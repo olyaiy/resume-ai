@@ -21,10 +21,8 @@ const Editor = () => {
      
     editorProps: {
       attributes: {
-        class: 'p-4 border border-slate-400',
-      },
-    
-    },
+        class: 'w-full h-full focus:outline-none ',
+      },},
   
 
   })
@@ -34,11 +32,11 @@ const Editor = () => {
 
 
   return (
-  <div className="flex flex-col">
+  <div className="flex flex-col gap-4 w-full h-full ">
 
     {/* toolbar */}
     <div 
-    className="flex flex-row gap-2 w-full p-4 border border-slate-400 rounded-t-lg border-b-0"> 
+    className="flex flex-row gap-2 w-full p-4 border border-slate-400 rounded-lg"> 
       {/* Bold Button  */}
       <Button 
       onClick={() => editor.chain().focus().toggleBold().run()} 
@@ -62,7 +60,8 @@ const Editor = () => {
 
     </div>
 
-    <EditorContent editor={editor} />
+    <EditorContent editor={editor} 
+    className='flex w-full h-full border border-gray-200 shadow-md pt-8 px-6'/>
   </div>
   )
 }
