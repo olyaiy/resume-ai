@@ -47,7 +47,8 @@ const Editor = () => {
       </Button>
 
       {/* Italics Button */}
-      <Button onClick={() => editor.chain().focus().toggleItalic().run()} 
+      <Button 
+      onClick={() => editor.chain().focus().toggleItalic().run()} 
       className={`bg-slate-200 text-black hover:bg-slate-300 ${editor.isActive('italic') ? 'is-active' : ''}`}> 
             <ItalicIcon/>
       </Button>
@@ -55,8 +56,7 @@ const Editor = () => {
       {/* Underline Button */}
       <Button
             onClick={() => editor.chain().focus().toggleUnderline().run()}
-            className={editor.isActive('underline') ? 'is-active' : ''}
-          >
+                  className={`bg-slate-200 text-black hover:bg-slate-300 ${editor.isActive('underline') ? 'is-active' : ''}`}> 
              <UnderlineIcon />
       </Button>
 
