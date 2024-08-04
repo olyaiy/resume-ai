@@ -4,8 +4,12 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import { Button } from './ui/button'
-import { Bold, BoldIcon, ItalicIcon, UnderlineIcon } from 'lucide-react'
-import Italic from '@tiptap/extension-italic'
+// import { BoldIcon, ItalicIcon, UnderlineIcon } from 'lucide-react'
+import { Bold, Italic, ItalicIcon, Underline as UnderlineIconLucid } from "lucide-react"
+import { Separator } from "@/components/ui/separator"
+
+
+
 
 
 const Editor = () => {
@@ -36,29 +40,33 @@ const Editor = () => {
 
     {/* toolbar */}
     <div 
-    className="flex flex-row gap-2 w-full p-4 border border-slate-400 rounded-lg"> 
+    className="flex flex-row gap-2 w-full rounded-lg"> 
       {/* Bold Button  */}
       <Button 
       onClick={() => editor.chain().focus().toggleBold().run()} 
-      className='bg-slate-200 text-black hover:bg-slate-300'> 
-        <BoldIcon/>
+      className='bg-white text-black hover:bg-slate-300'> 
+      <Bold className="h-4 w-4"/>
       </Button>
 
       {/* Italics Button */}
       <Button 
       onClick={() => editor.chain().focus().toggleItalic().run()} 
-      className={`bg-slate-200 text-black hover:bg-slate-300 ${editor.isActive('italic') ? 'is-active' : ''}`}> 
-            <ItalicIcon/>
+      className={`bg-white text-black hover:bg-slate-300 ${editor.isActive('italic') ? 'is-active' : ''}`}> 
+            {/* <ItalicIcon/> */}
+            <ItalicIcon className="h-4 w-4"/>
       </Button>
 
       {/* Underline Button */}
       <Button
             onClick={() => editor.chain().focus().toggleUnderline().run()}
-                  className={`bg-slate-200 text-black hover:bg-slate-300 ${editor.isActive('underline') ? 'is-active' : ''}`}> 
-             <UnderlineIcon />
+                  className={`bg-white text-black hover:bg-slate-300 ${editor.isActive('underline') ? 'is-active' : ''}`}> 
+             {/* <UnderlineIcon /> */}
+             <UnderlineIconLucid className="h-4 w-4"/>
       </Button>
+      
 
     </div>
+
 
     <EditorContent editor={editor} 
     className='flex w-full h-full border border-gray-200 shadow-md pt-8 px-6'/>
