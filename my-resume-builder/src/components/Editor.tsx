@@ -1,4 +1,5 @@
 'use client'
+import React from 'react'
 
 import { useEditor, EditorContent } from '@tiptap/react'
 
@@ -11,6 +12,9 @@ import Blockquote from '@tiptap/extension-blockquote'
 import Bold from '@tiptap/extension-bold'
 import Italic from '@tiptap/extension-italic'
 import Link from '@tiptap/extension-link'
+import BulletList from '@tiptap/extension-bullet-list'
+import ListItem from '@tiptap/extension-list-item'
+
 
 // shadcn
 import { Button } from './ui/button'
@@ -19,7 +23,7 @@ import { Popover, PopoverContent } from './ui/popover'
 import { Input } from "@/components/ui/input"
 
 // Icons
-import { BoldIcon, ItalicIcon, LinkIcon, TextQuote, Underline as UnderlineIconLucid } from "lucide-react"
+import { BoldIcon, ItalicIcon, LinkIcon, ListIcon, TextQuote, Underline as UnderlineIconLucid } from "lucide-react"
 
 
 export function InputDemo() {
@@ -28,6 +32,7 @@ export function InputDemo() {
 import { PopoverTrigger } from '@radix-ui/react-popover'
 import { useState } from 'react'
 
+// Handle Set Link
 const handleSetLink = (editor: any) => {
   // get the current input box value
   const input = document.getElementById('link-input') as HTMLInputElement | null;
@@ -63,16 +68,33 @@ const Editor = () => {
         HTMLAttributes: {
           class: 'text-blue-700 hover:underline cursor-pointer'
         },
+      }),
+      BulletList.configure({
+        HTMLAttributes: {
+          class: 'list-disc'
+        }
 
       }),
       
+          
+      ListItem.configure({
+        HTMLAttributes: {
+          class: 'text-black'
+        },
+      }),
+      
     ],
-    content: '<p>Hello World! 🌎️</p>',
+    content:`
+        <ul>
+          <li>A list item</li>
+          <li>And another one</li>
+        </ul>
+      `,
     editorProps: {
       attributes: {
         class: 'w-full h-full focus:outline-none ',
       },},
-      injectCSS: false,
+      // injectCSS: false,
   })
 
   if (!editor) return <div> Editor Failed to Load</div>; else return (
@@ -106,7 +128,6 @@ const Editor = () => {
       </Button>
       
       {/* Link Button */}
-
       <Popover>
         <PopoverTrigger asChild>
           <Button 
@@ -114,7 +135,6 @@ const Editor = () => {
             <LinkIcon className="h-4 w-4"/>
           </Button>
         </PopoverTrigger>
-
         <PopoverContent className='w-full p-4 flex flex-col gap-4'>
           <div className="flex flex-row gap-2">
             <Input className="w-64" id="link-input"/>
@@ -127,6 +147,12 @@ const Editor = () => {
         </PopoverContent>
       </Popover>
 
+      {/* Bullet List Button */}
+      <Button
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={ `bg-white text-black hover:bg-slate-300 ${editor.isActive('bulletList') ? 'is-active' : ''}`}>
+          <ListIcon />
+        </Button>      
 
 
       {/* Save Button */}
