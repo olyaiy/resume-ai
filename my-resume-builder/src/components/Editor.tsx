@@ -14,6 +14,8 @@ import Italic from '@tiptap/extension-italic'
 import Link from '@tiptap/extension-link'
 import BulletList from '@tiptap/extension-bullet-list'
 import ListItem from '@tiptap/extension-list-item'
+import HorizontalRule from '@tiptap/extension-horizontal-rule'
+
 
 
 // shadcn
@@ -74,13 +76,16 @@ const Editor = () => {
           class: 'list-disc'
         }
 
-      }),
-      
-          
+      }), 
       ListItem.configure({
         HTMLAttributes: {
           class: 'text-black'
         },
+      }),
+      HorizontalRule.configure({
+        HTMLAttributes: {
+          class: 'my-4'
+        }
       }),
       
     ],
@@ -156,7 +161,7 @@ const Editor = () => {
 
       { /* Horizontal Rule Button */}
       <Button 
-      
+      onClick={() => editor.chain().focus().setHorizontalRule().run()}
       className={'bg-white text-black hover:bg-slate-300'}>
       
         <Minus />
