@@ -25,7 +25,7 @@ import { Popover, PopoverContent } from './ui/popover'
 import { Input } from "@/components/ui/input"
 
 // Icons
-import { BoldIcon, ItalicIcon, LinkIcon, ListIcon, Minus, TextQuote, Underline as UnderlineIconLucid } from "lucide-react"
+import { BoldIcon, ItalicIcon, LinkIcon, ListIcon, Minus, QuoteIcon, TextQuote, Underline as UnderlineIconLucid } from "lucide-react"
 
 
 export function InputDemo() {
@@ -158,6 +158,11 @@ const Editor = () => {
         className={ `bg-white text-black hover:bg-slate-300 ${editor.isActive('bulletList') ? 'is-active' : ''}`}>
           <ListIcon />
         </Button>      
+
+      {/* Blockquote Button */}
+      <Button>
+        <QuoteIcon />
+      </Button>
 
       { /* Horizontal Rule Button */}
       <Button 
