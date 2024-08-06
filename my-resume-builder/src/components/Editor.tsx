@@ -111,7 +111,7 @@ const Editor = ({initialContent}: { initialContent: any }) => {
     content: initialJSON,
     editorProps: {
       attributes: {
-        class: 'w-full h-full prose text-black prose- decoration-black color prose-stone prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 dark:prose-invert prose-a:text-blue-700 focus:outline-none',
+        class: 'w-full h-full prose text-black prose- decoration-black color prose-stone prose-sm  m-5 dark:prose-invert prose-a:text-blue-700 focus:outline-none',
 
       },},
       injectCSS: false,
@@ -198,13 +198,13 @@ const Editor = ({initialContent}: { initialContent: any }) => {
         </Button>
 
 
-
-      <Button onClick={
-        ()=> {
-          console.log(initialJSON)
-          // console.log(initialContent)
-        }
-        }> PRINT</Button>
+      {/* Print button for debugging */}
+            {/* <Button onClick={
+              ()=> {
+                console.log(initialJSON)
+                // console.log(initialContent)
+              }
+              }> PRINT</Button> */}
     </div>
 
 

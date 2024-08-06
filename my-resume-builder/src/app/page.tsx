@@ -9,8 +9,8 @@ export default function Home() {
   const resumeContent = getResumeContent();
 
   return (
-    <main className="flex min-w-screen min-h-screen flex-col items-center p-24">
-      <div className="w-full h-full flex ">
+    <main className="flex min-w-screen min-h-screen flex-col items-center py-24 px-12">
+      <div className="w-full h-full flex max-w-screen-md ">
 
       <Editor initialContent={resumeContent}  />
       </div>
