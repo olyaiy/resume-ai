@@ -57,7 +57,11 @@ const Editor = () => {
     extensions: [
       Document,
       Paragraph,
-      Text,
+      Text.configure({
+        HTMLAttributes: {
+          class: ''
+        }
+      }),
       Bold,
       Italic,
       Underline,
@@ -68,25 +72,12 @@ const Editor = () => {
         openOnClick: true,
         linkOnPaste: true,
         HTMLAttributes: {
-          class: 'text-blue-700 hover:underline cursor-pointer'
+          class: 'cursor-pointer'
         },
       }),
-      BulletList.configure({
-        HTMLAttributes: {
-          class: 'list-disc'
-        }
-
-      }), 
-      ListItem.configure({
-        HTMLAttributes: {
-          class: 'text-black'
-        },
-      }),
-      HorizontalRule.configure({
-        HTMLAttributes: {
-          class: 'my-4'
-        }
-      }),
+      BulletList,
+      ListItem,
+      HorizontalRule,
       
     ],
     content:`
@@ -94,12 +85,14 @@ const Editor = () => {
           <li>A list item</li>
           <li>And another one</li>
         </ul>
+        <Blockquote> Hi </Blockquote>
       `,
     editorProps: {
       attributes: {
-        class: 'w-full h-full focus:outline-none ',
+        class: 'w-full h-full prose text-black accent-black decoration-black color prose-stone prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 dark:prose-invert prose-a:text-blue-700 focus:outline-none',
+
       },},
-      // injectCSS: false,
+      injectCSS: false,
   })
 
   if (!editor) return <div> Editor Failed to Load</div>; else return (
@@ -160,8 +153,11 @@ const Editor = () => {
         </Button>      
 
       {/* Blockquote Button */}
-      <Button>
-        <QuoteIcon />
+      <Button
+      onClick={() => editor.chain().focus().toggleBlockquote().run()}
+      className={ `bg-white text-black hover:bg-slate-300 ${editor.isActive('blockQuote') ? 'is-active' : ''}`}>
+      
+        <QuoteIcon className="h-4 w-4"/>
       </Button>
 
       { /* Horizontal Rule Button */}
@@ -169,7 +165,7 @@ const Editor = () => {
       onClick={() => editor.chain().focus().setHorizontalRule().run()}
       className={'bg-white text-black hover:bg-slate-300'}>
       
-        <Minus />
+        <Minus className="h-4 w-4"/>
       </Button>
 
       {/* Save Button */}

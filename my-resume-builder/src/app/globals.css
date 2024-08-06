@@ -67,23 +67,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-
-.tiptap {
-  :first-child {
-    margin-top: 0;
-  }
-
-  /* List styles */
-  ul, ol {
-    padding: 0 1rem;
-    margin: 0.4rem 1rem 1.25rem 0.4rem;
-    
-    li p {
-      margin-top: 0.00em;
-      margin-bottom: 0.25em;
-    }
-  }
-
-  
-}
