@@ -2,6 +2,10 @@
 import React from 'react'
 
 import { useEditor, EditorContent } from '@tiptap/react'
+import { getResumeContent } from '../lib/getResumeContent';
+import { generateJSON } from '@tiptap/html';
+
+
 
 // Tiptap Extensions
 import Document from '@tiptap/extension-document'
@@ -17,22 +21,14 @@ import ListItem from '@tiptap/extension-list-item'
 import HorizontalRule from '@tiptap/extension-horizontal-rule'
 
 
-
 // shadcn
 import { Button } from './ui/button'
 import { Separator } from "@/components/ui/separator"
-import { Popover, PopoverContent } from './ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { Input } from "@/components/ui/input"
 
 // Icons
 import { BoldIcon, ItalicIcon, LinkIcon, ListIcon, Minus, QuoteIcon, TextQuote, Underline as UnderlineIconLucid } from "lucide-react"
-
-
-export function InputDemo() {
-  return <Input type="email" placeholder="Email" />
-}
-import { PopoverTrigger } from '@radix-ui/react-popover'
-import { useState } from 'react'
 
 // Handle Set Link
 const handleSetLink = (editor: any) => {
@@ -50,7 +46,37 @@ const handleSetLink = (editor: any) => {
   editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
 
 }
-const Editor = () => {
+
+
+
+const Editor = ({initialContent}: { initialContent: any }) => {
+
+  const initialJSON = generateJSON(initialContent, [
+    Document,
+    Paragraph,
+    Text.configure({
+      HTMLAttributes: {
+        class: ''
+      }
+    }),
+    Bold,
+    Italic,
+    Underline,
+    Blockquote,
+    Link.configure({
+      protocols: ['https', 'mailto'],
+      autolink: true,
+      openOnClick: true,
+      linkOnPaste: true,
+      HTMLAttributes: {
+        class: 'cursor-pointer'
+      },
+    }),
+    BulletList,
+    ListItem,
+    HorizontalRule,
+    
+  ]);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -80,16 +106,12 @@ const Editor = () => {
       HorizontalRule,
       
     ],
-    content:`
-        <ul>
-          <li>A list item</li>
-          <li>And another one</li>
-        </ul>
-        <Blockquote> Hi </Blockquote>
-      `,
+
+
+    content: initialJSON,
     editorProps: {
       attributes: {
-        class: 'w-full h-full prose text-black accent-black decoration-black color prose-stone prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 dark:prose-invert prose-a:text-blue-700 focus:outline-none',
+        class: 'w-full h-full prose text-black prose- decoration-black color prose-stone prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 dark:prose-invert prose-a:text-blue-700 focus:outline-none',
 
       },},
       injectCSS: false,
@@ -176,11 +198,18 @@ const Editor = () => {
         </Button>
 
 
+
+      <Button onClick={
+        ()=> {
+          console.log(initialJSON)
+          // console.log(initialContent)
+        }
+        }> PRINT</Button>
     </div>
 
 
     <EditorContent editor={editor} 
-    className='flex w-full h-full border border-gray-200 shadow-md pt-8 px-6'/>
+    className='flex min-w-full min-h-full border border-gray-200 shadow-md pt-8 px-6'/>
   </div>
   )
 }

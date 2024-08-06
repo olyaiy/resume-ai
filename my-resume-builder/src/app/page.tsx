@@ -1,11 +1,18 @@
+
+
 import Editor from "@/components/Editor";
-import Image from "next/image";
+import { getResumeContent } from "@/lib/getResumeContent";
 
 export default function Home() {
+
+  
+  const resumeContent = getResumeContent();
+
   return (
-    <main className="flex w-screen h-screen flex-col items-center p-24">
+    <main className="flex min-w-screen min-h-screen flex-col items-center p-24">
       <div className="w-full h-full flex ">
-      <Editor />
+
+      <Editor initialContent={resumeContent}  />
       </div>
     </main>
   );
