@@ -23,7 +23,7 @@ import { Popover, PopoverContent } from './ui/popover'
 import { Input } from "@/components/ui/input"
 
 // Icons
-import { BoldIcon, ItalicIcon, LinkIcon, ListIcon, TextQuote, Underline as UnderlineIconLucid } from "lucide-react"
+import { BoldIcon, ItalicIcon, LinkIcon, ListIcon, Minus, TextQuote, Underline as UnderlineIconLucid } from "lucide-react"
 
 
 export function InputDemo() {
@@ -103,7 +103,7 @@ const Editor = () => {
   <div className="flex flex-col gap-4 w-full h-full ">
 
     {/* toolbar */}
-    <div className="flex flex-row gap-2 w-full rounded-lg"> 
+    <div className="flex flex-row gap-2 w-full rounded-lg justify-center"> 
 
       {/* Bold Button  */}
       <Button 
@@ -154,6 +154,13 @@ const Editor = () => {
           <ListIcon />
         </Button>      
 
+      { /* Horizontal Rule Button */}
+      <Button 
+      
+      className={'bg-white text-black hover:bg-slate-300'}>
+      
+        <Minus />
+      </Button>
 
       {/* Save Button */}
         <Button 
