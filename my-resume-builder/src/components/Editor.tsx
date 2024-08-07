@@ -47,9 +47,13 @@ const handleSetLink = (editor: any) => {
 
 }
 
+interface EditorProps {
+  initialContent: any;
+  saveLocation: string;
+}
 
+const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLocation: string }) => {
 
-const Editor = ({initialContent}: { initialContent: any }) => {
 
   const initialJSON = generateJSON(initialContent, [
     Document,
