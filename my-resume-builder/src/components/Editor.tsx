@@ -178,12 +178,16 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
     <div className="flex flex-row gap-2 w-full rounded-lg justify-center"> 
 
 
-      <div className=''>
       {/* Heading Button */}
       <DropdownMenu>
 
         {/* Dropdown Button */}
-        <DropdownMenuTrigger><HeadingIcon className="h-4 w-4 m-4"/></DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>
+            <Button 
+          className='bg-white text-black hover:bg-slate-300'> 
+          <HeadingIcon className="h-4 w-4"/>
+          </Button>
+          </DropdownMenuTrigger>
         
         {/* Dropdown Content */}
         <DropdownMenuContent>
@@ -214,7 +218,6 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      </div>
 
 
 
