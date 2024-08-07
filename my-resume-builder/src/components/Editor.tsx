@@ -119,7 +119,11 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
       }),
       BulletList,
       ListItem,
-      HorizontalRule,
+      HorizontalRule.configure({
+        HTMLAttributes: {
+          class: 'prose leading-none my-2'
+        },}
+      ),
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
@@ -127,7 +131,7 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
     content: initialJSON,
     editorProps: {
       attributes: {
-        class: 'min-w-full h-full prose text-black color prose-stone prose-sm   dark:prose-invert prose-a:text-blue-700 focus:outline-none',
+        class: 'min-w-full h-full prose prose-stone leading-3 font-sans text-black color prose-sm  dark:prose-invert prose-a:text-blue-700 focus:outline-none',
 
       },},
       injectCSS: false,
