@@ -10,8 +10,9 @@ import { generateJSON } from '@tiptap/html';
 // Tiptap Extensions
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
-import Underline from '@tiptap/extension-underline'
 import Text from '@tiptap/extension-text'
+import Underline from '@tiptap/extension-underline'
+import Heading from '@tiptap/extension-heading'
 import Blockquote from '@tiptap/extension-blockquote'
 import Bold from '@tiptap/extension-bold'
 import Italic from '@tiptap/extension-italic'
@@ -26,9 +27,18 @@ import { Button } from './ui/button'
 import { Separator } from "@/components/ui/separator"
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { Input } from "@/components/ui/input"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 
 // Icons
-import { BoldIcon, ItalicIcon, LinkIcon, ListIcon, Minus, QuoteIcon, TextQuote, Underline as UnderlineIconLucid } from "lucide-react"
+import { BoldIcon, Heading1, Heading2, Heading3, HeadingIcon, ItalicIcon, LinkIcon, ListIcon, Loader2, LucideHeading, Minus, QuoteIcon, TextQuote, Underline as UnderlineIconLucid } from "lucide-react"
 
 // Handle Set Link
 const handleSetLink = (editor: any) => {
@@ -47,16 +57,10 @@ const handleSetLink = (editor: any) => {
 
 }
 
-// // Handle Save 
-// const handleSave = (editor: any) =>{
-//   console.log(editor.getJSON())
-  
-// }
-
 const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLocation: string }) => {
   const [isSaving, setIsSaving] = useState(false);
 
-
+  // Get the initial JSON content
   const initialJSON = generateJSON(initialContent, [
     Document,
     Paragraph,
@@ -84,6 +88,7 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
     
   ]);
 
+  // Editor Instance Configuration
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -94,6 +99,7 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
           class: ''
         }
       }),
+      Heading,
       Bold,
       Italic,
       Underline,
@@ -122,7 +128,7 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
       },},
       injectCSS: false,
   })
-
+  // Save the content to the server
   const handleSave = async (editor: any) => {
     if (!editor) return;
 
@@ -153,14 +159,57 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
   };
 
 
+  // while editor is loading, dipaly a loading spinner
+  if (!editor) {
+    return (
+      <div className="flex items-center justify-center w-full h-full">
+        <Loader2 className="animate-spin text-blue-500" />
+      </div>
+    );
+  } 
 
-  if (!editor) return <div> Editor Failed to Load</div>; else return (
+  // display the editor
+  else return (
   
     // Editor Container
   <div className="flex flex-col gap-4 w-full h-full ">
 
     {/* toolbar */}
     <div className="flex flex-row gap-2 w-full rounded-lg justify-center"> 
+
+
+      {/* Heading Button */}
+      <DropdownMenu>
+
+        {/* Dropdown Button */}
+        <DropdownMenuTrigger><HeadingIcon className="h-4 w-4"/></DropdownMenuTrigger>
+        
+        {/* Dropdown Content */}
+        <DropdownMenuContent>
+
+          {/* Heading 1 */}
+          <DropdownMenuItem
+          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}>
+            <Heading1/>
+          </DropdownMenuItem>
+
+          {/* Heading 2 */}
+          <DropdownMenuItem
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}>
+            <Heading2/>
+          </DropdownMenuItem>
+
+          {/* Heading 3 */}
+          <DropdownMenuItem
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}>
+            <Heading3/>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+
+        
+      </DropdownMenu>
+
+
 
       {/* Bold Button  */}
       <Button 
@@ -233,21 +282,12 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
       disabled={isSaving}
       className={`bg-green-600 text-white hover:bg-green-950`}>
       {isSaving ? 'Saving...' : 'Save'}
-    </Button>
-
-
-      {/* Print button for debugging */}
-            {/* <Button onClick={
-              ()=> {
-                console.log(initialJSON)
-                // console.log(initialContent)
-              }
-              }> PRINT</Button> */}
+      </Button>
+      
     </div>
 
 
-    <EditorContent editor={editor} 
-    className='flex min-w-full min-h-full border border-gray-200 shadow-md pt-8 px-6'/>
+    <EditorContent editor={editor} className='flex min-w-full min-h-full border border-gray-200 shadow-md pt-8 px-6'/>
   </div>
   )
 }
