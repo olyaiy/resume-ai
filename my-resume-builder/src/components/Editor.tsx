@@ -321,7 +321,9 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
 
     {/* Editor Element */}
     <EditorContent editor={editor} 
-      className='flex min-w-full min-h-full border border-gray-200 shadow-md pt-8 px-6'
+      className='flex border border-gray-200 
+      w-[8.5in] h-[11in] mx-auto p-[0.5in] shadow-lg
+      '
       />
 
   </div>
