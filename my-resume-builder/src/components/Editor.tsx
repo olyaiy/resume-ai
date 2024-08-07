@@ -47,13 +47,13 @@ const handleSetLink = (editor: any) => {
 
 }
 
-interface EditorProps {
-  initialContent: any;
-  saveLocation: string;
+// Handle Save 
+const handleSave = (editor: any) =>{
+  console.log(editor.getJSON())
+  
 }
 
 const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLocation: string }) => {
-
 
   const initialJSON = generateJSON(initialContent, [
     Document,
@@ -196,7 +196,7 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
 
       {/* Save Button */}
         <Button 
-        onClick={() => console.log(editor.getJSON())}
+        onClick={() => handleSave(editor)}
         className={`bg-green-600 text-white hover:bg-green-950`}>
           Save
         </Button>
