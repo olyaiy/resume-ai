@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 
 import { useEditor, EditorContent } from '@tiptap/react'
 import { getResumeContent } from '../lib/getResumeContent';
@@ -47,13 +47,15 @@ const handleSetLink = (editor: any) => {
 
 }
 
-// Handle Save 
-const handleSave = (editor: any) =>{
-  console.log(editor.getJSON())
+// // Handle Save 
+// const handleSave = (editor: any) =>{
+//   console.log(editor.getJSON())
   
-}
+// }
 
 const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLocation: string }) => {
+  const [isSaving, setIsSaving] = useState(false);
+
 
   const initialJSON = generateJSON(initialContent, [
     Document,
@@ -120,6 +122,36 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
       },},
       injectCSS: false,
   })
+
+  const handleSave = async (editor: any) => {
+    if (!editor) return;
+
+    setIsSaving(true);
+    try {
+      const content = editor.getJSON();
+      const response = await fetch('/api/save-content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content, filename: saveLocation }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save content');
+      }
+
+      const result = await response.json();
+      console.log(result.message); // 'Content saved successfully'
+      // You could show a success message to the user here
+    } catch (error) {
+      console.error('Save error:', error);
+      // You could show an error message to the user here
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
 
   if (!editor) return <div> Editor Failed to Load</div>; else return (
   
