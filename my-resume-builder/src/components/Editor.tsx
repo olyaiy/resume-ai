@@ -11,6 +11,7 @@ import { generateJSON } from '@tiptap/html';
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
+import TextAlign from '@tiptap/extension-text-align'
 import Underline from '@tiptap/extension-underline'
 import Heading from '@tiptap/extension-heading'
 import Blockquote from '@tiptap/extension-blockquote'
@@ -38,7 +39,7 @@ import {
 
 
 // Icons
-import { BoldIcon, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, HeadingIcon, ItalicIcon, LinkIcon, ListIcon, Loader2, LucideHeading, Minus, QuoteIcon, TextQuote, Underline as UnderlineIconLucid } from "lucide-react"
+import { AlignCenterIcon, AlignLeft, AlignLeftIcon, AlignRightIcon, BoldIcon, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, HeadingIcon, ItalicIcon, LinkIcon, ListIcon, Loader2, LucideHeading, Minus, QuoteIcon, TextQuote, Underline as UnderlineIconLucid } from "lucide-react"
 
 // Handle Set Link
 const handleSetLink = (editor: any) => {
@@ -69,6 +70,7 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
         class: ''
       }
     }),
+    Heading,
     Bold,
     Italic,
     Underline,
@@ -85,7 +87,9 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
     BulletList,
     ListItem,
     HorizontalRule,
-    
+    TextAlign.configure({
+      types: ['heading', 'paragraph'],
+    }),
   ]);
 
   // Editor Instance Configuration
@@ -116,18 +120,19 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
       BulletList,
       ListItem,
       HorizontalRule,
-      
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
     ],
-
-
     content: initialJSON,
     editorProps: {
       attributes: {
-        class: 'w-full h-full prose text-black prose- decoration-black color prose-stone prose-sm  m-5 dark:prose-invert prose-a:text-blue-700 focus:outline-none',
+        class: 'min-w-full h-full prose text-black color prose-stone prose-sm   dark:prose-invert prose-a:text-blue-700 focus:outline-none',
 
       },},
       injectCSS: false,
   })
+
   // Save the content to the server
   const handleSave = async (editor: any) => {
     if (!editor) return;
@@ -159,7 +164,7 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
   };
 
 
-  // while editor is loading, dipaly a loading spinner
+  // while editor is loading, display a loading spinner
   if (!editor) {
     return (
       <div className="flex items-center justify-center w-full h-full">
@@ -172,7 +177,7 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
   else return (
   
     // Editor Container
-  <div className="flex flex-col gap-4 w-full h-full ">
+  <div className="flex flex-col gap-4 w-full h-full">
 
     {/* toolbar */}
     <div className="flex flex-row gap-2 w-full rounded-lg justify-center"> 
@@ -218,8 +223,6 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
-
 
       {/* Bold Button  */}
       <Button 
@@ -286,6 +289,26 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
         <Minus className="h-4 w-4"/>
       </Button>
 
+      {/* Text Align Buttons */}
+
+        <Button 
+        className='bg-white text-black hover:bg-slate-300'
+        onClick={() => editor.chain().focus().setTextAlign('left').run()}>
+          <AlignLeftIcon className="h-4 w-4"/>
+        </Button>
+
+        <Button
+        className='bg-white text-black hover:bg-slate-300'
+        onClick={() => editor.chain().focus().setTextAlign('center').run()}>
+          <AlignCenterIcon className="h-4 w-4"/>
+        </Button>
+
+        <Button
+        className='bg-white text-black hover:bg-slate-300'
+        onClick={() => editor.chain().focus().setTextAlign('right').run()}> 
+          <AlignRightIcon className="h-4 w-4"/>
+        </Button>
+
       {/* Save Button */}
       <Button 
       onClick={() => handleSave(editor)}
@@ -296,8 +319,11 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
       
     </div>
 
+    {/* Editor Element */}
+    <EditorContent editor={editor} 
+      className='flex min-w-full min-h-full border border-gray-200 shadow-md pt-8 px-6'
+      />
 
-    <EditorContent editor={editor} className='flex min-w-full min-h-full border border-gray-200 shadow-md pt-8 px-6'/>
   </div>
   )
 }

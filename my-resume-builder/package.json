@@ -27,6 +27,7 @@
     "@tiptap/extension-horizontal-rule": "^2.5.8",
     "@tiptap/extension-link": "^2.5.8",
     "@tiptap/extension-list-item": "^2.5.8",
+    "@tiptap/extension-text-align": "^2.5.9",
     "@tiptap/extension-underline": "^2.5.8",
     "@tiptap/html": "^2.5.8",
     "@tiptap/pm": "^2.5.8",
