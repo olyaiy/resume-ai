@@ -38,7 +38,7 @@ import {
 
 
 // Icons
-import { BoldIcon, Heading1, Heading2, Heading3, HeadingIcon, ItalicIcon, LinkIcon, ListIcon, Loader2, LucideHeading, Minus, QuoteIcon, TextQuote, Underline as UnderlineIconLucid } from "lucide-react"
+import { BoldIcon, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, HeadingIcon, ItalicIcon, LinkIcon, ListIcon, Loader2, LucideHeading, Minus, QuoteIcon, TextQuote, Underline as UnderlineIconLucid } from "lucide-react"
 
 // Handle Set Link
 const handleSetLink = (editor: any) => {
@@ -178,11 +178,12 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
     <div className="flex flex-row gap-2 w-full rounded-lg justify-center"> 
 
 
+      <div className=''>
       {/* Heading Button */}
       <DropdownMenu>
 
         {/* Dropdown Button */}
-        <DropdownMenuTrigger><HeadingIcon className="h-4 w-4"/></DropdownMenuTrigger>
+        <DropdownMenuTrigger><HeadingIcon className="h-4 w-4 m-4"/></DropdownMenuTrigger>
         
         {/* Dropdown Content */}
         <DropdownMenuContent>
@@ -204,10 +205,16 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}>
             <Heading3/>
           </DropdownMenuItem>
-        </DropdownMenuContent>
 
-        
+
+          {/* Heading 4 */}
+          <DropdownMenuItem
+          onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}>
+            <Heading4/>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
       </DropdownMenu>
+      </div>
 
 
 
