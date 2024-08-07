@@ -6,24 +6,19 @@ import path from 'path';
 
 interface SaveRequest {
   content: any;
-  filename: string;
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { content, filename } = await req.json() as SaveRequest;
+    const { content } = await req.json() as SaveRequest;
 
     // Validate input
-    if (!content || !filename) {
-      return NextResponse.json({ error: 'Missing content or filename' }, { status: 400 });
+    if (!content) {
+      return NextResponse.json({ error: 'Missing content' }, { status: 400 });
     }
 
-    // Ensure the filename is safe
-    const safeName = path.basename(filename).replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    const filePath = path.join(process.cwd(), 'data', `${safeName}.json`);
-
-    // Ensure directory exists
-    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    // Set the file path to resumes/resume.json
+    const filePath = path.join(process.cwd(), 'src', 'resumes', 'resume.json');
 
     // Write the file
     await fs.writeFile(filePath, JSON.stringify(content, null, 2));
@@ -33,9 +28,4 @@ export async function POST(req: NextRequest) {
     console.error('Save error:', error);
     return NextResponse.json({ error: 'Failed to save content' }, { status: 500 });
   }
-}
-
-// If you need to handle OPTIONS requests (e.g., for CORS preflight)
-export async function OPTIONS(req: NextRequest) {
-  return NextResponse.json({}, { status: 200 });
 }

@@ -134,7 +134,7 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content, filename: saveLocation }),
+        body: JSON.stringify({ content }),
       });
 
       if (!response.ok) {
@@ -151,6 +151,7 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
       setIsSaving(false);
     }
   };
+
 
 
   if (!editor) return <div> Editor Failed to Load</div>; else return (
@@ -227,11 +228,12 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
       </Button>
 
       {/* Save Button */}
-        <Button 
-        onClick={() => handleSave(editor)}
-        className={`bg-green-600 text-white hover:bg-green-950`}>
-          Save
-        </Button>
+      <Button 
+      onClick={() => handleSave(editor)}
+      disabled={isSaving}
+      className={`bg-green-600 text-white hover:bg-green-950`}>
+      {isSaving ? 'Saving...' : 'Save'}
+    </Button>
 
 
       {/* Print button for debugging */}
