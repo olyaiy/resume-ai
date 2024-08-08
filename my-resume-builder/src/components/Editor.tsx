@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { useEditor, EditorContent } from '@tiptap/react'
 import { getResumeContent } from '../lib/getResumeContent';
@@ -62,35 +62,35 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
   const [isSaving, setIsSaving] = useState(false);
 
   // Get the initial JSON content
-  const initialJSON = generateJSON(initialContent, [
-    Document,
-    Paragraph,
-    Text.configure({
-      HTMLAttributes: {
-        class: ''
-      }
-    }),
-    Heading,
-    Bold,
-    Italic,
-    Underline,
-    Blockquote,
-    Link.configure({
-      protocols: ['https', 'mailto'],
-      autolink: true,
-      openOnClick: true,
-      linkOnPaste: true,
-      HTMLAttributes: {
-        class: 'cursor-pointer'
-      },
-    }),
-    BulletList,
-    ListItem,
-    HorizontalRule,
-    TextAlign.configure({
-      types: ['heading', 'paragraph'],
-    }),
-  ]);
+  // const initialJSON = generateJSON(initialContent, [
+  //   Document,
+  //   Paragraph,
+  //   Text.configure({
+  //     HTMLAttributes: {
+  //       class: ''
+  //     }
+  //   }),
+  //   Heading,
+  //   Bold,
+  //   Italic,
+  //   Underline,
+  //   Blockquote,
+  //   Link.configure({
+  //     protocols: ['https', 'mailto'],
+  //     autolink: true,
+  //     openOnClick: true,
+  //     linkOnPaste: true,
+  //     HTMLAttributes: {
+  //       class: 'cursor-pointer'
+  //     },
+  //   }),
+  //   BulletList,
+  //   ListItem,
+  //   HorizontalRule,
+  //   TextAlign.configure({
+  //     types: ['heading', 'paragraph'],
+  //   }),
+  // ]);
 
   // Editor Instance Configuration
   const editor = useEditor({
@@ -128,7 +128,7 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
         types: ['heading', 'paragraph'],
       }),
     ],
-    content: initialJSON,
+    content: initialContent,
     editorProps: {
       attributes: {
         class: 'min-w-full h-full prose prose-stone leading-3 font-sans text-black color prose-sm  dark:prose-invert prose-a:text-blue-700 focus:outline-none',
@@ -166,6 +166,9 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
       setIsSaving(false);
     }
   };
+
+
+  
 
 
   // while editor is loading, display a loading spinner
@@ -320,7 +323,7 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
       className={`bg-green-600 text-white hover:bg-green-950`}>
       {isSaving ? 'Saving...' : 'Save'}
       </Button>
-      
+
     </div>
 
     {/* Editor Element */}

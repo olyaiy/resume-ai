@@ -1,5 +1,3 @@
-// File: app/api/save-content/route.ts
-
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
