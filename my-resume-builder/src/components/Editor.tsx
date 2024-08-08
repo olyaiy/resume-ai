@@ -131,7 +131,7 @@ const Editor = ({ initialContent, saveLocation }: { initialContent: any; saveLoc
     content: initialContent,
     editorProps: {
       attributes: {
-        class: 'min-w-full h-full prose prose-stone leading-3 font-sans text-black color prose-sm  dark:prose-invert prose-a:text-blue-700 focus:outline-none',
+        class: 'min-w-full h-full prose prose-stone prose-li:prose-p:m-0 leading-5 prose-headings:leading-4 prose-li:p-0 prose-li:m-0 font-sans text-black color prose-sm  dark:prose-invert prose-a:text-blue-700 focus:outline-none',
 
       },},
       injectCSS: false,
