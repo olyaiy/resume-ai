@@ -66,4 +66,43 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply leading-tight;
+  }
+  p, li {
+    @apply leading-normal;
+  }
+
+  h1 {
+    @apply text-2xl font-bold;
+  }
+  h2 {
+    @apply text-xl font-bold;
+  }
+  h3 {
+    @apply text-lg font-bold;
+  }
+  h4 {
+    @apply text-base font-bold;
+  }
+  h5 {
+    @apply text-sm font-bold;
+  }
+  h6 {
+    @apply text-xs font-bold;
+  }
+  p {
+    @apply text-base;
+  }
+  ul {
+    @apply list-disc;
+  }
+  ol {
+    @apply list-decimal;
+  }
+  li {
+    @apply text-base;
+    @apply ml-4;
+  }
 }
