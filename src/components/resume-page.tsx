@@ -1,12 +1,13 @@
 'use client'
 
 import { Button } from './ui/button'
-import { ForwardRefEditor } from './ForwardRefEditor'
+
 import { askGPT } from '@/lib/openai';
 
 
 import { useState, useEffect } from 'react';
 import { getFileContents } from '@/lib/fileUtils';
+import { ForwardRefEditor } from './mdx-editor/ForwardRefEditor';
 
 const ResumePage = () => {
   const [resumeContent, setResumeContent] = useState('');
