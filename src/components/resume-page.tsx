@@ -27,7 +27,7 @@ const ResumePage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-full gap-4">
+    <div className=" gap-4">
         <div className="bg-white w-full h-full p-2 overflow-auto">
             <ForwardRefEditor markdown={resumeContent} />
         </div>

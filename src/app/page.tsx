@@ -27,7 +27,7 @@ export default async function Home() {
 
 
   return (
-    <main className="flex min-h-screen bg-zinc-950 p-4">
+    <main className="flex min-h-screen bg-zinc-200">
       <HomePage resume={resume}/>
     </main>
   );
