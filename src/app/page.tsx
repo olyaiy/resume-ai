@@ -1,10 +1,13 @@
-import Image from "next/image";
+import ResumePage from "@/components/resume-page";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center  p-24">
-      <h1>Hi</h1>
-      <h2>Hi</h2>
+    <main className="flex min-h-screen bg-zinc-950 p-4">
+      <div className="flex-1 flex items-center justify-center">
+        <div className="w-full h-full max-w-[calc(100vh*8.5/11)] max-h-[calc(100vw*11/8.5)] aspect-[8.5/11]">
+          <ResumePage />
+        </div>
+      </div>
     </main>
   );
 }
