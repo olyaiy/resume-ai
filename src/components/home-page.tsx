@@ -16,19 +16,16 @@ export default function HomePage({ resume }: { resume: any }) {
     setResumeData((prev: typeof resumeData) => ({ ...prev, [section]: value }))
   }
 
-  console.log(resume)
-
   return (
-    <div className="flex-1 flex items-center gap-4 h-screen overflow-hidden">
+    <div className="flex-1 flex  h-screen justify-between">
       {/* Edit Panel */}
       <EditPanel resumeData={resumeData} onInputChange={handleInputChange} />
 
       {/* Resume Page */}
-      <div className="flex-1 flex items-center justify-center h-full">
-        <div className="w-full h-full max-w-[calc(100vh*8.5/11)] max-h-[calc(100vw*11/8.5)] aspect-[8.5/11] overflow-hidden">
+
+        <div className="aspect-[8.5/11] h-full bg-white overflow-scroll">
           <ResumePage />
         </div>
-      </div>
     </div>
   )
 }

@@ -28,11 +28,11 @@ const ResumePage = () => {
   }, []);
 
   return (
-    <div className=" gap-4">
-        <div className="bg-white w-full h-full p-2 overflow-auto">
+
+        <div className="bg-white w-full h-full p-2">
             <ForwardRefEditor markdown={resumeContent} />
         </div>
-    </div>
+
   )
 }
 
