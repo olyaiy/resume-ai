@@ -9,7 +9,7 @@ const Editor = dynamic(() => import('./InitializedMDXEditor'), {
 })
 
 export const ForwardRefEditor = forwardRef<MDXEditorMethods, MDXEditorProps>((props, ref) => (
-  <Editor {...props} editorRef={ref} />
+    <Editor {...props} editorRef={ref} />
 ))
 
 ForwardRefEditor.displayName = 'ForwardRefEditor'
