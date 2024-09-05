@@ -9,8 +9,6 @@ interface EditPanelProps {
 }
 
 export default function EditPanel({ resumeData, onInputChange }: EditPanelProps) {
-  const relevantFields = ['name', 'skills', 'work_experience', 'projects', 'education']
-
   return (
     <div className="h-full w-1/2 bg-zinc-200 flex flex-col gap-2 overflow-y-auto">
       <div className="sticky top-0 bg-navy-900 p-2 z-10 flex justify-end gap-2 bg-black mx-4 rounded-md">
@@ -25,8 +23,7 @@ export default function EditPanel({ resumeData, onInputChange }: EditPanelProps)
         </Button>
       </div>
       <div className="flex flex-col gap-4 p-4">
-        {relevantFields.map(key => {
-          const value = resumeData[key];
+        {Object.entries(resumeData).map(([key, value]) => {
           if (Array.isArray(value)) {
             return (
               <PanelSection

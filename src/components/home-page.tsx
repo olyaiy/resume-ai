@@ -10,8 +10,13 @@ export default function HomePage({ resume }: { resume: any }) {
   const [resumeData, setResumeData] = useState(resume)
 
   useEffect(() => {
-    setResumeData(resume)
-  }, [resume])
+    const relevantSections = ['name', 'skills', 'work_experience', 'projects', 'education'];
+    const processedResume = Object.fromEntries(
+      Object.entries(resume).filter(([key]) => relevantSections.includes(key))
+    );
+    setResumeData(processedResume);
+  }, [resume]);
+
 
   const handleInputChange = (section: string, value: string | any[]) => {
     setResumeData((prev: typeof resumeData) => ({ ...prev, [section]: value }))
@@ -30,6 +35,8 @@ export default function HomePage({ resume }: { resume: any }) {
           {/* Use text area component for now until we find a good editor */}
           {/* <ResumePage /> */}
           <textarea className="w-full h-full"/>
+          <h1>Raw Resume Data</h1>
+          <textarea className="w-full h-full overflow-visible" value={JSON.stringify(resumeData, null, 2)} />
         </div>
     </div>
   )
