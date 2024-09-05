@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 
 export async function askGPT(prompt: string): Promise<string> {
-    console.log('askGPT called')
+
     const response = await fetch('/api/openai', {
       method: 'POST',
       headers: {

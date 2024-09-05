@@ -12,8 +12,11 @@ export default function EditPanel({ resumeData, onInputChange }: EditPanelProps)
   const relevantFields = ['name', 'skills', 'work_experience', 'projects', 'education']
 
   return (
-    <div className="h-full w-1/2 bg-zinc-200 flex flex-col gap-4 overflow-y-auto">
-      <div className="sticky top-4 bg-navy-900 p-2 z-10 flex justify-end gap-2 bg-black mx-4 rounded-md">
+    <div className="h-full w-1/2 bg-zinc-200 flex flex-col gap-2 overflow-y-auto">
+      <div className="sticky top-0 bg-navy-900 p-2 z-10 flex justify-end gap-2 bg-black mx-4 rounded-md">
+        <Button variant="outline">
+          Save Content
+        </Button>
         <Button>
           Download
         </Button>

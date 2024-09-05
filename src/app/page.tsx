@@ -3,6 +3,8 @@ import HomePage from "@/components/home-page";
 import PocketBase from 'pocketbase';
 
 
+
+// Fetch resumes from PocketBase
 async function getResumes() {
   const pb = new PocketBase('http://127.0.0.1:8090');
   try {
