@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { logout } from "@/app/actions";
 
 
 export default function SideBar() {
@@ -22,7 +23,15 @@ export default function SideBar() {
           <Link href="/settings" passHref>
             <Button variant="ghost" className="w-full">Settings</Button>
           </Link>
+          <form action={logout}>
+                    <Button type="submit" variant="destructive" className="w-full">
+                        Logout
+                    </Button>
+                </form>
+
         </div>
+
+
       </div>
     );
 }
