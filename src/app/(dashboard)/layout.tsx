@@ -1,5 +1,7 @@
 // (dashboard)/layout.tsx
+
 import DashboardLayout from '@/components/dashboard-layout';
+import NavBar from '@/components/nav-bar';
 import { ReactNode } from 'react';
 
 
@@ -10,10 +12,12 @@ export default function Layout({
   children: ReactNode
 }) {
   return (
-
-      <DashboardLayout>
-      {children}
-      </DashboardLayout>
+      <>
+        <NavBar />
+        <DashboardLayout>
+        {children}
+        </DashboardLayout>
+      </>
 
   );
 }
