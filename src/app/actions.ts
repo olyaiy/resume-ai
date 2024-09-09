@@ -4,6 +4,25 @@ import { redirect } from 'next/navigation';
 import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
 
+// Helper function to check if user is authenticated
+async function isAuthenticated() {
+  const pb = new PocketBase(process.env.POCKETBASE_URL);
+  const cookieStore = cookies();
+  const authCookie = cookieStore.get('pb_auth');
+
+  if (authCookie) {
+    try {
+      const authData = JSON.parse(authCookie.value);
+      pb.authStore.save(authData.token, authData.model);
+      return pb.authStore.isValid;
+    } catch (error) {
+      console.error('Error parsing auth cookie:', error);
+    }
+  }
+  return false;
+}
+
+
 export async function login(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
@@ -12,21 +31,31 @@ export async function login(formData: FormData) {
 
   const pb = new PocketBase(process.env.POCKETBASE_URL);
 
-  const { token, record: model } = await pb
-    .collection('users')
-    .authWithPassword(email, password);
+  try {
+    console.log('starting...')
+    const { token, record: model } = await pb
+      .collection('users')
+      .authWithPassword(email, password);
 
-  const cookie = JSON.stringify({ token, model });
+    const cookie = JSON.stringify({ token, model });
 
-  cookies().set('pb_auth', cookie, {
-    secure: true,
-    path: '/',
-    sameSite: 'strict',
-    httpOnly: true,
-  });
+    cookies().set('pb_auth', cookie, {
+      secure: true,
+      path: '/',
+      sameSite: 'strict',
+      httpOnly: true,
+    });
 
-  redirect('/dashboard');
+  } catch (error) {
+  // Redirect to login page with error parameter
+    redirect('/sign-in?error=AuthFailed');
+    }
+    if (await isAuthenticated()) {
+      redirect('/dashboard');
+  }
 }
+  
+
 
 export async function logout() {
   cookies().delete('pb_auth');
