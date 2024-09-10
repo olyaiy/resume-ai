@@ -1,6 +1,7 @@
 
-import SignUpForm from "@/components/signup-form"
 
+
+import SignUpForm from "@/components/auth/signup-form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function SignUpPage(){
