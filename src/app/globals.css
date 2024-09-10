@@ -67,5 +67,23 @@
   }
   body {
     @apply bg-background text-foreground;
+    
   }
+}
+
+h1 {
+  display: block;
+  font-size: 2em;
+
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+} 
+
+h2 {
+  display: block;
+  font-size: 1.5em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
 }

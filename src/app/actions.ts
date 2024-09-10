@@ -5,7 +5,7 @@ import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
 
 // Helper function to check if user is authenticated
-async function isAuthenticated() {
+export async function isAuthenticated() {
   const pb = new PocketBase(process.env.POCKETBASE_URL);
   const cookieStore = cookies();
   const authCookie = cookieStore.get('pb_auth');
@@ -61,3 +61,47 @@ export async function logout() {
   cookies().delete('pb_auth');
   redirect('/');
 }
+
+
+
+export async function signup(formData: FormData) {
+  const email = formData.get('email') as string;
+  const password = formData.get('password') as string;
+  const passwordConfirm = formData.get('passwordConfirm') as string;
+
+  // TODO: server-side validation
+  if (password !== passwordConfirm) {
+    redirect('/sign-up?error=PasswordMismatch');
+  }
+
+  const pb = new PocketBase(process.env.POCKETBASE_URL);
+
+  try {
+    const user = await pb.collection('users').create({
+      email,
+      password,
+      passwordConfirm,
+    });
+
+    // Automatically log in the user after successful signup
+    const { token, record: model } = await pb
+      .collection('users')
+      .authWithPassword(email, password);
+
+    const cookie = JSON.stringify({ token, model });
+
+    cookies().set('pb_auth', cookie, {
+      secure: true,
+      path: '/',
+      sameSite: 'strict',
+      httpOnly: true,
+    });
+
+    redirect('/dashboard');
+  } catch (error) {
+    // Handle specific error cases if needed
+    console.error('Signup error:', error);
+    redirect('/sign-up?error=SignupFailed');
+  }
+}
+
