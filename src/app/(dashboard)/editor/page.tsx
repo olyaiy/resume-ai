@@ -1,5 +1,6 @@
+import EditorLayout from "./editor-layout";
+
+
 export default function Page() {
-    return (
-        <div></div>
-    );
+    return <EditorLayout />;
 }

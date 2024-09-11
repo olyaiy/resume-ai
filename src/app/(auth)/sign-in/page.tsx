@@ -1,4 +1,5 @@
-import { LoginForm } from "@/components/login-form";
+
+import { LoginForm } from "@/components/auth/login-form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function Page({
