@@ -8,21 +8,15 @@ import ResumeDocument from "./document";
 import { saveResume } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { revalidatePath } from "next/cache";
+import BasicInfo from "@/components/editor/basic-info";
+import Skills from "@/components/editor/skills";
 
 
 
 export default function EditorLayout({resumeData}: {resumeData: Resume}) {
     const { toast } = useToast()
-
-
-
     const [resume, setResume] = useState(resumeData);
     const [isSaving, setIsSaving] = useState(false);
-
-
-    const handleInputChange = (field: keyof Resume, value: any) => {
-        setResume(prev => ({ ...prev, [field]: value }));
-    };
 
     const handleArrayChange = <T extends Education | WorkExperience | Project | Skill>(
         field: keyof Pick<Resume, 'education_history' | 'work_history' | 'projects' | 'skills'>,
@@ -113,6 +107,7 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
                 </div>
 
                 {/* Basic Information */}
+                <BasicInfo resume={resume} setResume={setResume}/>
                 {/* <div className="space-y-2 bg-card p-4 border rounded">
                     <h2 className="text-xl font-semibold">Basic Information</h2>
                     <div className="flex items-center space-x-2">
@@ -138,6 +133,8 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
                 </div> */}
 
                 {/* Skills */}
+                <Skills resume={resume} setResume={setResume}/>
+
                 {/* <div className="space-y-2 bg-card p-4 border rounded">
                     <h2 className="text-xl font-semibold">Skills</h2>
                     <button onClick={ ()=> console.log(resume.skills)}/>

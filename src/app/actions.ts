@@ -127,10 +127,10 @@ export async function saveResume(resumeData: Resume): Promise<{ success: boolean
 
 // New Resume
 export async function createResume(resumeName: string){
-    // Get the cookie from the request
-    const cookieStore = cookies();
-    const authCookie = cookieStore.get('pb_auth');
-  
+  // Get the cookie from the request
+  const cookieStore = cookies();
+  const authCookie = cookieStore.get('pb_auth');
+
   
   if (authCookie) {
     // Load the auth data from the cookie
@@ -142,10 +142,10 @@ export async function createResume(resumeName: string){
     try {
       const data = {
         "name": "test",
-        "skills": "JSON",
-        "education_history": "JSON",
-        "work_history": "JSON",
-        "projects": "JSON",
+        "skills": {},
+        "education_history": {},
+        "work_history": {},
+        "projects": {},
         "field": currentUserId,
         "resume_name": resumeName,
         "linkedin": "https://example.com",
