@@ -7,7 +7,8 @@ import { useState } from "react";
 import ResumeDocument from "./document";
 
 export default function EditorLayout({resumeData}: {resumeData: Resume}) {
-    const [resume, setResume] = useState<Resume>(resumeData);
+    // 
+    const [resume, setResume] = useState(resumeData);
 
     const handleInputChange = (field: keyof Resume, value: any) => {
         setResume(prev => ({ ...prev, [field]: value }));
@@ -29,6 +30,7 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
 
     return (
         <div className="flex flex-row gap-4 h-full ">
+            {/* left side: resume editor */}
             <div className="w-full h-full space-y-6 p-4 overflow-scroll">
 
 
@@ -266,7 +268,10 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
                 </div>
                 
             </div>
-            <ResumeDocument />
+            {/* right side: resume display */}
+            <ResumeDocument
+                resumeData={resume}
+            />
         </div>
 
     );

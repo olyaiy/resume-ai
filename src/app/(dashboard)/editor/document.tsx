@@ -3,6 +3,7 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { Resume } from '@/lib/types';
 
 // Dynamically import PDFViewer with ssr option set to false
 const PDFViewer = dynamic(() => import('@react-pdf/renderer').then(mod => mod.PDFViewer), {
@@ -21,6 +22,20 @@ const styles = StyleSheet.create({
       marginBottom: 5,
       textAlign: 'center',
     },
+    jobHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: 5,
+      },
+      jobInfo: {
+        flex: 1,
+      },
+      dateRange: {
+        fontSize: 11,
+        textAlign: 'right',
+    },
+  
     subHeader: {
       fontSize: 11,
       marginBottom: 10,
@@ -59,66 +74,113 @@ const styles = StyleSheet.create({
     },
   });
   
-  // Create Document Component
-  const MyDocument = () => (
+ 
+
+const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
+
+  <PDFViewer width="100%" className='h-full'>
     <Document pageMode={'fullScreen'} pageLayout={"oneColumn"}>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.header}>Lisan al-Gaib</Text>
+
+        {/* Name */}
+        <Text style={styles.header}>{resumeData.name}</Text>
         <Text style={styles.subHeader}>name@gmail.com | portfolio.com | github.com/name</Text>
         
-        <View style={styles.sectionTitle}><Text>Skills</Text></View>
+        {/* Skills */}
+        <View style={styles.sectionTitle}>
+            <Text>Skills</Text>
+        </View>
+
         <Text style={styles.content}>
-          <Text style={styles.bold}>CAD: </Text>Siemens NX, CATIA V5, SolidWorks{'\n'}
-          <Text style={styles.bold}>Analysis: </Text>Thermal Desktop, Abaqus, LS-DYNA, STAR-CCM+
+            {resumeData.skills.map((skill, index) => (
+                <React.Fragment key={skill.name}>
+                <Text style={styles.bold}>{skill.name}</Text>
+                {index < resumeData.skills.length - 1 ? ', ' : ''}
+                </React.Fragment>
+            ))}
         </Text>
-  
+
+        {/* Work Experience */}
         <View style={styles.sectionTitle}><Text>Experience</Text></View>
-        <Text style={styles.content}>
-          <Text style={styles.bold}>Job Title, </Text>Company – City, ST        June 2022 – Present
-        </Text>
-        <View style={styles.listItem}>
-          <Text style={styles.bullet}>•</Text>
-          <Text style={styles.listItemContent}><Text style={styles.bold}>STAR: </Text>Situation Task Action Result: Briefly describe a specific situation, task, action taken, and the result achieved</Text>
+            {resumeData.work_history.map((job, index) => (
+            <React.Fragment key={index}>
+                <View style={styles.jobHeader}>
+                    <View style={styles.jobInfo}>
+                        <Text style={styles.content}>
+                        <Text style={styles.bold}>{job.position}, </Text>{job.company}
+                        </Text>
+                    </View>
+                    <Text style={styles.dateRange}>{job.startDate} – {job.endDate}</Text>
+                </View>
+                {job.description.split('\n').map((bullet, bulletIndex) => (
+                <View key={bulletIndex} style={styles.listItem}>
+                    <Text style={styles.bullet}>•</Text>
+                    <Text style={styles.listItemContent}>{bullet}</Text>
+                </View>
+                ))}
+            </React.Fragment>
+            ))}
+
+        {/* Projects */}
+        <View style={styles.sectionTitle}>
+            <Text>Projects</Text>
         </View>
-        <View style={styles.listItem}>
-          <Text style={styles.bullet}>•</Text>
-          <Text style={styles.listItemContent}><Text style={styles.bold}>STAR: </Text>Another example of a situation, task, action, and result</Text>
+                {resumeData.projects.map((project, index) => (
+                    <React.Fragment key={index}>
+
+
+                        <Text style={styles.content}>
+                            <Text style={styles.bold}>
+                                {project.name}        
+                            </Text>
+                        </Text>
+
+                        {/* Project Url */}
+                        {project.url && <Text style={styles.content}>{project.url}</Text>}
+
+                        <Text style={styles.content}>
+                            {project.technologies.join(', ')}
+                        </Text>
+
+                        <View style={styles.listItem}>
+                            <Text style={styles.bullet}>•</Text>
+                            <Text style={styles.listItemContent}>
+                                {project.description}
+                            </Text>
+                        </View>
+
+                        
+                        {index < resumeData.projects.length - 1 && <View style={{ marginBottom: 10 }} />}
+                    </React.Fragment>
+                ))}
+        
+        {/* Education */}
+        <View style={styles.sectionTitle}>
+            <Text>Education</Text>
         </View>
-  
-        <Text style={styles.content}>
-          <Text style={styles.bold}>Job Title, </Text>Company – City, ST        Jan 2021 – May 2022
-        </Text>
-        <View style={styles.listItem}>
-          <Text style={styles.bullet}>•</Text>
-          <Text style={styles.listItemContent}><Text style={styles.bold}>XYZ: </Text>Accomplished X as measured by Y by doing Z</Text>
-        </View>
-        <View style={styles.listItem}>
-          <Text style={styles.bullet}>•</Text>
-          <Text style={styles.listItemContent}><Text style={styles.bold}>XYZ: </Text>Another example of accomplishment X, measurement Y, and action Z</Text>
-        </View>
-  
-        <View style={styles.sectionTitle}><Text>Projects</Text></View>
-        <Text style={styles.content}>
-          <Text style={styles.bold}>Project Title        </Text>name.com/projectdemo
-        </Text>
-        <View style={styles.listItem}>
-          <Text style={styles.bullet}>•</Text>
-          <Text style={styles.listItemContent}>Brief description of the project and its significance</Text>
-        </View>
-  
-        <View style={styles.sectionTitle}><Text>Education</Text></View>
-        <Text style={styles.content}>
-          <Text style={styles.bold}>School </Text>– PhD in Mechanical Engineering        May 2010{'\n'}
-          <Text style={styles.bold}>School </Text>– MS in Mechanical Engineering         June 2006{'\n'}
-          <Text style={styles.bold}>School </Text>– BS in Mechanical Engineering         Apr 2004
-        </Text>
+        {resumeData.education_history.map((edu, index) => (
+            <View key={index} style={{ marginBottom: index < resumeData.education_history.length - 1 ? 10 : 0 }}>
+                <View style={styles.jobHeader}>
+                    <Text style={styles.content}>
+                        <Text style={[styles.content, styles.bold]}>{edu.institution} | </Text>
+                        {edu.degree} in {edu.fieldOfStudy}
+                    </Text>
+
+                    
+                    <Text style={styles.dateRange}>{edu.endDate}</Text>
+                </View>
+                {edu.description && (
+                    <View style={styles.listItem}>
+                        <Text style={styles.bullet}>•</Text>
+                        <Text style={styles.listItemContent}>{edu.description}</Text>
+                    </View>
+                )}
+            </View>
+        ))}
+
+
       </Page>
     </Document>
-  );
-
-const ResumeDocument = () => (
-  <PDFViewer width="100%" className='h-full'>
-    <MyDocument />
   </PDFViewer>
 );
 
