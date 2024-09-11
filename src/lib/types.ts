@@ -14,9 +14,7 @@ export type SkillsArray = {
 export interface Education {
     institution: string;
     degree: string;
-    fieldOfStudy: string;
-    startDate: string;
-    endDate: string;
+    date: string;
     description?: string;
   }
   

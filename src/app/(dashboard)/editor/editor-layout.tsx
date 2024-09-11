@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Resume, Education, WorkExperience, Project, Skill, SkillCategories } from "@/lib/types";
-import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import ResumeDocument from "./document";
 import { saveResume } from "@/app/actions";
@@ -10,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { revalidatePath } from "next/cache";
 import BasicInfo from "@/components/editor/basic-info";
 import Skills from "@/components/editor/skills";
+import EducationHistory from "@/components/editor/education";
 
 
 
@@ -135,104 +135,9 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
                 {/* Skills */}
                 <Skills resume={resume} setResume={setResume}/>
 
-                {/* <div className="space-y-2 bg-card p-4 border rounded">
-                    <h2 className="text-xl font-semibold">Skills</h2>
-                    <button onClick={ ()=> console.log(resume.skills)}/>
-                    {resume.skills.map((skill, index) => (
-                        <div key={index} className="flex items-center space-x-2 mb-2">
-                            <input
-                                type="text"
-                                value={skill.category}
-                                onChange={(e) => handleSkillChange(index, 'category', e.target.value)}
-                                className="w-48 p-2 border rounded"
-                                placeholder="Skill Category"
-                            />
-                            <input
-                                type="text"
-                                value={skill.skills}
-                                onChange={(e) => handleSkillChange(index, 'skills', e.target.value)}
-                                className="flex-grow p-2 border rounded"
-                                placeholder="Skills (comma-separated)"
-                            />
-                            <Button variant={'destructive'} onClick={() => removeSkillCategory(index)}>
-                                <Trash2 className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    ))}
-                    <Button onClick={addSkillCategory} className="mt-2">
-                        Add Skill Category
-                    </Button>
-                </div> */}
-
                 {/* Education History */}
-                {/* <div className="space-y-2">
-                    <h2 className="text-xl font-semibold">Education History</h2>
-                    {resume.education_history.map((edu, index) => (
-                        <div key={index} className="space-y-2 border p-4 rounded relative bg-card">
-                            <div className="w-full flex justify-end">
-                                <Button variant={'destructive'} className=" top-4 right-4">
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">Institution:</label>
-                                <textarea
-                                    value={edu.institution}
-                                    onChange={(e) => handleArrayChange<Education>('education_history', index, 'institution', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="Institution"
-                                />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">Degree:</label>
-                                <textarea
-                                    value={edu.degree}
-                                    onChange={(e) => handleArrayChange<Education>('education_history', index, 'degree', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="Degree"
-                                />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">Field of Study:</label>
-                                <textarea
-                                    value={edu.fieldOfStudy}
-                                    onChange={(e) => handleArrayChange<Education>('education_history', index, 'fieldOfStudy', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="Field of Study"
-                                />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">Start Date:</label>
-                                <input
-                                    type="text"
-                                    value={edu.startDate}
-                                    onChange={(e) => handleArrayChange<Education>('education_history', index, 'startDate', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="Start Date"
-                                />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">End Date:</label>
-                                <input
-                                    type="text"
-                                    value={edu.endDate}
-                                    onChange={(e) => handleArrayChange<Education>('education_history', index, 'endDate', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="End Date"
-                                />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">Description:</label>
-                                <textarea
-                                    value={edu.description || ''}
-                                    onChange={(e) => handleArrayChange<Education>('education_history', index, 'description', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="Description (optional)"
-                                />
-                            </div>
-                        </div>
-                    ))}
-                </div> */}
+                <EducationHistory resume={resume} setResume={setResume}/>
+
 
                 {/* Work Experience */}
                 {/* <div className="space-y-2">

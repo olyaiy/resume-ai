@@ -2,6 +2,7 @@ import { Resume } from "@/lib/types";
 import { Button } from "../ui/button";
 import { Trash2 } from "lucide-react";
 import { Textarea } from "../ui/textarea";
+import { Input } from "../ui/input";
 
 export default function Skills({resume, setResume}: {resume: Resume, setResume: (resume: Resume) => void}) {
     return (
@@ -23,7 +24,7 @@ export default function Skills({resume, setResume}: {resume: Resume, setResume: 
                         
                         {/* Category and Delete Button Row */}
                         <div className="flex flex-row w-full gap-4 items-stretch justify-stretch">
-                            <input
+                            <Input
                                 type="text"
                                 value={category}
                                 // onChange={(e) => handleSkillChange(index, 'category', e.target.value)}
