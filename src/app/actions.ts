@@ -3,8 +3,10 @@
 import { redirect } from 'next/navigation';
 import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
+import { Resume } from '@/lib/types';
+import { revalidatePath } from 'next/cache';
 
-// Helper function to check if user is authenticated
+//  -----  AUTH -----
 export async function isAuthenticated() {
   const pb = new PocketBase(process.env.POCKETBASE_URL);
   const cookieStore = cookies();
@@ -21,8 +23,6 @@ export async function isAuthenticated() {
   }
   return false;
 }
-
-
 export async function login(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
@@ -53,17 +53,11 @@ export async function login(formData: FormData) {
     if (await isAuthenticated()) {
       redirect('/dashboard');
   }
-}
-  
-
-
+} 
 export async function logout() {
   cookies().delete('pb_auth');
   redirect('/');
 }
-
-
-
 export async function signup(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
@@ -102,6 +96,29 @@ export async function signup(formData: FormData) {
     // Handle specific error cases if needed
     console.error('Signup error:', error);
     redirect('/sign-up?error=SignupFailed');
+  }
+}
+
+// Save Resume
+export async function saveResume(resumeData: Resume): Promise<{ success: boolean, message: string }> {
+  const pb = new PocketBase(process.env.POCKETBASE_URL);
+  
+  try {
+    const record = await pb.collection('resumes').update(resumeData.id, {
+      name: resumeData.name,
+      resume_name: resumeData.resume_name,
+      skills: resumeData.skills,
+      education_history: resumeData.education_history,
+      work_history: resumeData.work_history,
+      projects: resumeData.projects,
+    });
+    
+    console.log('Resume saved successfully:', record);
+
+    return { success: true, message: 'Resume saved successfully' };
+  } catch (error) {
+    console.error('Error saving resume:', error);
+    return { success: false, message: 'Failed to save resume' };
   }
 }
 
