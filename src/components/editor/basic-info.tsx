@@ -4,6 +4,14 @@ import { Input } from "../ui/input";
 
 export default function BasicInfo({resume, setResume}: {resume: Resume, setResume: (resume: Resume) => void}) {
 
+    // Event handler for input change
+    const handleInputChange = (field: keyof Resume, value: string) => {
+        setResume({
+            ...resume,
+            [field]: value,
+        });
+    };
+
     return (
             <>
             {/* Basic Information */}
@@ -15,7 +23,7 @@ export default function BasicInfo({resume, setResume}: {resume: Resume, setResum
                         <Input
                             type="text"
                             value={resume.name}
-                            // onChange={(e) => handleInputChange('name', e.target.value)}
+                            onChange={(e) => handleInputChange('name', e.target.value)}
                             className="flex-grow p-2 border rounded"
                             placeholder="Name"
                         />
@@ -25,7 +33,7 @@ export default function BasicInfo({resume, setResume}: {resume: Resume, setResum
                         <Input
                             type="text"
                             value={resume.resume_name}
-                            // onChange={(e) => handleInputChange('resume_name', e.target.value)}
+                            onChange={(e) => handleInputChange('resume_name', e.target.value)}
                             className="flex-grow p-2 border rounded"
                             placeholder="Resume Name"
                         />

@@ -19,24 +19,10 @@ import Projects from "@/components/editor/projects";
 export default function EditorLayout({resumeData}: {resumeData: Resume}) {
     const { toast } = useToast()
     const [resume, setResume] = useState(resumeData);
-    const [isSaving, setIsSaving] = useState(false);
 
-    // const handleArrayChange = <T extends Education | WorkExperience | Project | Skill>(
-    //     field: keyof Pick<Resume, 'education_history' | 'work_history' | 'projects' | 'skills'>,
-    //     index: number,
-    //     subField: keyof T,
-    //     value: any
-    // ) => {
-    //     setResume(prev => ({
-    //         ...prev,
-    //         [field]: (prev[field] as T[]).map((item, i) => 
-    //             i === index ? { ...item, [subField]: value } : item
-    //         )
-    //     }));
-    // };
 
     const handleSaveResume = async () => {
-        setIsSaving(true);
+
         toast({
             title: "Saving resume...",
             description: "Please wait while we save your changes.",
@@ -63,34 +49,8 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
                 description: "An error occurred while saving",
                 variant: "destructive",
             });
-        } finally {
-            setIsSaving(false);
-        }
+        } 
     };
-
-    const handleSkillChange = (index: number, field: 'category' | 'skills', value: string) => {
-        setResume(prev => ({
-            ...prev,
-            skills: prev.skills.map((skill, i) => 
-                i === index ? { ...skill, [field]: value } : skill
-            )
-        }));
-    };
-
-    const addSkillCategory = () => {
-        setResume(prev => ({
-            ...prev,
-            skills: [...prev.skills, { category: '', skills: '' }]
-        }));
-    };
-
-    const removeSkillCategory = (index: number) => {
-        setResume(prev => ({
-            ...prev,
-            skills: prev.skills.filter((_, i) => i !== index)
-        }));
-    };
-
 
 
     return (

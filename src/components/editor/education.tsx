@@ -1,4 +1,4 @@
-import { Resume } from "@/lib/types";
+import { Resume, Education } from "@/lib/types";
 import { Button } from "../ui/button";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { Input } from "../ui/input";
@@ -6,6 +6,27 @@ import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
 
 export default function EducationHistory({resume, setResume}: {resume: Resume, setResume: (resume: Resume) => void}) {
+    const handleEducationChange = (index: number, field: keyof Education, value: string) => {
+        const updatedEducation = [...resume.education_history];
+        updatedEducation[index] = { ...updatedEducation[index], [field]: value };
+        setResume({ ...resume, education_history: updatedEducation });
+    };
+
+    const removeEducation = (index: number) => {
+        const updatedEducation = resume.education_history.filter((_, i) => i !== index);
+        setResume({ ...resume, education_history: updatedEducation });
+    };
+
+    const addEducation = () => {
+        const newEducation: Education = {
+            institution: "",
+            degree: "",
+            date: "",
+            description: ""
+        };
+        setResume({ ...resume, education_history: [...resume.education_history, newEducation] });
+    };
+
     return (
         <div className="space-y-4">
             <h2 className="text-xl font-semibold">Education History</h2>
@@ -13,7 +34,11 @@ export default function EducationHistory({resume, setResume}: {resume: Resume, s
                 <div key={index} className="space-y-4 border p-4 rounded bg-card">
                     <div className="flex justify-between items-center">
                         <h3 className="text-lg font-medium">Education {index + 1}</h3>
-                        <Button variant="destructive" size="icon">
+                        <Button 
+                            variant="destructive" 
+                            size="icon"
+                            onClick={() => removeEducation(index)}
+                        >
                             <Trash2 className="h-4 w-4" />
                         </Button>
                     </div>
@@ -24,7 +49,7 @@ export default function EducationHistory({resume, setResume}: {resume: Resume, s
                             <Label>Institution:</Label>
                             <Input
                                 value={edu.institution}
-                                // onChange={(e) => handleArrayChange<Education>('education_history', index, 'institution', e.target.value)}
+                                onChange={(e) => handleEducationChange(index, 'institution', e.target.value)}
                                 placeholder="Institution"
                             />
                         </div>
@@ -32,7 +57,7 @@ export default function EducationHistory({resume, setResume}: {resume: Resume, s
                             <Label>Degree:</Label>
                             <Input
                                 value={edu.degree}
-                                // onChange={(e) => handleArrayChange<Education>('education_history', index, 'degree', e.target.value)}
+                                onChange={(e) => handleEducationChange(index, 'degree', e.target.value)}
                                 placeholder="Degree"
                             />
                         </div>
@@ -41,7 +66,7 @@ export default function EducationHistory({resume, setResume}: {resume: Resume, s
                             <Input
                                 type="text"
                                 value={edu.date}
-                                // onChange={(e) => handleArrayChange<Education>('education_history', index, 'startDate', e.target.value)}
+                                onChange={(e) => handleEducationChange(index, 'date', e.target.value)}
                                 placeholder="E.g. Aug 2020 - May 2024"
                             />
                         </div>
@@ -49,14 +74,14 @@ export default function EducationHistory({resume, setResume}: {resume: Resume, s
                             <Label>Description:</Label>
                             <Textarea
                                 value={edu.description || ''}
-                                // onChange={(e) => handleArrayChange<Education>('education_history', index, 'description', e.target.value)}
+                                onChange={(e) => handleEducationChange(index, 'description', e.target.value)}
                                 placeholder="Description (optional)"
                             />
                         </div>
                     </div>
                 </div>
             ))}
-            <Button>
+            <Button onClick={addEducation}>
                 <PlusCircle className="w-4 h-4 mr-2"/>
                 Add Education
             </Button>
