@@ -4,7 +4,11 @@ import { redirect } from 'next/navigation';
 import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
 import { Resume } from '@/lib/types';
-import { revalidatePath } from 'next/cache';
+
+
+const pb = new PocketBase(process.env.POCKETBASE_URL);
+  
+
 
 //  -----  AUTH -----
 export async function isAuthenticated() {
@@ -101,7 +105,6 @@ export async function signup(formData: FormData) {
 
 // Save Resume
 export async function saveResume(resumeData: Resume): Promise<{ success: boolean, message: string }> {
-  const pb = new PocketBase(process.env.POCKETBASE_URL);
   
   try {
     const record = await pb.collection('resumes').update(resumeData.id, {
@@ -119,6 +122,52 @@ export async function saveResume(resumeData: Resume): Promise<{ success: boolean
   } catch (error) {
     console.error('Error saving resume:', error);
     return { success: false, message: 'Failed to save resume' };
+  }
+}
+
+// New Resume
+export async function createResume(resumeName: string){
+    // Get the cookie from the request
+    const cookieStore = cookies();
+    const authCookie = cookieStore.get('pb_auth');
+  
+  
+  if (authCookie) {
+    // Load the auth data from the cookie
+    pb.authStore.loadFromCookie(`pb_auth=${authCookie.value}`);
+  }
+
+  const currentUserId: string = pb.authStore.model?.id ?? '';
+  
+    try {
+      const data = {
+        "name": "test",
+        "skills": "JSON",
+        "education_history": "JSON",
+        "work_history": "JSON",
+        "projects": "JSON",
+        "field": currentUserId,
+        "resume_name": resumeName,
+        "linkedin": "https://example.com",
+        "github": "https://example.com",
+        "portfolio_site": "https://example.com"
+      };
+
+    const record = await pb.collection('resumes').create(data);
+
+    console.log('Resume created successfully:', record);
+
+    return { 
+      success: true, 
+      message: 'Resume created successfully', 
+      id: record.id 
+    };
+  } catch (error) {
+    console.error('Error creating resume:', error);
+    return { 
+      success: false, 
+      message: error instanceof Error ? error.message : 'Failed to create resume' 
+    };
   }
 }
 
