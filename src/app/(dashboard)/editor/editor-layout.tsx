@@ -148,55 +148,7 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
 
                 {/* Projects */}
                 <Projects resume={resume} setResume={setResume}/>
-                {/* <div className="space-y-2">
-                    <h2 className="text-xl font-semibold">Projects</h2>
-                    {resume.projects.map((project, index) => (
-                        <div key={index} className="space-y-2 border p-4 rounded bg-card">
-                            <div className="w-full flex justify-end">
-                                <Button variant={'destructive'} className=" top-4 right-4">
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">Name:</label>
-                                <textarea
-                                    value={project.name}
-                                    onChange={(e) => handleArrayChange<Project>('projects', index, 'name', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="Project Name"
-                                />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">Description:</label>
-                                <textarea
-                                    value={project.description}
-                                    onChange={(e) => handleArrayChange<Project>('projects', index, 'description', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="Description"
-                                />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">Technologies:</label>
-                                <textarea
-                                    value={project.technologies.join(', ')}
-                                    onChange={(e) => handleArrayChange<Project>('projects', index, 'technologies', e.target.value.split(', '))}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="Technologies (comma-separated)"
-                                />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">URL:</label>
-                                <input
-                                    type="text"
-                                    value={project.url || ''}
-                                    onChange={(e) => handleArrayChange<Project>('projects', index, 'url', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="URL (optional)"
-                                />
-                            </div>
-                        </div>
-                    ))}
-                </div> */}
+                
                 
             </div>
             {/* right side: resume display */}
