@@ -142,10 +142,10 @@ export async function createResume(resumeName: string){
     try {
       const data = {
         "name": "test",
-        "skills": {},
-        "education_history": {},
-        "work_history": {},
-        "projects": {},
+        "skills": [],
+        "education_history": [],
+        "work_history": [],
+        "projects": [],
         "field": currentUserId,
         "resume_name": resumeName,
         "linkedin": "https://example.com",

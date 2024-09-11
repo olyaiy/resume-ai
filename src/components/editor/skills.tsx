@@ -5,48 +5,57 @@ import { Textarea } from "../ui/textarea";
 
 export default function Skills({resume, setResume}: {resume: Resume, setResume: (resume: Resume) => void}) {
     return (
-       <>
        <div className="space-y-2 bg-card p-4 border rounded">
-                    {/* Skills section heading */}
-                    <h2 className="text-xl font-semibold">
-                        Skills
-                    </h2>
+            {/* Skills section heading */}
+            <h2 className="text-xl font-semibold">
+                Skills
+            </h2>
 
-                    {/*  */}
-                    <button onClick={ ()=> console.log(resume.skills)}/>
+            {/* Mapping each skill object */}
+            {resume.skills.map((skill, index) => {
+
+                // Mapping each skill category
+                const category = Object.keys(skill)[0];
+                const skillsList = skill[category];
+
+                return (
+                    <div key={index} className="flex items-center flex-col w-full gap-2 pb-4">
                         
-                    {resume.skills.map((skill, index) => (
-                        <div key={index} className="flex items-center flex-col w-full gap-2 pb-4">
-                            <div className="flex flex-row w-full gap-4 items-stretch justify-stretch">
-                                <input
-                                    type="text"
-                                    value={skill.category}
-                                    // onChange={(e) => handleSkillChange(index, 'category', e.target.value)}
-                                    className="w-full p-2 border rounded"
-                                    placeholder="Skill Category"
-                                />
-                                
-                                <Button variant={'destructive'} className="ml-auto"
-                                // onClick={() => removeSkillCategory(index)}
-                                >
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                            </div>
-                            <Textarea
-                                value={skill.skills}
-                                // onChange={(e) => handleSkillChange(index, 'skills', e.target.value)}
-                                className="flex-grow p-2 border rounded"
-                                placeholder="Skills (comma-separated)"
+                        {/* Category and Delete Button Row */}
+                        <div className="flex flex-row w-full gap-4 items-stretch justify-stretch">
+                            <input
+                                type="text"
+                                value={category}
+                                // onChange={(e) => handleSkillChange(index, 'category', e.target.value)}
+                                className="w-full p-2 border rounded"
+                                placeholder="Skill Category"
                             />
+                            
+                            <Button variant={'destructive'} className="ml-auto"
+                            // onClick={() => removeSkillCategory(index)}
+                            >
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
                         </div>
-                    ))}
-                    <Button 
-                    // onClick={addSkillCategory} 
-                    className="mt-2">
-                        Add Skill Category
-                    </Button>
-                </div>
-       
-       </>
+
+                        {/* Skill List Textarea */}
+                        <Textarea
+                            value={skillsList}
+                            // onChange={(e) => handleSkillChange(index, 'skills', e.target.value)}
+                            className="flex-grow p-2 border rounded"
+                            placeholder="Skills (comma-separated)"
+                        />
+                    </div>
+                );
+            })}
+
+            {/* Add Skill Category Button */}
+            <Button 
+            // onClick={addSkillCategory} 
+            className="mt-2">
+                Add Skill Category
+            </Button>
+        </div>
+
     );
 }
