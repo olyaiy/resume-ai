@@ -138,31 +138,33 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
                 </div>
 
                 
-                {/* Skills */}
-                <div className="space-y-2 bg-card p-4 border rounded">
+                    {/* Skills */}
+                    <div className="space-y-2 bg-card p-4 border rounded">
                     <h2 className="text-xl font-semibold">Skills</h2>
                     {resume.skills.map((skill, index) => {
                         const category = Object.keys(skill)[0];
                         const skillsList = skill[category];
                         return (
-                            <div key={index} className="flex items-center space-x-2 mb-2">
-                                <input
-                                    type="text"
-                                    value={category}
-                                    onChange={(e) => handleSkillChange(index, 'category', e.target.value)}
-                                    className="w-48 p-2 border rounded"
-                                    placeholder="Skill Category"
-                                />
-                                <input
-                                    type="text"
+                            <div key={index} className="space-y-2 mb-4">
+                                <div className="flex items-center space-x-2">
+                                    <input
+                                        type="text"
+                                        value={category}
+                                        onChange={(e) => handleSkillChange(index, 'category', e.target.value)}
+                                        className="flex-grow p-2 border rounded"
+                                        placeholder="Skill Category"
+                                    />
+                                    <Button variant={'destructive'} onClick={() => removeSkillCategory(index)}>
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                                <textarea
                                     value={skillsList}
                                     onChange={(e) => handleSkillChange(index, 'skills', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
+                                    className="w-full p-2 border rounded"
                                     placeholder="Skills (comma-separated)"
+                                    rows={3}
                                 />
-                                <Button variant={'destructive'} onClick={() => removeSkillCategory(index)}>
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
                             </div>
                         );
                     })}
