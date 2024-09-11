@@ -72,6 +72,12 @@ const styles = StyleSheet.create({
       lineHeight: 1.2,
 
     },
+    skillCategory: {
+        marginBottom: 5,
+        fontSize: 11,
+        fontWeight: 'extrabold',
+
+    },
   });
   
  
@@ -91,14 +97,18 @@ const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
             <Text>Skills</Text>
         </View>
 
-        <Text style={styles.content}>
-            {resumeData.skills.map((skill, index) => (
-                <React.Fragment key={skill.name}>
-                <Text style={styles.bold}>{skill.name}</Text>
-                {index < resumeData.skills.length - 1 ? ', ' : ''}
-                </React.Fragment>
-            ))}
-        </Text>
+        {resumeData.skills.map((skillCategory, index) => {
+            const category = Object.keys(skillCategory)[0];
+            const skillsList = skillCategory[category];
+            return (
+                <View key={index} style={styles.skillCategory}>
+                    <Text>
+                        <Text style={styles.bold}>{category}: </Text>
+                        <Text style={styles.content}>{skillsList}</Text>
+                    </Text>
+                </View>
+            );
+        })}
 
         {/* Work Experience */}
         <View style={styles.sectionTitle}><Text>Experience</Text></View>
