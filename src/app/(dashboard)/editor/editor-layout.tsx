@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Resume, Education, WorkExperience, Project, Skill } from "@/lib/types";
+import { Resume, Education, WorkExperience, Project, Skill, SkillCategories } from "@/lib/types";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import ResumeDocument from "./document";
@@ -71,6 +71,29 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
         }
     };
 
+    const handleSkillChange = (index: number, field: 'category' | 'skills', value: string) => {
+        setResume(prev => ({
+            ...prev,
+            skills: prev.skills.map((skill, i) => 
+                i === index ? { ...skill, [field]: value } : skill
+            )
+        }));
+    };
+
+    const addSkillCategory = () => {
+        setResume(prev => ({
+            ...prev,
+            skills: [...prev.skills, { category: '', skills: '' }]
+        }));
+    };
+
+    const removeSkillCategory = (index: number) => {
+        setResume(prev => ({
+            ...prev,
+            skills: prev.skills.filter((_, i) => i !== index)
+        }));
+    };
+
 
 
     return (
@@ -114,24 +137,38 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
                     </div>
                 </div>
 
+                
                 {/* Skills */}
                 <div className="space-y-2 bg-card p-4 border rounded">
                     <h2 className="text-xl font-semibold">Skills</h2>
-                    {resume.skills.map((skill, index) => (
-                        <div key={index} className="flex items-center space-x-2">
-                            <label className="w-24">Skill {index + 1}:</label>
-                            <input
-                                type="text"
-                                value={skill.name}
-                                onChange={(e) => handleArrayChange<Skill>('skills', index, 'name', e.target.value)}
-                                className="flex-grow p-2 border rounded"
-                                placeholder="Skill Name"
-                            />
-                            <Button variant={'destructive'}>
-                                <Trash2 className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    ))}
+                    {resume.skills.map((skill, index) => {
+                        const category = Object.keys(skill)[0];
+                        const skillsList = skill[category];
+                        return (
+                            <div key={index} className="flex items-center space-x-2 mb-2">
+                                <input
+                                    type="text"
+                                    value={category}
+                                    onChange={(e) => handleSkillChange(index, 'category', e.target.value)}
+                                    className="w-48 p-2 border rounded"
+                                    placeholder="Skill Category"
+                                />
+                                <input
+                                    type="text"
+                                    value={skillsList}
+                                    onChange={(e) => handleSkillChange(index, 'skills', e.target.value)}
+                                    className="flex-grow p-2 border rounded"
+                                    placeholder="Skills (comma-separated)"
+                                />
+                                <Button variant={'destructive'} onClick={() => removeSkillCategory(index)}>
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        );
+                    })}
+                    <Button onClick={addSkillCategory} className="mt-2">
+                        Add Skill Category
+                    </Button>
                 </div>
 
                 {/* Education History */}

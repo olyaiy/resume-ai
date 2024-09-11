@@ -1,8 +1,15 @@
 
 
 export interface Skill {
-    name: string;
+    [key: string]: string;
   }
+  
+export type SkillCategories = 'Languages' | 'Frameworks/ Libraries' | 'Developer Tools' | 'Other';
+  
+export type SkillsArray = {
+    [K in SkillCategories]: string;
+  }[];
+  
   
 export interface Education {
     institution: string;
