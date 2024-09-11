@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Resume, Education, WorkExperience, Project, Skill, SkillCategories } from "@/lib/types";
+import { Resume, Education, Project, Skill, SkillCategories } from "@/lib/types";
 import { useState } from "react";
 import ResumeDocument from "./document";
 import { saveResume } from "@/app/actions";
@@ -10,6 +10,9 @@ import { revalidatePath } from "next/cache";
 import BasicInfo from "@/components/editor/basic-info";
 import Skills from "@/components/editor/skills";
 import EducationHistory from "@/components/editor/education";
+import Work from "@/components/editor/work";
+import Projects from "@/components/editor/projects";
+
 
 
 
@@ -18,19 +21,19 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
     const [resume, setResume] = useState(resumeData);
     const [isSaving, setIsSaving] = useState(false);
 
-    const handleArrayChange = <T extends Education | WorkExperience | Project | Skill>(
-        field: keyof Pick<Resume, 'education_history' | 'work_history' | 'projects' | 'skills'>,
-        index: number,
-        subField: keyof T,
-        value: any
-    ) => {
-        setResume(prev => ({
-            ...prev,
-            [field]: (prev[field] as T[]).map((item, i) => 
-                i === index ? { ...item, [subField]: value } : item
-            )
-        }));
-    };
+    // const handleArrayChange = <T extends Education | WorkExperience | Project | Skill>(
+    //     field: keyof Pick<Resume, 'education_history' | 'work_history' | 'projects' | 'skills'>,
+    //     index: number,
+    //     subField: keyof T,
+    //     value: any
+    // ) => {
+    //     setResume(prev => ({
+    //         ...prev,
+    //         [field]: (prev[field] as T[]).map((item, i) => 
+    //             i === index ? { ...item, [subField]: value } : item
+    //         )
+    //     }));
+    // };
 
     const handleSaveResume = async () => {
         setIsSaving(true);
@@ -140,67 +143,11 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
 
 
                 {/* Work Experience */}
-                {/* <div className="space-y-2">
-                    <h2 className="text-xl font-semibold">Work Experience</h2>
-                    {resume.work_history.map((work, index) => (
-                        <div key={index} className="space-y-2 border p-4 rounded bg-card">
-                            <div className="w-full flex justify-end">
-                                <Button variant={'destructive'} className=" top-4 right-4">
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">Company:</label>
-                                <textarea
-                                    value={work.company}
-                                    onChange={(e) => handleArrayChange<WorkExperience>('work_history', index, 'company', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="Company"
-                                />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">Position:</label>
-                                <textarea
-                                    value={work.position}
-                                    onChange={(e) => handleArrayChange<WorkExperience>('work_history', index, 'position', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="Position"
-                                />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">Start Date:</label>
-                                <input
-                                    type="text"
-                                    value={work.startDate}
-                                    onChange={(e) => handleArrayChange<WorkExperience>('work_history', index, 'startDate', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="Start Date"
-                                />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">End Date:</label>
-                                <input
-                                    type="text"
-                                    value={work.endDate}
-                                    onChange={(e) => handleArrayChange<WorkExperience>('work_history', index, 'endDate', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="End Date"
-                                />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <label className="w-24">Description:</label>
-                                <textarea
-                                    value={work.description}
-                                    onChange={(e) => handleArrayChange<WorkExperience>('work_history', index, 'description', e.target.value)}
-                                    className="flex-grow p-2 border rounded"
-                                    placeholder="Description"
-                                />
-                            </div>
-                        </div>
-                    ))}
-                </div> */}
+                <Work resume={resume} setResume={setResume}/>
+                
 
                 {/* Projects */}
+                <Projects resume={resume} setResume={setResume}/>
                 {/* <div className="space-y-2">
                     <h2 className="text-xl font-semibold">Projects</h2>
                     {resume.projects.map((project, index) => (

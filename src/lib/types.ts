@@ -21,14 +21,15 @@ export interface Education {
 export interface WorkExperience {
     company: string;
     position: string;
-    startDate: string;
-    endDate: string;
+    date: string;
     description: string;
+    accomplishments: string[];
   }
   
 export interface Project {
     name: string;
     description: string;
+    accomplishments: string[];
     technologies: string[];
     url?: string;
   }
