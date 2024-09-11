@@ -93,10 +93,9 @@ const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
         <Text style={styles.subHeader}>name@gmail.com | portfolio.com | github.com/name</Text>
         
         {/* Skills */}
-        <View style={styles.sectionTitle}>
+        {/* <View style={styles.sectionTitle}>
             <Text>Skills</Text>
         </View>
-
         {resumeData.skills.map((skillCategory, index) => {
             const category = Object.keys(skillCategory)[0];
             const skillsList = skillCategory[category];
@@ -108,10 +107,10 @@ const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
                     </Text>
                 </View>
             );
-        })}
+        })} */}
 
         {/* Work Experience */}
-        <View style={styles.sectionTitle}><Text>Experience</Text></View>
+        {/* <View style={styles.sectionTitle}><Text>Experience</Text></View>
             {resumeData.work_history.map((job, index) => (
             <React.Fragment key={index}>
                 <View style={styles.jobHeader}>
@@ -129,10 +128,10 @@ const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
                 </View>
                 ))}
             </React.Fragment>
-            ))}
+            ))} */}
 
         {/* Projects */}
-        <View style={styles.sectionTitle}>
+        {/* <View style={styles.sectionTitle}>
             <Text>Projects</Text>
         </View>
                 {resumeData.projects.map((project, index) => (
@@ -143,10 +142,10 @@ const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
                             <Text style={styles.bold}>
                                 {project.name}        
                             </Text>
-                        </Text>
+                        </Text> */}
 
                         {/* Project Url */}
-                        {project.url && <Text style={styles.content}>{project.url}</Text>}
+                        {/* {project.url && <Text style={styles.content}>{project.url}</Text>}
 
                         <Text style={styles.content}>
                             {project.technologies.join(', ')}
@@ -162,9 +161,9 @@ const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
                         
                         {index < resumeData.projects.length - 1 && <View style={{ marginBottom: 10 }} />}
                     </React.Fragment>
-                ))}
+                ))} */}
         
-        {/* Education */}
+        {/* Education
         <View style={styles.sectionTitle}>
             <Text>Education</Text>
         </View>
@@ -186,7 +185,7 @@ const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
                     </View>
                 )}
             </View>
-        ))}
+        ))} */}
 
 
       </Page>
