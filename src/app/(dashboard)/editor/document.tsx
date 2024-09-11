@@ -2,7 +2,7 @@
 
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
 import { Resume, SkillCategories, SkillsArray } from '@/lib/types';
 
 // Dynamically import PDFViewer with ssr option set to false
@@ -10,12 +10,25 @@ const PDFViewer = dynamic(() => import('@react-pdf/renderer').then(mod => mod.PD
   ssr: false,
 });
 
+
+Font.register({
+    family: 'Arial',
+    fonts: [
+    { src: 'https://cdn.jsdelivr.net/npm/@canvas-fonts/arial@1.0.4/Arial.ttf', fontWeight: 'normal' },
+    { src: 'https://cdn.jsdelivr.net/npm/@canvas-fonts/arial-bold@1.0.4/Arial%20Bold.ttf', fontWeight: 'bold' },
+    ]
+    },
+  );
+
 // Create styles
 const styles = StyleSheet.create({
     page: {
-      flexDirection: 'column',
-      backgroundColor: '#ffffff',
-      padding: 30,
+        flexDirection: 'column',
+        backgroundColor: '#ffffff',
+        padding: 30,
+        fontFamily: 'Arial',
+
+        
     },
     header: {
       fontSize: 24,
@@ -35,7 +48,6 @@ const styles = StyleSheet.create({
         fontSize: 11,
         textAlign: 'right',
     },
-  
     subHeader: {
       fontSize: 11,
       marginBottom: 10,
@@ -43,17 +55,19 @@ const styles = StyleSheet.create({
     },
     sectionTitle: {
       fontSize: 12.5,
-      fontWeight: 'bold',
       marginBottom: 5,
       borderBottom: '1 solid black',
       paddingBottom: 2,
     },
     content: {
-      fontSize: 11,
-      lineHeight: 1.2,
+        fontWeight: 'normal',
+        fontSize: 11,
+        lineHeight: 1.2,
     },
     bold: {
       fontWeight: 'bold',
+      fontSize: 11,
+      lineHeight: 1.2,
     },
     listItem: {
       flexDirection: 'row',
@@ -70,14 +84,33 @@ const styles = StyleSheet.create({
       flex: 1,
       fontSize: 11,
       lineHeight: 1.2,
-
     },
-    skillCategory: {
-        marginBottom: 5,
+    jobTitle: {
         fontSize: 11,
-        fontWeight: 'extrabold',
+        fontWeight: 'bold',
+      },
+      companyName: {
 
+        fontSize: 11,
+      },
+      skillCategory: {
+        flexDirection: 'row',
+        marginBottom: 5,
     },
+    skillCategoryWrapper: {
+        marginRight: 5,
+    },
+    skillCategoryText: {
+        fontWeight: 'bold',
+        fontSize: 11,
+    },
+    skillListWrapper: {
+        flex: 1,
+    },
+
+      
+      
+    
   });
   
  
@@ -97,15 +130,19 @@ const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
         <View style={styles.sectionTitle}>
             <Text>Skills</Text>
         </View>
+
         {(resumeData.skills as SkillsArray).map((skillCategory, index) => {
             const category = Object.keys(skillCategory)[0] as SkillCategories;
             const skillsList = skillCategory[category];
+
             return (
                 <View key={index} style={styles.skillCategory}>
-                    <Text>
-                        <Text style={styles.bold}>{category}: </Text>
+                    <View style={styles.skillCategoryWrapper}>
+                        <Text style={styles.skillCategoryText}>{category}:</Text>
+                    </View>
+                    <View style={styles.skillListWrapper}>
                         <Text style={styles.content}>{skillsList}</Text>
-                    </Text>
+                    </View>
                 </View>
             );
         })}
@@ -116,15 +153,15 @@ const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
         <React.Fragment key={index}>
 
             {/* Job Header */}
+
             <View style={styles.jobHeader}>
-                <View style={styles.jobInfo}>
-                    <Text style={styles.content}>
-                        {/* Position, Company */}
-                    <Text style={styles.bold}>{job.position}, </Text>{job.company}
-                    </Text>
-                </View>
-                {/* Job Date */}
-                <Text style={styles.dateRange}>{job.date}</Text>
+            <View style={styles.jobInfo}>
+                <Text>
+                <Text style={styles.jobTitle}>{job.position}, </Text>
+                <Text style={styles.companyName}>{job.company}</Text>
+                </Text>
+            </View>
+            <Text style={styles.dateRange}>{job.date}</Text>
             </View>
 
             {/* Job Description */}
