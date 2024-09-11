@@ -29,16 +29,16 @@ export interface Project {
   }
   
 export interface Resume {
-    id: string;
     collectionId: string;
     collectionName: string;
     created: string;
-    updated: string;
-    name: string;
-    skills: Skill[];
     education_history: Education[];
-    work_history: WorkExperience[];
-    projects: Project[];
     field: string; // Assuming this is still a relation record ID
+    id: string;
+    name: string;
+    projects: Project[];
     resume_name: string;
+    skills: Skill[];
+    updated: string;
+    work_history: WorkExperience[];
   }
