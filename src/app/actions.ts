@@ -4,11 +4,15 @@ import { redirect } from 'next/navigation';
 import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
 import { Resume } from '@/lib/types';
+import { revalidatePath } from 'next/cache';
 
 
 const pb = new PocketBase(process.env.POCKETBASE_URL);
   
-
+// Helper function to revalidate all paths
+function revalidateAll() {
+  revalidatePath('/', 'layout');
+}
 
 //  -----  AUTH -----
 export async function isAuthenticated() {
@@ -117,6 +121,7 @@ export async function saveResume(resumeData: Resume): Promise<{ success: boolean
     });
     
     console.log('Resume saved successfully:', record);
+    revalidateAll();
 
     return { success: true, message: 'Resume saved successfully' };
   } catch (error) {
@@ -156,6 +161,7 @@ export async function createResume(resumeName: string){
     const record = await pb.collection('resumes').create(data);
 
     console.log('Resume created successfully:', record);
+    revalidateAll();
 
     return { 
       success: true, 
@@ -174,4 +180,5 @@ export async function createResume(resumeName: string){
 // Delete Resume
 export async function deleteResume(resumeId: string) {
   await pb.collection('resumes').delete(resumeId);
+  revalidateAll();
 }
