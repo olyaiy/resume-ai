@@ -8,9 +8,10 @@ import { Resume } from "@/lib/types";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { createResume, deleteResume } from "@/app/actions";
+import { Label } from "@/components/ui/label";
 
 export default function Dashboard({resumeList}: {resumeList: Resume[]}) {
     const router = useRouter();
@@ -18,17 +19,35 @@ export default function Dashboard({resumeList}: {resumeList: Resume[]}) {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [resumeToDelete, setResumeToDelete] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
+    const [error, setError] = useState<string | null>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
+    useEffect(() => {
+        if (isOpen && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [isOpen]);
 
     const handleCreateResume = async () => {
-        const resumeName = document.getElementById('resumeName') as HTMLInputElement;
-        const result = await createResume(resumeName.value);
+        const resumeName = inputRef.current?.value.trim();
+        if (!resumeName) {
+            setError("Resume name is required");
+            return;
+        }
+        setError(null);
+        const result = await createResume(resumeName);
         if (result.success) {
             setIsOpen(false);
             router.push(`/editor/${result.id}`);
         } else {
-            // Handle error, maybe show an alert or set an error state
             console.error(result.message);
+            setError(result.message);
+        }
+    }
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleCreateResume();
         }
     }
 
@@ -71,14 +90,19 @@ export default function Dashboard({resumeList}: {resumeList: Resume[]}) {
                         <DialogTitle>Name Your Resume</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
-                        <Input
-                            id="resumeName"
-                            placeholder="Enter resume name"
-                        />
+                        <div className="grid gap-2">
+                            <Label htmlFor="resumeName">Resume Name</Label>
+                            <Input
+                                id="resumeName"
+                                ref={inputRef}
+                                placeholder="Enter resume name"
+                                onKeyDown={handleKeyDown}
+                            />
+                            {error && <p className="text-sm text-red-500">{error}</p>}
+                        </div>
                     </div>
                     <Button onClick={handleCreateResume}>Continue</Button>
                 </DialogContent>
-
             </Dialog>
             
 
