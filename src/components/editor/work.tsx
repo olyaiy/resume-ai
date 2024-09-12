@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 
 export default function Work({resume, setResume}: {resume: Resume, setResume: (resume: Resume) => void}) {
     const handleWorkChange = (index: number, field: keyof WorkExperience, value: string) => {
@@ -47,7 +48,12 @@ export default function Work({resume, setResume}: {resume: Resume, setResume: (r
 
     return (
         <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Work Experience</h2>
+
+            <Accordion type="single" collapsible className="w-full" defaultValue="work">
+            <AccordionItem value="work">
+            <AccordionTrigger>Work Experience</AccordionTrigger>
+            <AccordionContent>
+
             {resume.work_history.map((work, index) => (
                 <div key={index} className="space-y-4 border p-4 rounded bg-card">
                     <div className="flex justify-between items-center">
@@ -134,6 +140,9 @@ export default function Work({resume, setResume}: {resume: Resume, setResume: (r
                 <PlusCircle className="w-4 h-4 mr-2"/>
                 Add Work Experience
             </Button>
+            </AccordionContent>
+                </AccordionItem>
+            </Accordion>
         </div>
     );
 }
