@@ -100,26 +100,35 @@ export default function Dashboard({resumeList}: {resumeList: Resume[]}) {
                 </DialogContent>
             </Dialog>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-1/2">
+            <div className="w-full max-w-2xl">
                 {resumeList.map((resume: Resume) => (
-                    <Card key={resume.id} className="relative w-full h-[200px] flex flex-col items-center justify-center p-4">
-                        <Button
-                            variant="destructive"
-                            size="icon"
-                            className="absolute top-2 right-2"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                handleDeleteResume(resume.id);
-                            }}
-                        >
-                            <Trash2 className="h-4 w-4" />
-                        </Button>
-                        <Link href={`/editor/${resume.id}`} className="w-full h-full flex items-center justify-center">
-                            <div className="text-lg text-center break-words max-w-full">{resume.resume_name}</div>
-                        </Link>
-                    </Card>
+                    <div key={resume.id} className="mb-2">
+                        <Card className="relative w-full p-4 hover:bg-gray-50 hover:text-black transition-colors">
+                            <Link href={`/editor/${resume.id}`} className="flex items-center justify-between w-full">
+                                {/* Resume Name */}
+                                <div className="text-lg font-medium truncate flex-grow">
+                                    {resume.resume_name}
+                                </div>
+
+                                {/* Delete Button */}
+                                <Button
+                                    variant="destructive"
+                                    size="icon"
+                                    className="ml-4"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleDeleteResume(resume.id);
+                                    }}
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            </Link>
+                        </Card>
+                    </div>
                 ))}
             </div>
+
         </div>
     );
 }
