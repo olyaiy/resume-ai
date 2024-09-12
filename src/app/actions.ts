@@ -171,3 +171,7 @@ export async function createResume(resumeName: string){
   }
 }
 
+// Delete Resume
+export async function deleteResume(resumeId: string) {
+  await pb.collection('resumes').delete(resumeId);
+}

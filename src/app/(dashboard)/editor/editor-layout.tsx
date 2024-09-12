@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Resume, Education, Project, Skill, SkillCategories } from "@/lib/types";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import ResumeDocument from "./document";
 import { saveResume } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
@@ -12,6 +12,7 @@ import Skills from "@/components/editor/skills";
 import EducationHistory from "@/components/editor/education";
 import Work from "@/components/editor/work";
 import Projects from "@/components/editor/projects";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 
@@ -71,35 +72,9 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
 
                 {/* Basic Information */}
                 <BasicInfo resume={resume} setResume={setResume}/>
-                {/* <div className="space-y-2 bg-card p-4 border rounded">
-                    <h2 className="text-xl font-semibold">Basic Information</h2>
-                    <div className="flex items-center space-x-2">
-                        <label className="w-24">Name:</label>
-                        <input
-                            type="text"
-                            value={resume.name}
-                            onChange={(e) => handleInputChange('name', e.target.value)}
-                            className="flex-grow p-2 border rounded"
-                            placeholder="Name"
-                        />
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <label className="w-24">Resume Name:</label>
-                        <input
-                            type="text"
-                            value={resume.resume_name}
-                            onChange={(e) => handleInputChange('resume_name', e.target.value)}
-                            className="flex-grow p-2 border rounded"
-                            placeholder="Resume Name"
-                        />
-                    </div>
-                </div> */}
-
+                
                 {/* Skills */}
                 <Skills resume={resume} setResume={setResume}/>
-
-                {/* Education History */}
-                <EducationHistory resume={resume} setResume={setResume}/>
 
 
                 {/* Work Experience */}
@@ -108,14 +83,46 @@ export default function EditorLayout({resumeData}: {resumeData: Resume}) {
 
                 {/* Projects */}
                 <Projects resume={resume} setResume={setResume}/>
+
+                {/* Education History */}
+                <EducationHistory resume={resume} setResume={setResume}/>
                 
                 
             </div>
             {/* right side: resume display */}
-            <ResumeDocument
-                resumeData={resume}
-            />
+
+                <ResumeDocument
+                    resumeData={resume}
+                />
+
         </div>
 
     );
 }
+
+// export function ResumeSkeleton() {
+//     return (
+//         <div className="w-full h-full p-4 space-y-4 bg-white rounded">
+//             <Skeleton className="h-24 w-3/4 bg-slate-500" />
+//             <Skeleton className="h-4 w-full bg-slate-500" />
+//             <Skeleton className="h-4 w-full bg-slate-500" />
+//             <Skeleton className="h-4 w-2/3 bg-slate-500" />
+//             <div className="space-y-2">
+//                 <Skeleton className="h-4 w-1/2 bg-slate-500" />
+//                 <Skeleton className="h-4 w-full bg-slate-500" />
+//                 <Skeleton className="h-4 w-full bg-slate-500" />
+//             </div>
+//             <div className="space-y-2">
+//                 <Skeleton className="h-4 w-1/2 bg-slate-500" />
+//                 <Skeleton className="h-4 w-full bg-slate-500" />
+//                 <Skeleton className="h-4 w-full bg-slate-500" />
+//             </div>
+//             <div className="space-y-2">
+//                 <Skeleton className="h-4 w-1/2 bg-slate-500" />
+//                 <Skeleton className="h-4 w-full bg-slate-500" />
+//                 <Skeleton className="h-4 w-full bg-slate-500" />
+//             </div>
+//             {/* Add more skeleton elements as needed to match your resume layout */}
+//         </div>
+//     );
+// }

@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
 import { Resume, SkillCategories, SkillsArray } from '@/lib/types';
@@ -116,9 +116,12 @@ const styles = StyleSheet.create({
  
 
 const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
-
   <PDFViewer width="100%" className='h-full'>
+
+
     <Document pageMode={'fullScreen'} pageLayout={"oneColumn"}>
+
+
       <Page size="A4" style={styles.page}>
 
         {/* Name */}
@@ -244,8 +247,11 @@ const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
 
 
       </Page>
+
     </Document>
+   
   </PDFViewer>
+  
 );
 
 export default ResumeDocument;

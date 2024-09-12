@@ -1,6 +1,6 @@
 import { Resume, Skill } from "@/lib/types";
 import { Button } from "../ui/button";
-import { Trash2 } from "lucide-react";
+import { PlusCircle, Trash2 } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
 
@@ -32,7 +32,7 @@ export default function Skills({resume, setResume}: {resume: Resume, setResume: 
     
     
     return (
-        <div className="space-y-2 bg-card p-4 border rounded">
+        <div className="space-y-2">
              <h2 className="text-xl font-semibold">Skills</h2>
  
              {resume.skills.map((skill, index) => {
@@ -40,7 +40,7 @@ export default function Skills({resume, setResume}: {resume: Resume, setResume: 
                  const skillsList = skill[category];
  
                  return (
-                     <div key={index} className="flex items-center flex-col w-full gap-2 pb-4">
+                     <div key={index} className="flex items-center flex-col w-full gap-2 pb-4 bg-card p-4 border rounded">
                          <div className="flex flex-row w-full gap-4 items-stretch justify-stretch">
                              <Input
                                  type="text"
@@ -73,6 +73,7 @@ export default function Skills({resume, setResume}: {resume: Resume, setResume: 
                  onClick={addSkillCategory} 
                  className="mt-2"
              >
+                <PlusCircle className="h-4 w-4 mr-2" />
                  Add Skill Category
              </Button>
          </div>
