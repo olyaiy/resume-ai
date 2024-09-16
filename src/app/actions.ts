@@ -184,6 +184,8 @@ export async function deleteResume(resumeId: string) {
   revalidateAll();
 }
 
+// ------- Profiles -------
+
 // get Profile
 export async function getProfile(){
 
