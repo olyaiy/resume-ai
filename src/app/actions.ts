@@ -186,7 +186,7 @@ export async function deleteResume(resumeId: string) {
 
 // get Profile
 export async function getProfile(){
-  
+
   // Get the cookie from the request
   const cookieStore = cookies();
   const authCookie = cookieStore.get('pb_auth');
@@ -199,5 +199,55 @@ export async function getProfile(){
 
   const currentUserId: string = pb.authStore.model?.id ?? '';
   const record = await pb.collection('users').getOne(currentUserId);
+
   return record as UserProfile;
+}
+
+// Update Profile
+export async function updateProfile(profileData: Partial<UserProfile>): Promise<{ success: boolean; message: string }> {
+  const cookieStore = cookies();
+  const authCookie = cookieStore.get('pb_auth');
+
+  if (authCookie) {
+    pb.authStore.loadFromCookie(`pb_auth=${authCookie.value}`);
+  }
+
+  const currentUserId: string = pb.authStore.model?.id ?? '';
+
+  try {
+    // Prepare the data for update
+    const data: Partial<UserProfile> = {
+      username: profileData.username,
+      emailVisibility: profileData.emailVisibility,
+      first_name: profileData.first_name,
+      last_name: profileData.last_name,
+      skills: profileData.skills,
+      work_history: profileData.work_history,
+      education_history: profileData.education_history,
+      projects: profileData.projects,
+      Linkedin: profileData.Linkedin,
+      Github: profileData.Github,
+      Portfolio: profileData.Portfolio,
+    };
+
+    // Remove undefined fields
+    Object.keys(data).forEach(key => {
+      if (data[key as keyof Partial<UserProfile>] === undefined) {
+        delete data[key as keyof Partial<UserProfile>];
+      }
+    });
+
+    const record = await pb.collection('users').update(currentUserId, data);
+
+    console.log('Profile updated successfully:', record);
+    revalidateAll();
+
+    return { success: true, message: 'Profile updated successfully' };
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    return { 
+      success: false, 
+      message: error instanceof Error ? error.message : 'Failed to update profile' 
+    };
+  }
 }
