@@ -48,3 +48,26 @@ export interface Resume {
     updated: string;
     work_history: WorkExperience[];
   }
+
+  export interface UserProfile {
+    id: string;
+    collectionId: string;
+    collectionName: string;
+    username: string;
+    verified: boolean;
+    emailVisibility: boolean;
+    email: string;
+    created: string;
+    updated: string;
+    first_name: string;
+    last_name: string;
+    avatar: string;
+    field: string[];
+    skills: Skill[];
+    work_history: WorkExperience[];
+    education_history: Education[];
+    projects: Project[];
+    Linkedin?: string;
+    Github?: string;
+    Portfolio?: string;
+  }

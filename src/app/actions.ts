@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation';
 import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
-import { Resume } from '@/lib/types';
+import { Resume, UserProfile } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 
 
@@ -111,6 +111,7 @@ export async function signup(formData: FormData) {
 export async function saveResume(resumeData: Resume): Promise<{ success: boolean, message: string }> {
   
   try {
+    // Set the resume data
     const record = await pb.collection('resumes').update(resumeData.id, {
       name: resumeData.name,
       resume_name: resumeData.resume_name,
@@ -181,4 +182,22 @@ export async function createResume(resumeName: string){
 export async function deleteResume(resumeId: string) {
   await pb.collection('resumes').delete(resumeId);
   revalidateAll();
+}
+
+// get Profile
+export async function getProfile(){
+  
+  // Get the cookie from the request
+  const cookieStore = cookies();
+  const authCookie = cookieStore.get('pb_auth');
+
+  
+  if (authCookie) {
+    // Load the auth data from the cookie
+    pb.authStore.loadFromCookie(`pb_auth=${authCookie.value}`);
+  }
+
+  const currentUserId: string = pb.authStore.model?.id ?? '';
+  const record = await pb.collection('users').getOne(currentUserId);
+  return record as UserProfile;
 }
