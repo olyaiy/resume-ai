@@ -5,7 +5,7 @@ export default function Page() {
   return (
     <div className="w-full h-screen flex items-center justify-center flex-col">
       <Tabs defaultValue="signin" className="w-full max-w-sm">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-2 bg-foreground">
           <TabsTrigger value="signin">Sign In</TabsTrigger>
           <TabsTrigger value="signup">Sign Up</TabsTrigger>
         </TabsList>
