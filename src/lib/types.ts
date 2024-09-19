@@ -71,3 +71,8 @@ export interface Resume {
     Github?: string;
     Portfolio?: string;
   }
+
+  export interface AuthError {
+    type: string;
+    message: string;
+  }

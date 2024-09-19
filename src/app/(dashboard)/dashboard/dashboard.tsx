@@ -10,7 +10,7 @@ import Link from "next/link";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
-import { createResume, deleteResume } from "@/app/actions";
+
 import { Label } from "@/components/ui/label";
 
 export default function Dashboard({resumeList}: {resumeList: Resume[]}) {
@@ -28,49 +28,49 @@ export default function Dashboard({resumeList}: {resumeList: Resume[]}) {
         }
     }, [isOpen]);
 
-    const handleCreateResume = async () => {
-        const resumeName = inputRef.current?.value.trim();
-        if (!resumeName) {
-            setError("Resume name is required");
-            return;
-        }
-        setError(null);
-        const result = await createResume(resumeName);
-        if (result.success) {
-            setIsOpen(false);
-            router.push(`/editor/${result.id}`);
-        } else {
-            console.error(result.message);
-            setError(result.message);
-        }
-    }
+    // const handleCreateResume = async () => {
+    //     const resumeName = inputRef.current?.value.trim();
+    //     if (!resumeName) {
+    //         setError("Resume name is required");
+    //         return;
+    //     }
+    //     setError(null);
+    //     const result = await createResume(resumeName);
+    //     if (result.success) {
+    //         setIsOpen(false);
+    //         router.push(`/editor/${result.id}`);
+    //     } else {
+    //         console.error(result.message);
+    //         setError(result.message);
+    //     }
+    // }
 
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') {
-            handleCreateResume();
-        }
-    }
+    // const handleKeyDown = (e: React.KeyboardEvent) => {
+    //     if (e.key === 'Enter') {
+    //         handleCreateResume();
+    //     }
+    // }
 
-    const handleDeleteResume = (resumeId: string) => {
-        setResumeToDelete(resumeId);
-        setIsDeleteDialogOpen(true);
-    };
+    // const handleDeleteResume = (resumeId: string) => {
+    //     setResumeToDelete(resumeId);
+    //     setIsDeleteDialogOpen(true);
+    // };
 
-    const confirmDelete = () => {
-        if (resumeToDelete) {
-            startTransition(() => {
-                deleteResume(resumeToDelete)
-                    .then(() => {
-                        setIsDeleteDialogOpen(false);
-                        router.refresh();
-                    })
-                    .catch((error) => {
-                        console.error('Error deleting resume:', error);
-                        // Handle error (e.g., show an error message)
-                    });
-            });
-        }
-    };
+    // const confirmDelete = () => {
+    //     if (resumeToDelete) {
+    //         startTransition(() => {
+    //             deleteResume(resumeToDelete)
+    //                 .then(() => {
+    //                     setIsDeleteDialogOpen(false);
+    //                     router.refresh();
+    //                 })
+    //                 .catch((error) => {
+    //                     console.error('Error deleting resume:', error);
+    //                     // Handle error (e.g., show an error message)
+    //                 });
+    //         });
+    //     }
+    // };
 
 
     return (
@@ -96,12 +96,12 @@ export default function Dashboard({resumeList}: {resumeList: Resume[]}) {
                                 id="resumeName"
                                 ref={inputRef}
                                 placeholder="Enter resume name"
-                                onKeyDown={handleKeyDown}
+                                // onKeyDown={handleKeyDown}
                             />
                             {error && <p className="text-sm text-red-500">{error}</p>}
                         </div>
                     </div>
-                    <Button onClick={handleCreateResume}>Continue</Button>
+                    {/* <Button onClick={handleCreateResume}>Continue</Button> */}
                 </DialogContent>
             </Dialog>
             
@@ -117,9 +117,9 @@ export default function Dashboard({resumeList}: {resumeList: Resume[]}) {
                     </DialogHeader>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
-                        <Button variant="destructive" onClick={confirmDelete} disabled={isPending}>
+                        {/* <Button variant="destructive" onClick={confirmDelete} disabled={isPending}>
                             {isPending ? "Deleting..." : "Delete"}
-                        </Button>
+                        </Button> */}
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
@@ -142,7 +142,7 @@ export default function Dashboard({resumeList}: {resumeList: Resume[]}) {
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
-                                        handleDeleteResume(resume.id);
+                                        // handleDeleteResume(resume.id);
                                     }}
                                 >
                                     <Trash2 className="h-4 w-4" />

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { isAuthenticated } from "./actions";
+// import { isAuthenticated } from "./actions";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
@@ -19,9 +19,9 @@ import Link from "next/link";
 
 
 export default async function Page() {
-  if (await isAuthenticated()) {
-    redirect('/dashboard');
-  }
+  // if (await isAuthenticated()) {
+  //   redirect('/dashboard');
+  // }
 
 
 

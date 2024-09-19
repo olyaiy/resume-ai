@@ -1,22 +1,36 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+'use client';
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { login } from "@/app/actions"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { login } from "@/app/actions";
 
 export const description =
-  "A login form with email and password. There's an option to login with Google and a link to sign up if you don't have an account."
+  "A login form with email and password. There's an option to login with Google and a link to sign up if you don't have an account.";
 
 export function LoginForm() {
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    
+    const result = await login(formData);
+  };
+
   return (
-    <form action={login}>
+    <form onSubmit={handleSubmit}>
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
@@ -45,6 +59,7 @@ export function LoginForm() {
               </div>
               <Input id="password" name="password" type="password" required />
             </div>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
             <Button type="submit" className="w-full">
               Login
             </Button>
@@ -61,5 +76,5 @@ export function LoginForm() {
         </CardContent>
       </Card>
     </form>
-  )
+  );
 }
