@@ -21,13 +21,17 @@
 
 import { logout } from '@/app/actions';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export default function Page() {
   const cookie = cookies().get('pb_auth');
 
   // This never happens because of the middleware,
   // but we must make typescript happy
-  if (!cookie) throw new Error('Not logged in');
+  if (!cookie) 
+  {
+    redirect('/');
+  }
 
   const { model } = JSON.parse(cookie.value);
 

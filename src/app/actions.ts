@@ -18,12 +18,8 @@ function revalidateAll() {
 export async function login(formData: FormData) {
   console.log('Login function called');
 
-  // Extract email and password from form data
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
-
-  console.log('Email:', email); // Log email (be cautious with sensitive data in production)
-  console.log('Password length:', password); // Log password length for security
 
   try {
     console.log('Attempting authentication with PocketBase');
@@ -32,25 +28,19 @@ export async function login(formData: FormData) {
       .authWithPassword(email, password);
 
     console.log('Authentication successful');
-    console.log('Token received:', token ? 'Yes' : 'No');
-    console.log('User model:', model); // Be careful not to log sensitive user data
 
     // Prepare cookie data
-     // Prepare cookie data
-     const cookieData = {
+    const cookieData = JSON.stringify({
       token,
       model: {
         id: model.id,
         email: model.email,
         username: model.username,
       }
-    };
-    const encodedCookie = encodeURIComponent(JSON.stringify(cookieData));
-    console.log('Cookie prepared');
+    });
 
-
-    // Set the cookie
-    cookies().set('pb_auth', encodedCookie, {
+    // Set the cookie without additional encoding
+    cookies().set('pb_auth', cookieData, {
       secure: true,
       path: '/',
       sameSite: 'strict',
@@ -61,9 +51,8 @@ export async function login(formData: FormData) {
     console.log('Redirecting to dashboard');
     
   } catch (error) {
-    // Log any errors that occur during the login process
     console.error('Login error:', error);
-    throw error; // Re-throw the error to be handled by the caller
+    throw error;
   } finally {
     redirect('/dashboard');
   }
