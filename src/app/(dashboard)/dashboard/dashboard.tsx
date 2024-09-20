@@ -12,6 +12,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 
 import { Label } from "@/components/ui/label";
+import { createResume } from "@/app/actions";
 
 export default function Dashboard({resumeList}: {resumeList: Resume[]}) {
     const router = useRouter();
@@ -28,28 +29,28 @@ export default function Dashboard({resumeList}: {resumeList: Resume[]}) {
         }
     }, [isOpen]);
 
-    // const handleCreateResume = async () => {
-    //     const resumeName = inputRef.current?.value.trim();
-    //     if (!resumeName) {
-    //         setError("Resume name is required");
-    //         return;
-    //     }
-    //     setError(null);
-    //     const result = await createResume(resumeName);
-    //     if (result.success) {
-    //         setIsOpen(false);
-    //         router.push(`/editor/${result.id}`);
-    //     } else {
-    //         console.error(result.message);
-    //         setError(result.message);
-    //     }
-    // }
+    const handleCreateResume = async () => {
+        const resumeName = inputRef.current?.value.trim();
+        if (!resumeName) {
+            setError("Resume name is required");
+            return;
+        }
+        setError(null);
+        const result = await createResume(resumeName);
+        if (result.success) {
+            setIsOpen(false);
+            router.push(`/editor/${result.id}`);
+        } else {
+            console.error(result.message);
+            setError(result.message);
+        }
+    }
 
-    // const handleKeyDown = (e: React.KeyboardEvent) => {
-    //     if (e.key === 'Enter') {
-    //         handleCreateResume();
-    //     }
-    // }
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleCreateResume();
+        }
+    }
 
     // const handleDeleteResume = (resumeId: string) => {
     //     setResumeToDelete(resumeId);
@@ -96,12 +97,12 @@ export default function Dashboard({resumeList}: {resumeList: Resume[]}) {
                                 id="resumeName"
                                 ref={inputRef}
                                 placeholder="Enter resume name"
-                                // onKeyDown={handleKeyDown}
+                                onKeyDown={handleKeyDown}
                             />
                             {error && <p className="text-sm text-red-500">{error}</p>}
                         </div>
                     </div>
-                    {/* <Button onClick={handleCreateResume}>Continue</Button> */}
+                    <Button onClick={handleCreateResume}>Continue</Button>
                 </DialogContent>
             </Dialog>
             

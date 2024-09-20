@@ -14,7 +14,7 @@ function revalidateAll() {
   revalidatePath('/', 'layout');
 }
 
-
+// Login
 export async function login(formData: FormData) {
   console.log('Login function called');
 
@@ -58,7 +58,7 @@ export async function login(formData: FormData) {
   }
 }
 
-
+// Logout
 export async function logout() {
   cookies().delete('pb_auth');
   redirect('/');
@@ -90,44 +90,63 @@ export async function logout() {
 //   }
 // }
 
-// export async function createResume(resumeName: string) {
-//   loadAuthFromCookie();
-//   if (!pb.authStore.isValid) {
-//     return { success: false, message: 'Not authenticated' };
-//   }
+export async function createResume(resumeName: string) {
+  const cookie = cookies().get('pb_auth');
 
-//   const currentUserId = pb.authStore.model?.id;
-  
-//   try {
-//     const data = {
-//       "name": "test",
-//       "skills": [],
-//       "education_history": [],
-//       "work_history": [],
-//       "projects": [],
-//       "field": currentUserId,
-//       "resume_name": resumeName,
-//       "linkedin": "https://example.com",
-//       "github": "https://example.com",
-//       "portfolio_site": "https://example.com"
-//     };
+  if (cookie) {
+    console.log('Authentication cookie found:', cookie.value);
 
-//     const record = await pb.collection('resumes').create(data);
-//     revalidateAll();
+    // Parse the authentication data from the cookie
+    const authData = JSON.parse(cookie.value);
 
-//     return { 
-//       success: true, 
-//       message: 'Resume created successfully', 
-//       id: record.id 
-//     };
-//   } catch (error) {
-//     console.error('Error creating resume:', error);
-//     return { 
-//       success: false, 
-//       message: error instanceof Error ? error.message : 'Failed to create resume' 
-//     };
-//   }
-// }
+    // Load the authentication token into the authStore
+    pb.authStore.save(authData.token, authData.model);
+
+    console.log('Authentication store after loading from cookie:', pb.authStore);
+
+    if (pb.authStore.isValid) {
+      console.log('Authentication is valid');
+
+      const currentUserId = pb.authStore.model?.id;
+      
+      try {
+        const data = {
+          "name": "test",
+          "skills": [],
+          "education_history": [],
+          "work_history": [],
+          "projects": [],
+          "field": currentUserId,
+          "resume_name": resumeName,
+          "linkedin": "https://example.com",
+          "github": "https://example.com",
+          "portfolio_site": "https://example.com"
+        };
+
+        const record = await pb.collection('resumes').create(data);
+        revalidateAll();
+
+        return { 
+          success: true, 
+          message: 'Resume created successfully', 
+          id: record.id 
+        };
+      } catch (error) {
+        console.error('Error creating resume:', error);
+        return { 
+          success: false, 
+          message: error instanceof Error ? error.message : 'Failed to create resume' 
+        };
+      }
+    } else {
+      console.log('Invalid authentication token');
+      return { success: false, message: 'Invalid authentication token' };
+    }
+  } else {
+    console.log('Authentication cookie not found');
+    return { success: false, message: 'Authentication cookie not found' };
+  }
+}
 
 // export async function deleteResume(resumeId: string) {
 //   loadAuthFromCookie();
