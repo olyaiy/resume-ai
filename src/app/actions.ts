@@ -14,6 +14,31 @@ function revalidateAll() {
   revalidatePath('/', 'layout');
 }
 
+// Helper function to load authentication from cookie
+function loadAuthFromCookie(): boolean {
+  const cookie = cookies().get('pb_auth');
+
+  if (!cookie) {
+    console.log('Authentication cookie not found');
+    return false;
+  }
+
+  // Parse the authentication data from the cookie
+  const authData = JSON.parse(cookie.value);
+
+  // Load the authentication token into the authStore
+  pb.authStore.save(authData.token, authData.model);
+
+  console.log('Authentication store after loading from cookie:', pb.authStore);
+
+  if (!pb.authStore.isValid) {
+    console.log('Invalid authentication token');
+    return false;
+  }
+
+  return true;
+}
+
 // Login
 export async function login(formData: FormData) {
   console.log('Login function called');
@@ -163,15 +188,16 @@ export async function createResume(resumeName: string) {
   }
 }
 
-// export async function deleteResume(resumeId: string) {
-//   loadAuthFromCookie();
-//   if (!pb.authStore.isValid) {
-//     return { success: false, message: 'Not authenticated' };
-//   }
+export async function deleteResume(resumeId: string) {
+  const cookie = cookies().get('pb_auth');
 
-//   await pb.collection('resumes').delete(resumeId);
-//   revalidateAll();
-// }
+  if (!loadAuthFromCookie()) {
+    return { success: false, message: 'Not authenticated' };
+  }
+
+  await pb.collection('resumes').delete(resumeId);
+  revalidateAll();
+}
 
 // ------- Profiles ------- //
 
