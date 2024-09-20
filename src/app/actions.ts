@@ -92,24 +92,8 @@ export async function logout() {
 // ------- Resumes ------- //
 
 export async function saveResume(resumeData: Resume): Promise<{ success: boolean, message: string }> {
-  const cookie = cookies().get('pb_auth');
-
-  if (!cookie) {
-    console.log('Authentication cookie not found');
-    return { success: false, message: 'Authentication cookie not found' };
-  }
-
-  // Parse the authentication data from the cookie
-  const authData = JSON.parse(cookie.value);
-
-  // Load the authentication token into the authStore
-  pb.authStore.save(authData.token, authData.model);
-
-  console.log('Authentication store after loading from cookie:', pb.authStore);
-
-  if (!pb.authStore.isValid) {
-    console.log('Invalid authentication token');
-    return { success: false, message: 'Invalid authentication token' };
+  if (!loadAuthFromCookie()) {
+    return { success: false, message: 'Not authenticated' };
   }
 
   try {
@@ -131,66 +115,45 @@ export async function saveResume(resumeData: Resume): Promise<{ success: boolean
 }
 
 export async function createResume(resumeName: string) {
-  const cookie = cookies().get('pb_auth');
+  // Check if authentication is valid
+  if (!loadAuthFromCookie()) {
+    return { success: false, message: 'Not authenticated' };
+  }
 
-  if (cookie) {
-    console.log('Authentication cookie found:', cookie.value);
+  const currentUserId = pb.authStore.model?.id;
 
-    // Parse the authentication data from the cookie
-    const authData = JSON.parse(cookie.value);
+  try {
+    const data = {
+      "name": "test",
+      "skills": [],
+      "education_history": [],
+      "work_history": [],
+      "projects": [],
+      "field": currentUserId,
+      "resume_name": resumeName,
+      "linkedin": "https://example.com",
+      "github": "https://example.com",
+      "portfolio_site": "https://example.com"
+    };
 
-    // Load the authentication token into the authStore
-    pb.authStore.save(authData.token, authData.model);
+    const record = await pb.collection('resumes').create(data);
+    revalidateAll();
 
-    console.log('Authentication store after loading from cookie:', pb.authStore);
-
-    if (pb.authStore.isValid) {
-      console.log('Authentication is valid');
-
-      const currentUserId = pb.authStore.model?.id;
-      
-      try {
-        const data = {
-          "name": "test",
-          "skills": [],
-          "education_history": [],
-          "work_history": [],
-          "projects": [],
-          "field": currentUserId,
-          "resume_name": resumeName,
-          "linkedin": "https://example.com",
-          "github": "https://example.com",
-          "portfolio_site": "https://example.com"
-        };
-
-        const record = await pb.collection('resumes').create(data);
-        revalidateAll();
-
-        return { 
-          success: true, 
-          message: 'Resume created successfully', 
-          id: record.id 
-        };
-      } catch (error) {
-        console.error('Error creating resume:', error);
-        return { 
-          success: false, 
-          message: error instanceof Error ? error.message : 'Failed to create resume' 
-        };
-      }
-    } else {
-      console.log('Invalid authentication token');
-      return { success: false, message: 'Invalid authentication token' };
-    }
-  } else {
-    console.log('Authentication cookie not found');
-    return { success: false, message: 'Authentication cookie not found' };
+    return { 
+      success: true, 
+      message: 'Resume created successfully', 
+      id: record.id 
+    };
+  } catch (error) {
+    console.error('Error creating resume:', error);
+    return { 
+      success: false, 
+      message: error instanceof Error ? error.message : 'Failed to create resume' 
+    };
   }
 }
 
 export async function deleteResume(resumeId: string) {
-  const cookie = cookies().get('pb_auth');
-
   if (!loadAuthFromCookie()) {
     return { success: false, message: 'Not authenticated' };
   }
