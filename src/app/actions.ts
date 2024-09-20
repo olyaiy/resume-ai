@@ -164,17 +164,18 @@ export async function deleteResume(resumeId: string) {
 
 // ------- Profiles ------- //
 
-// export async function getProfile() {
-//   loadAuthFromCookie();
-//   if (!pb.authStore.isValid) {
-//     throw new Error('Not authenticated');
-//   }
+export async function getProfile() {
 
-//   const currentUserId = pb.authStore.model?.id;
-//   const record = await pb.collection('users').getOne(currentUserId);
+  if (!loadAuthFromCookie()) {
+    return { success: false, message: 'Not authenticated' };
+  }
+  
 
-//   return record as UserProfile;
-// }
+  const currentUserId = pb.authStore.model?.id;
+  const record = await pb.collection('users').getOne(currentUserId);
+
+  return record as UserProfile;
+}
 
 // export async function updateProfile(profileData: Partial<UserProfile>): Promise<{ success: boolean; message: string }> {
 //   loadAuthFromCookie();
