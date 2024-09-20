@@ -66,29 +66,44 @@ export async function logout() {
 
 // ------- Resumes ------- //
 
-// export async function saveResume(resumeData: Resume): Promise<{ success: boolean, message: string }> {
+export async function saveResume(resumeData: Resume): Promise<{ success: boolean, message: string }> {
+  const cookie = cookies().get('pb_auth');
 
-//   if (!pb.authStore.isValid) {
-//     return { success: false, message: 'Not authenticated' };
-//   }
+  if (!cookie) {
+    console.log('Authentication cookie not found');
+    return { success: false, message: 'Authentication cookie not found' };
+  }
 
-//   try {
-//     const record = await pb.collection('resumes').update(resumeData.id, {
-//       name: resumeData.name,
-//       resume_name: resumeData.resume_name,
-//       skills: resumeData.skills,
-//       education_history: resumeData.education_history,
-//       work_history: resumeData.work_history,
-//       projects: resumeData.projects,
-//     });
-    
-//     revalidateAll();
-//     return { success: true, message: 'Resume saved successfully' };
-//   } catch (error) {
-//     console.error('Error saving resume:', error);
-//     return { success: false, message: 'Failed to save resume' };
-//   }
-// }
+  // Parse the authentication data from the cookie
+  const authData = JSON.parse(cookie.value);
+
+  // Load the authentication token into the authStore
+  pb.authStore.save(authData.token, authData.model);
+
+  console.log('Authentication store after loading from cookie:', pb.authStore);
+
+  if (!pb.authStore.isValid) {
+    console.log('Invalid authentication token');
+    return { success: false, message: 'Invalid authentication token' };
+  }
+
+  try {
+    const record = await pb.collection('resumes').update(resumeData.id, {
+      name: resumeData.name,
+      resume_name: resumeData.resume_name,
+      skills: resumeData.skills,
+      education_history: resumeData.education_history,
+      work_history: resumeData.work_history,
+      projects: resumeData.projects,
+    });
+
+    revalidateAll();
+    return { success: true, message: 'Resume saved successfully' };
+  } catch (error) {
+    console.error('Error saving resume:', error);
+    return { success: false, message: 'Failed to save resume' };
+  }
+}
 
 export async function createResume(resumeName: string) {
   const cookie = cookies().get('pb_auth');
