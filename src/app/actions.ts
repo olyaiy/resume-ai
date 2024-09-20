@@ -177,45 +177,44 @@ export async function getProfile() {
   return record as UserProfile;
 }
 
-// export async function updateProfile(profileData: Partial<UserProfile>): Promise<{ success: boolean; message: string }> {
-//   loadAuthFromCookie();
-//   if (!pb.authStore.isValid) {
-//     return { success: false, message: 'Not authenticated' };
-//   }
+export async function updateProfile(profileData: Partial<UserProfile>): Promise<{ success: boolean; message: string }> {
+  if (!loadAuthFromCookie()) {
+    return { success: false, message: 'Not authenticated' };
+  }
 
-//   const currentUserId = pb.authStore.model?.id;
+  const currentUserId = pb.authStore.model?.id;
 
-//   try {
-//     const data: Partial<UserProfile> = {
-//       username: profileData.username,
-//       emailVisibility: profileData.emailVisibility,
-//       first_name: profileData.first_name,
-//       last_name: profileData.last_name,
-//       skills: profileData.skills,
-//       work_history: profileData.work_history,
-//       education_history: profileData.education_history,
-//       projects: profileData.projects,
-//       Linkedin: profileData.Linkedin,
-//       Github: profileData.Github,
-//       Portfolio: profileData.Portfolio,
-//     };
+  try {
+    const data: Partial<UserProfile> = {
+      username: profileData.username,
+      emailVisibility: profileData.emailVisibility,
+      first_name: profileData.first_name,
+      last_name: profileData.last_name,
+      skills: profileData.skills,
+      work_history: profileData.work_history,
+      education_history: profileData.education_history,
+      projects: profileData.projects,
+      Linkedin: profileData.Linkedin,
+      Github: profileData.Github,
+      Portfolio: profileData.Portfolio,
+    };
 
-//     // Remove undefined fields
-//     Object.keys(data).forEach(key => {
-//       if (data[key as keyof Partial<UserProfile>] === undefined) {
-//         delete data[key as keyof Partial<UserProfile>];
-//       }
-//     });
+    // Remove undefined fields
+    Object.keys(data).forEach(key => {
+      if (data[key as keyof Partial<UserProfile>] === undefined) {
+        delete data[key as keyof Partial<UserProfile>];
+      }
+    });
 
-//     const record = await pb.collection('users').update(currentUserId, data);
-//     revalidateAll();
+    const record = await pb.collection('users').update(currentUserId, data);
+    revalidateAll();
 
-//     return { success: true, message: 'Profile updated successfully' };
-//   } catch (error) {
-//     console.error('Error updating profile:', error);
-//     return { 
-//       success: false, 
-//       message: error instanceof Error ? error.message : 'Failed to update profile' 
-//     };
-//   }
-// }
+    return { success: true, message: 'Profile updated successfully' };
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    return { 
+      success: false, 
+      message: error instanceof Error ? error.message : 'Failed to update profile' 
+    };
+  }
+}
