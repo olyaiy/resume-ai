@@ -174,6 +174,8 @@ export async function getProfile() {
   const currentUserId = pb.authStore.model?.id;
   const record = await pb.collection('users').getOne(currentUserId);
 
+  console.log('Profile record:', record);
+
   return record as UserProfile;
 }
 
