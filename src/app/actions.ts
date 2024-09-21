@@ -18,7 +18,7 @@ function loadAuthFromCookie(): boolean {
   const cookie = cookies().get('pb_auth');
 
   if (!cookie) {
-    console.log('Authentication cookie not found');
+
     return false;
   }
 
@@ -28,10 +28,10 @@ function loadAuthFromCookie(): boolean {
   // Load the authentication token into the authStore
   pb.authStore.save(authData.token, authData.model);
 
-  console.log('Authentication store after loading from cookie:', pb.authStore);
+
 
   if (!pb.authStore.isValid) {
-    console.log('Invalid authentication token');
+
     return false;
   }
 
@@ -40,18 +40,18 @@ function loadAuthFromCookie(): boolean {
 
 // Login
 export async function login(formData: FormData) {
-  console.log('Login function called');
+
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
   try {
-    console.log('Attempting authentication with PocketBase');
+
     const { token, record: model } = await pb
       .collection('users')
       .authWithPassword(email, password);
 
-    console.log('Authentication successful');
+
 
     // Prepare cookie data
     const cookieData = JSON.stringify({
@@ -70,9 +70,6 @@ export async function login(formData: FormData) {
       sameSite: 'strict',
       httpOnly: true,
     });
-    console.log('Cookie set successfully');
-
-    console.log('Redirecting to dashboard');
     
   } catch (error) {
     console.error('Login error:', error);
@@ -173,7 +170,6 @@ export async function getProfile() {
   const currentUserId = pb.authStore.model?.id;
   const record = await pb.collection('users').getOne(currentUserId);
 
-  console.log('Profile record:', record);
 
   return record as UserProfile;
 }
@@ -228,7 +224,6 @@ export async function createProfile(
   password: string,
   confirmPassword: string
 ): Promise<{ success: boolean; message: string }> {
-  console.log('Creating profile for:', user_name);
   try {
     const newUserData = {
       username: user_name,
@@ -247,9 +242,7 @@ export async function createProfile(
       Portfolio: ""
     };
     
-    console.log('Attempting to create user with data:', { ...newUserData, password: '[REDACTED]', passwordConfirm: '[REDACTED]' });
     const createdUser = await pb.collection('users').create(newUserData);
-    console.log('User created successfully with ID:', createdUser.id);
 
     // Automatically log in the user
     const { token, record: model } = await pb.collection('users').authWithPassword(email, password);
@@ -272,14 +265,14 @@ export async function createProfile(
       httpOnly: true,
     });
 
-    console.log('User logged in automatically');
+
     redirect('/dashboard');
 
     return { success: true, message: 'Profile created and logged in successfully' };
   } catch (error) {
     console.error('Error creating profile:', error);
     const errorMessage = error instanceof Error ? error.message : 'Failed to create profile';
-    console.log('Returning error message:', errorMessage);
+
     return { 
       success: false, 
       message: errorMessage

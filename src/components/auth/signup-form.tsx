@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -22,7 +22,7 @@ export default function SignUpForm() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [emailError, setEmailError] = useState("")
   const [passwordError, setPasswordError] = useState("")
-  const router = useRouter()
+
 
   function validateEmail(email: string) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -63,11 +63,6 @@ export default function SignUpForm() {
 
     setIsLoading(false)
 
-    // if (result.success) {
-    //   router.push("/dashboard")
-    // } else {
-    //   console.error(result.message)
-    // }
   }
   
   return (

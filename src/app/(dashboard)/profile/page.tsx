@@ -4,6 +4,8 @@ import { ProfileEditor } from './profile-editor';
 
 export default async function Page() {
     const data: UserProfile = await getProfile();
+
+    console.log(data)
     
     return (
         <div className="space-y-8 p-4">
