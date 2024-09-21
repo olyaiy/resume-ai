@@ -103,7 +103,7 @@ export async function createResume(resumeName: string, useProfile: boolean) {
   const currentUserId = profile.id;
 
   let data: Record<string, any> = {
-    "name": profile.first_name || "",
+    "name": profile.first_name + " " + profile.last_name || "",
     "resume_name": resumeName,
     "user": profile.id,
   };

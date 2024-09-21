@@ -1,18 +1,17 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Resume, Education, Project, Skill, SkillCategories } from "@/lib/types";
+import { Resume } from "@/lib/types";
 import { Suspense, useState } from "react";
 import ResumeDocument from "./document";
 import { saveResume } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
-import { revalidatePath } from "next/cache";
 import BasicInfo from "@/components/editor/basic-info";
 import Skills from "@/components/editor/skills";
 import EducationHistory from "@/components/editor/education";
 import Work from "@/components/editor/work";
 import Projects from "@/components/editor/projects";
-import { Skeleton } from "@/components/ui/skeleton";
+
 
 
 
@@ -20,6 +19,18 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
     const { toast } = useToast()
     const [resume, setResume] = useState(resumeData);
+
+    if (!resume) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                    <h2 className="text-xl font-semibold mb-2">Error loading resume</h2>
+                    <p>Please refresh the page and try again.</p>
+                    <p>If the issue persists, contact support.</p>
+                </div>
+            </div>
+        );
+    }
 
 
     const handleSaveResume = async () => {
