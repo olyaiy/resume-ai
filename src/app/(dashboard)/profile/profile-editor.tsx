@@ -13,6 +13,8 @@ import { PlusCircle, Trash2 } from "lucide-react";
 import ProfileSkills from '@/components/profile/profile-skills';
 import Work from '@/components/editor/work';
 import ProfileWork from '@/components/profile/profile-work';
+import ProfileProjects from '@/components/profile/profile-projects';
+import ProfileEducation from '@/components/profile/profile-education';
 
 
 export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile }) {
@@ -33,7 +35,15 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
    
 
     return (
-        <div className="flex flex-col gap-4 h-full w-1/2">
+      <div className="flex flex-row p-8 gap-4">
+
+        {/* Editor (Left Side) */}
+        <div className="flex flex-col gap-4 w-1/2">
+        <Textarea className='w-full h-auto min-h-[500px]' />
+      </div>
+
+        {/* Editor (Right Side) */}
+        <div className="flex flex-col gap-4 w-1/2 ">
 
           {/* Personal Information */}
           <h2 className="text-lg font-semibold mb-2">Personal Information</h2>
@@ -68,35 +78,39 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
             />
 
 
-          </div>
-      
-          {/* Links */}
-          {/* <h2 className="text-lg font-semibold mt-4 mb-2">Links</h2>
-          <div className="grid grid-cols-[120px_1fr] gap-4 items-center">
-            <Label htmlFor="Github" className="text-right">Github</Label>
+              {/* Github */}
+              <Label htmlFor="github" className="text-right">Github Link</Label>
             <Input
-              id="Github"
-              name="Github"
-              value={profile.Github}
+              id="github"
+              name="github"
+              value={profile.Github} 
               onChange={handleInputChange}
             />
-      
-            <Label htmlFor="Linkedin" className="text-right">LinkedIn</Label>
+
+            {/* Linkedin */}
+            <Label htmlFor="Linkedin" className="text-right">Linkedin Link</Label>
             <Input
               id="Linkedin"
               name="Linkedin"
-              value={profile.Linkedin}
+              value={profile.Linkedin} 
               onChange={handleInputChange}
             />
-      
-            <Label htmlFor="Portfolio" className="text-right">Portfolio</Label>
+
+            {/* Portfolio */}
+            <Label htmlFor="Portfolio" className="text-right">Portfolio Link</Label>
             <Input
               id="Portfolio"
               name="Portfolio"
-              value={profile.Portfolio}
+              value={profile.Portfolio} 
               onChange={handleInputChange}
             />
-          </div> */}
+
+
+          </div>
+      
+          {/* Links */}
+
+          
       
           {/* Skills */}
           <h2 className="text-lg font-semibold mt-4 mb-2">Skills</h2>
@@ -112,8 +126,22 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
             profile={profile}
             setProfile={setProfile}
           />
+
+          {/* Projects  */}
+          <ProfileProjects
+            profile={profile}
+            setProfile={setProfile}
+          />
+
+          {/* Education History  */}
+          <ProfileEducation
+            profile={profile}
+            setProfile={setProfile}
+          />
         
           {/* Add skills section here */}
+        </div>
+      
         </div>
       );
     }
