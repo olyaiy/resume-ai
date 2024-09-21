@@ -5,7 +5,6 @@ import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
 import { Resume, UserProfile } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
-import { AuthError } from '@/lib/types';
 
 const pb = new PocketBase(process.env.POCKETBASE_URL);
 
@@ -221,27 +220,44 @@ export async function updateProfile(profileData: Partial<UserProfile>): Promise<
   }
 }
 
-export async function createProfile(first_name: string, last_name: string, email: string, password: string, confirmPassword: string): Promise<{ success: boolean; message: string }> {
-{
-  const newUserData = {
-    "username": "test_username",
-    "email": email,
-    "emailVisibility": true,
-    "password": password,
-    "passwordConfirm": confirmPassword,
-    "first_name": first_name,
-    "field": [
-        "RELATION_RECORD_ID"
-    ],
-    "last_name": last_name,
-    "skills": "JSON",
-    "work_history": "JSON",
-    "education_history": "JSON",
-    "projects": "JSON",
-    "Linkedin": "",
-    "Github": "",
-    "Portfolio": ""
+export async function createProfile(
+  first_name: string,
+  last_name: string,
+  user_name: string,
+  email: string,
+  password: string,
+  confirmPassword: string
+): Promise<{ success: boolean; message: string }> {
+  console.log('Creating profile for:', user_name);
+  try {
+    const newUserData = {
+      username: user_name,
+      email,
+      emailVisibility: true,
+      password,
+      passwordConfirm: confirmPassword,
+      first_name,
+      last_name,
+      skills: "[]",
+      work_history: "[]",
+      education_history: "[]",
+      projects: "[]",
+      Linkedin: "",
+      Github: "",
+      Portfolio: ""
+    };
+    
+    console.log('Attempting to create user with data:', { ...newUserData, password: '[REDACTED]', passwordConfirm: '[REDACTED]' });
+    const createdUser = await pb.collection('users').create(newUserData);
+    console.log('User created successfully with ID:', createdUser.id);
+    return { success: true, message: 'Profile created successfully' };
+  } catch (error) {
+    console.error('Error creating profile:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create profile';
+    console.log('Returning error message:', errorMessage);
+    return { 
+      success: false, 
+      message: errorMessage
     };
   }
-  return {success: true, message: 'Profile created successfully'};
 }
