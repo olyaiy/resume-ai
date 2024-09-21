@@ -1,19 +1,19 @@
+'use client'
 import Link from "next/link";
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./ui/button";
-import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 import { UserMenu } from "./UserMenu";
+import { NewResumeDialog } from "./NewResumeDialog";
+import { UserProfile } from "@/lib/types";
+import { getProfile } from "@/app/actions";
+import { use } from 'react';
+
 
 
 export default function NavBar() {
-  const cookie = cookies().get('pb_auth');
 
-  if (!cookie) {
-    redirect('/');
-  }
-
-  const { model } = JSON.parse(cookie.value);
+    // Get profile
+    const data: UserProfile = use(getProfile());
 
   return (
     <div className="absolute z-10 w-full h-auto bg-secondary border-b-2 border-border p-2 flex flex-row justify-between items-center">
@@ -21,9 +21,11 @@ export default function NavBar() {
         <Link href="/dashboard" passHref>
           <Button variant="ghost">Dashboard</Button>
         </Link>
-        <Link href="/editor" passHref>
+        <NewResumeDialog triggerButton={
           <Button variant="ghost">New Resume</Button>
-        </Link>
+        } />
+
+        
         <Link href="/resumes" passHref>
           <Button variant="ghost">Resumes</Button>
         </Link>
@@ -35,7 +37,7 @@ export default function NavBar() {
         </Link>
       </div>
       <div className="flex flex-row gap-2 items-center">
-        <UserMenu email={model.email} />
+        <UserMenu email={data.username} />
         <ModeToggle />
       </div>
     </div>
