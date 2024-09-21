@@ -10,10 +10,8 @@ import { use } from 'react';
 
 
 
-export default function NavBar() {
+export default function NavBar({profile}: {profile: UserProfile}) {
 
-    // Get profile
-    const data: UserProfile = use(getProfile());
 
   return (
     <div className="absolute z-10 w-full h-auto bg-secondary border-b-2 border-border p-2 flex flex-row justify-between items-center">
@@ -37,7 +35,7 @@ export default function NavBar() {
         </Link>
       </div>
       <div className="flex flex-row gap-2 items-center">
-        <UserMenu email={data.username} />
+        <UserMenu email={profile.username} />
         <ModeToggle />
       </div>
     </div>
