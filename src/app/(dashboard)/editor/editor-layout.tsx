@@ -11,6 +11,7 @@ import Skills from "@/components/editor/skills";
 import EducationHistory from "@/components/editor/education";
 import Work from "@/components/editor/work";
 import Projects from "@/components/editor/projects";
+import { ClearResumeButton } from "@/components/editor/clear-resume";
 
 
 
@@ -72,13 +73,17 @@ export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
 
 
                 
-                <div className="flex flex-row">
+                <div className="flex flex-row gap-2">
                     <h1 className="text-2xl font-bold">Edit Resume</h1>
                     <Button 
                     onClick={() => handleSaveResume()}
                     className="ml-auto">
                         Save
                     </Button>
+
+
+                    <ClearResumeButton resume={resume} setResume={setResume} />
+
                 </div>
 
                 {/* Basic Information */}
