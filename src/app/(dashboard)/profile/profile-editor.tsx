@@ -39,7 +39,7 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
         
 
         {/* sticky bar */}
-        <div className="w-full flex flex-row justify-between sticky top-0 z-10 bg-card p-2 items-center rounded-md">
+        <div className="w-full flex flex-row justify-between sticky top-0 z-10 bg-card px-4 py-2 items-center rounded-md">
           <h1>User Profile</h1>
           <Button
             onClick={async () => {
@@ -70,8 +70,10 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
 
           {/* Editor (Left Side) */}
           <div className="flex flex-col gap-4 w-1/2">
-          <Textarea className='w-full h-auto min-h-[500px]' />
-        </div>
+            <h2 className="text-lg font-semibold mb-2">Personal Information</h2>
+
+            <Textarea className='w-full h-auto min-h-[500px]' />
+          </div>
 
           {/* Editor (Right Side) */}
           <div className="flex flex-col gap-4 w-1/2 ">

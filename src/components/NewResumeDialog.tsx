@@ -5,25 +5,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FileText } from "lucide-react";
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createResume } from "@/app/actions";
 
 interface NewResumeDialogProps {
-    onCreateResume: (resumeName: string) => void;
+    triggerButton?: React.ReactNode;
 }
 
-export const NewResumeDialog = ({ onCreateResume }: NewResumeDialogProps) => {
+export const NewResumeDialog = ({ triggerButton }: NewResumeDialogProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const router = useRouter();
 
-    const handleCreateResume = () => {
+    const handleCreateResume = async () => {
         const resumeName = inputRef.current?.value.trim();
         if (!resumeName) {
             setError("Resume name is required");
             return;
         }
         setError(null);
-        onCreateResume(resumeName);
-        setIsOpen(false);
+        
+        const result = await createResume(resumeName);
+        if (result.success) {
+            router.push(`/editor/${result.id}`);
+            setIsOpen(false);
+        } else {
+            setError(result.message || "Failed to create resume");
+        }
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -34,15 +43,15 @@ export const NewResumeDialog = ({ onCreateResume }: NewResumeDialogProps) => {
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            {/* New Resume Button */}
             <DialogTrigger asChild>
-                <Button className="h-12">
-                    <FileText className="mr-2 h-4 w-4" />
-                    New Resume
-                </Button>
+                {triggerButton || (
+                    <Button className="h-12">
+                        <FileText className="mr-2 h-4 w-4" />
+                        New Resume
+                    </Button>
+                )}
             </DialogTrigger>
 
-            {/* Dialog Content */}
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Name Your Resume</DialogTitle>

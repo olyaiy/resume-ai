@@ -49,7 +49,7 @@ export default function Dashboard({ resumeList }: { resumeList: Resume[] }) {
 
     return (
         <div className="gap-2 flex flex-col items-start">
-            <NewResumeDialog onCreateResume={handleCreateResume} />
+            <NewResumeDialog />
             <DeleteResumeDialog
                 isOpen={isDeleteDialogOpen}
                 onClose={() => setIsDeleteDialogOpen(false)}
