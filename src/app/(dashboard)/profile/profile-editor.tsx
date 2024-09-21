@@ -38,28 +38,29 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
       <div className="flex flex-col relative">
         
 
-        <div className="w-full flex flex-row justify-between sticky top-0 z-10">
-        <h1>User Profile</h1>
-        <Button
-          onClick={async () => {
-            const result = await updateProfile(profile);
-            if (result.success) {
-              toast({
-                title: "Success",
-                description: result.message,
-                variant: "default",
-              });
-            } else {
-              toast({
-                title: "Error",
-                description: result.message,
-                variant: "destructive",
-              });
-            }
-          }}
-        >
-          Save Profile Info
-        </Button>
+        {/* sticky bar */}
+        <div className="w-full flex flex-row justify-between sticky top-0 z-10 bg-card p-2 items-center rounded-md">
+          <h1>User Profile</h1>
+          <Button
+            onClick={async () => {
+              const result = await updateProfile(profile);
+              if (result.success) {
+                toast({
+                  title: "Success",
+                  description: result.message,
+                  variant: "default",
+                });
+              } else {
+                toast({
+                  title: "Error",
+                  description: result.message,
+                  variant: "destructive",
+                });
+              }
+            }}
+          >
+            Save Profile Info
+          </Button>
 
         </div>
 
