@@ -7,7 +7,6 @@ export default async function Page() {
     
     return (
         <div className="space-y-8 p-4">
-            <h1 className="text-3xl font-bold mb-6">User Profile</h1>
             <ProfileEditor initialProfile={data} />
         </div>
     );
