@@ -14,7 +14,7 @@ export default function NavBar({profile}: {profile: UserProfile}) {
 
 
   return (
-    <div className="absolute z-10 w-full h-auto bg-secondary border-b-2 border-border p-2 flex flex-row justify-between items-center">
+    <div className="absolute z-10 w-full h-auto  border-b-2 border-border p-2 flex flex-row justify-between items-center">
       <div className="flex flex-row gap-2">
         <Link href="/dashboard" passHref>
           <Button variant="ghost">Dashboard</Button>

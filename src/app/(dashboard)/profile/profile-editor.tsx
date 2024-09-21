@@ -8,8 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PlusCircle, Trash2 } from "lucide-react";
 import ProfileSkills from '@/components/profile/profile-skills';
 import Work from '@/components/editor/work';
 import ProfileWork from '@/components/profile/profile-work';
@@ -39,7 +37,7 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
         
 
         {/* sticky bar */}
-        <div className="w-full flex flex-row justify-between sticky top-0 z-10 bg-card px-4 py-2 items-center rounded-md">
+        <div className="w-full flex flex-row justify-between sticky top-0 z-10 bg-card border-2 border-border px-4 py-2 items-center rounded-md">
           <h1>User Profile</h1>
           <Button
             onClick={async () => {

@@ -12,7 +12,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="w-screen flex flex-row h-screen">
 
-      <div className="w-full m-4 rounded-md bg-secondary mt-[4.5rem] p-4 overflow-scroll">
+      <div className="w-full m-4 rounded-md mt-[4.5rem] p-4 overflow-scroll">
         {children}
       </div>
     </div>
