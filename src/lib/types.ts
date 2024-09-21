@@ -39,7 +39,7 @@ export interface Resume {
     collectionName: string;
     created: string;
     education_history: Education[];
-    field: string; // Assuming this is still a relation record ID
+    user: string; 
     id: string;
     name: string;
     projects: Project[];
@@ -62,7 +62,7 @@ export interface Resume {
     first_name: string;
     last_name: string;
     avatar: string;
-    field: string[];
+    user: string[];
     skills: Skill[];
     work_history: WorkExperience[];
     education_history: Education[];

@@ -13,11 +13,10 @@ export default async function Page() {
     // Get resumes, filter by profile id
     const resumeList = (
         await pb.collection('resumes').getList(1, 8, {
-            filter: `field = "${data.id}"`
+            filter: `user = "${data.id}"`
         })
     ).items as Resume[];
     
-    console.log(resumeList)
 
     return <Dashboard resumeList={resumeList}/>
 }

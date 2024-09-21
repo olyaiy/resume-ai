@@ -5,6 +5,8 @@ import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
 import { Resume, UserProfile } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
+import { unstable_cache } from 'next/cache';
+
 
 const pb = new PocketBase(process.env.POCKETBASE_URL);
 
@@ -125,7 +127,7 @@ export async function createResume(resumeName: string) {
       "education_history": [],
       "work_history": [],
       "projects": [],
-      "field": currentUserId,
+      "user": currentUserId,
       "resume_name": resumeName,
       "linkedin": "https://example.com",
       "github": "https://example.com",
@@ -160,18 +162,24 @@ export async function deleteResume(resumeId: string) {
 
 // ------- Profiles ------- //
 
-export async function getProfile() {
 
+export async function getProfile() {
   if (!loadAuthFromCookie()) {
     redirect('/');
-
   }
 
   const currentUserId = pb.authStore.model?.id;
-  const record = await pb.collection('users').getOne(currentUserId);
 
+  const getCachedProfile = unstable_cache(
+    async () => {
+      const record = await pb.collection('users').getOne(currentUserId);
+      return record as UserProfile;
+    },
+    [`user-profile-${currentUserId}`],
+    { revalidate: 86400 } // Cache for 1 day (24 hours * 60 minutes * 60 seconds)
+  );
 
-  return record as UserProfile;
+  return getCachedProfile();
 }
 
 export async function updateProfile(profileData: Partial<UserProfile>): Promise<{ success: boolean; message: string }> {
