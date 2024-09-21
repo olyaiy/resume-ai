@@ -10,10 +10,9 @@ import { DeleteResumeDialog } from "@/components/DeleteResumeDialog";
 
 interface ResumeListProps {
     resumeList: Resume[];
-    onDeleteResume: (resumeId: string) => void;
 }
 
-export const ResumeList = ({ resumeList, onDeleteResume }: ResumeListProps) => {
+export const ResumeList = ({ resumeList }: ResumeListProps) => {
     const [resumeToDelete, setResumeToDelete] = useState<string | null>(null);
 
     return (
@@ -44,16 +43,13 @@ export const ResumeList = ({ resumeList, onDeleteResume }: ResumeListProps) => {
                     </Card>
                 </div>
             ))}
-            {resumeToDelete && (
-                <DeleteResumeDialog
-                    resumeId={resumeToDelete}
-                    onClose={() => setResumeToDelete(null)}
-                    onDelete={() => {
-                        onDeleteResume(resumeToDelete);
-                        setResumeToDelete(null);
-                    }}
-                />
-            )}
+            <DeleteResumeDialog
+                resumeId={resumeToDelete || ''}
+                isOpen={!!resumeToDelete}
+                onOpenChange={(open) => {
+                    if (!open) setResumeToDelete(null);
+                }}
+            />
         </div>
     );
 };

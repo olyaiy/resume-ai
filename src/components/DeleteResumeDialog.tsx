@@ -2,17 +2,17 @@
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { deleteResume } from "@/app/actions";
 import { useRouter } from "next/navigation";
 
 interface DeleteResumeDialogProps {
     resumeId: string;
-    onClose: () => void;
-    onDelete: () => void;
+    isOpen: boolean;
+    onOpenChange: (open: boolean) => void;
 }
 
-export function DeleteResumeDialog({ resumeId, onClose, onDelete }: DeleteResumeDialogProps) {
+export function DeleteResumeDialog({ resumeId, isOpen, onOpenChange }: DeleteResumeDialogProps) {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
 
@@ -20,7 +20,7 @@ export function DeleteResumeDialog({ resumeId, onClose, onDelete }: DeleteResume
         startTransition(() => {
             deleteResume(resumeId)
                 .then(() => {
-                    onDelete();
+                    onOpenChange(false);
                     router.refresh();
                 })
                 .catch((error) => {
@@ -31,7 +31,7 @@ export function DeleteResumeDialog({ resumeId, onClose, onDelete }: DeleteResume
     };
 
     return (
-        <Dialog open={true} onOpenChange={onClose}>
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Confirm Deletion</DialogTitle>
@@ -40,7 +40,7 @@ export function DeleteResumeDialog({ resumeId, onClose, onDelete }: DeleteResume
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                    <Button variant="outline" onClick={onClose}>Cancel</Button>
+                    <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
                     <Button variant="destructive" onClick={handleDelete} disabled={isPending}>
                         {isPending ? "Deleting..." : "Delete"}
                     </Button>
