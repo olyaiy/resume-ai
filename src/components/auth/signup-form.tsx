@@ -63,11 +63,11 @@ export default function SignUpForm() {
 
     setIsLoading(false)
 
-    if (result.success) {
-      router.push("/dashboard")
-    } else {
-      console.error(result.message)
-    }
+    // if (result.success) {
+    //   router.push("/dashboard")
+    // } else {
+    //   console.error(result.message)
+    // }
   }
   
   return (

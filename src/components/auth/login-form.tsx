@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,13 +18,41 @@ export const description =
   "A login form with email and password. There's an option to login with Google and a link to sign up if you don't have an account.";
 
 export function LoginForm() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [error, setError] = useState<string | null>(null);
+
+
+  function validateEmail(email: string) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email) ? "" : "Please enter a valid email address";
+  }
+
+  function validatePassword(password: string) {
+    return password.length >= 8 ? "" : "Password must be at least 8 characters long";
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const emailValidationError = validateEmail(email);
+    const passwordValidationError = validatePassword(password);
     
+    setEmailError(emailValidationError);
+    setPasswordError(passwordValidationError);
+
+    if (emailValidationError || passwordValidationError) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    const formData = new FormData(event.currentTarget);
     const result = await login(formData);
+
+    setIsLoading(false);
+
   };
 
   return (
@@ -47,7 +74,14 @@ export function LoginForm() {
                 type="email"
                 placeholder="m@example.com"
                 required
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setEmailError("");
+                }}
+                onBlur={(e) => setEmailError(validateEmail(e.target.value))}
               />
+              {emailError && <p className="text-sm text-red-500">{emailError}</p>}
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -56,11 +90,23 @@ export function LoginForm() {
                   Forgot your password?
                 </Link>
               </div>
-              <Input id="password" name="password" type="password" required />
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setPasswordError("");
+                }}
+                onBlur={(e) => setPasswordError(validatePassword(e.target.value))}
+              />
+              {passwordError && <p className="text-sm text-red-500">{passwordError}</p>}
             </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button type="submit" className="w-full">
-              Login
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Logging in..." : "Login"}
             </Button>
             <Button variant="outline" className="w-full">
               Login with Google
@@ -68,7 +114,7 @@ export function LoginForm() {
           </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href="#" className="underline">
+            <Link href="/signup" className="underline">
               Sign up
             </Link>
           </div>
