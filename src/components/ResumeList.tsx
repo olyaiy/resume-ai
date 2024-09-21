@@ -1,9 +1,12 @@
-// ResumeList.tsx
+'use client'
+
 import { Resume } from "@/lib/types";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
+import { useState } from "react";
+import { DeleteResumeDialog } from "@/components/DeleteResumeDialog";
 
 interface ResumeListProps {
     resumeList: Resume[];
@@ -11,6 +14,8 @@ interface ResumeListProps {
 }
 
 export const ResumeList = ({ resumeList, onDeleteResume }: ResumeListProps) => {
+    const [resumeToDelete, setResumeToDelete] = useState<string | null>(null);
+
     return (
         <div className="w-full max-w-2xl">
             {resumeList.map((resume: Resume) => (
@@ -30,7 +35,7 @@ export const ResumeList = ({ resumeList, onDeleteResume }: ResumeListProps) => {
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
-                                    onDeleteResume(resume.id);
+                                    setResumeToDelete(resume.id);
                                 }}
                             >
                                 <Trash2 className="h-4 w-4" />
@@ -39,6 +44,16 @@ export const ResumeList = ({ resumeList, onDeleteResume }: ResumeListProps) => {
                     </Card>
                 </div>
             ))}
+            {resumeToDelete && (
+                <DeleteResumeDialog
+                    resumeId={resumeToDelete}
+                    onClose={() => setResumeToDelete(null)}
+                    onDelete={() => {
+                        onDeleteResume(resumeToDelete);
+                        setResumeToDelete(null);
+                    }}
+                />
+            )}
         </div>
     );
 };

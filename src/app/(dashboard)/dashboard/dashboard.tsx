@@ -17,15 +17,6 @@ export default function Dashboard({ resumeList }: { resumeList: Resume[] }) {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [resumeToDelete, setResumeToDelete] = useState<string | null>(null);
 
-    const handleCreateResume = async (resumeName: string) => {
-        const result = await createResume(resumeName);
-        if (result.success) {
-            router.push(`/editor/${result.id}`);
-        } else {
-            console.error(result.message);
-        }
-    };
-
     const handleDeleteResume = (resumeId: string) => {
         setResumeToDelete(resumeId);
         setIsDeleteDialogOpen(true);
@@ -50,12 +41,12 @@ export default function Dashboard({ resumeList }: { resumeList: Resume[] }) {
     return (
         <div className="gap-2 flex flex-col items-start">
             <NewResumeDialog />
-            <DeleteResumeDialog
+            {/* <DeleteResumeDialog
                 isOpen={isDeleteDialogOpen}
                 onClose={() => setIsDeleteDialogOpen(false)}
                 onConfirmDelete={confirmDelete}
                 isPending={isPending}
-            />
+            /> */}
             <ResumeList resumeList={resumeList} onDeleteResume={handleDeleteResume} />
         </div>
     );
