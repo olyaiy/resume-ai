@@ -5,10 +5,11 @@ import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
 import { Resume, UserProfile } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
-import { unstable_cache } from 'next/cache';
 
-
-const pb = new PocketBase(process.env.POCKETBASE_URL);
+// Create a new PocketBase instance for each request
+function getPocketBaseInstance() {
+  return new PocketBase(process.env.POCKETBASE_URL);
+}
 
 // Helper function to revalidate all paths
 function revalidateAll() {
@@ -16,46 +17,27 @@ function revalidateAll() {
 }
 
 // Helper function to load authentication from cookie
-function loadAuthFromCookie(): boolean {
+function loadAuthFromCookie(pb: PocketBase): boolean {
   const cookie = cookies().get('pb_auth');
-
   if (!cookie) {
-
     return false;
   }
-
-  // Parse the authentication data from the cookie
   const authData = JSON.parse(cookie.value);
-
-  // Load the authentication token into the authStore
   pb.authStore.save(authData.token, authData.model);
-
-
-
-  if (!pb.authStore.isValid) {
-
-    return false;
-  }
-
-  return true;
+  return pb.authStore.isValid;
 }
 
 // Login
 export async function login(formData: FormData) {
-
-
+  const pb = getPocketBaseInstance();
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
   try {
-
     const { token, record: model } = await pb
       .collection('users')
       .authWithPassword(email, password);
 
-
-
-    // Prepare cookie data
     const cookieData = JSON.stringify({
       token,
       model: {
@@ -65,7 +47,6 @@ export async function login(formData: FormData) {
       }
     });
 
-    // Set the cookie without additional encoding
     cookies().set('pb_auth', cookieData, {
       secure: true,
       path: '/',
@@ -90,12 +71,13 @@ export async function logout() {
 // ------- Resumes ------- //
 
 export async function saveResume(resumeData: Resume): Promise<{ success: boolean, message: string }> {
-  if (!loadAuthFromCookie()) {
+  const pb = getPocketBaseInstance();
+  if (!loadAuthFromCookie(pb)) {
     return { success: false, message: 'Not authenticated' };
   }
 
   try {
-    const record = await pb.collection('resumes').update(resumeData.id, {
+    await pb.collection('resumes').update(resumeData.id, {
       name: resumeData.name,
       resume_name: resumeData.resume_name,
       skills: resumeData.skills,
@@ -112,31 +94,49 @@ export async function saveResume(resumeData: Resume): Promise<{ success: boolean
   }
 }
 
-export async function createResume(resumeName: string) {
-  // Check if authentication is valid
-  if (!loadAuthFromCookie()) {
-    return { success: false, message: 'Not authenticated' };
-  }
+export async function createResume(resumeName: string, useProfile: boolean) {
+  const pb = getPocketBaseInstance();
 
-  const currentUserId = pb.authStore.model?.id;
+
+  const profile: UserProfile = await getProfile();
+
+  const currentUserId = profile.id;
+
+  let data: Record<string, any> = {
+    "name": profile.first_name || "",
+    "resume_name": resumeName,
+    "user": profile.id,
+  };
 
   try {
-    const data = {
-      "name": "test",
-      "skills": [],
-      "education_history": [],
-      "work_history": [],
-      "projects": [],
-      "user": currentUserId,
-      "resume_name": resumeName,
-      "linkedin": "https://example.com",
-      "github": "https://example.com",
-      "portfolio_site": "https://example.com"
-    };
+    if (useProfile) {
+      const userProfile = pb.authStore.model;
+      data = {
+        ...data,
+        "skills": profile.skills || [],
+        "education_history": profile.education_history || [],
+        "work_history": profile.work_history || [],
+        "projects": profile.projects || [],
+        "linkedin": profile.Linkedin || "",
+        "github": profile.Github || "",
+        "portfolio_site": profile.Portfolio || "",
+      };
+    } else {
+      data = {
+        ...data,
+        "skills": [],
+        "education_history": [],
+        "work_history": [],
+        "projects": [],
+        "linkedin": "",
+        "github": "",
+        "portfolio_site": "",
+      };
+    }
 
     const record = await pb.collection('resumes').create(data);
-    revalidateAll();
 
+    revalidateAll();
     return { 
       success: true, 
       message: 'Resume created successfully', 
@@ -152,38 +152,86 @@ export async function createResume(resumeName: string) {
 }
 
 export async function deleteResume(resumeId: string) {
-  if (!loadAuthFromCookie()) {
+  const pb = getPocketBaseInstance();
+  if (!loadAuthFromCookie(pb)) {
     return { success: false, message: 'Not authenticated' };
   }
 
-  await pb.collection('resumes').delete(resumeId);
-  revalidateAll();
+  try {
+    await pb.collection('resumes').delete(resumeId);
+    revalidateAll();
+    return { success: true, message: 'Resume deleted successfully' };
+  } catch (error) {
+    console.error('Error deleting resume:', error);
+    return { success: false, message: 'Failed to delete resume' };
+  }
+}
+
+export async function getResumeList(): Promise<Resume[]> {
+  const pb = getPocketBaseInstance();
+  if (!loadAuthFromCookie(pb)) {
+    return [];
+  }
+
+  const currentUserId = pb.authStore.model?.id;
+
+  if (!currentUserId) {
+    return [];
+  }
+
+  try {
+    const resumeList = await pb.collection('resumes').getList(1, 8, {
+      filter: `user = "${currentUserId}"`
+    });
+    return resumeList.items as Resume[];
+  } catch (error) {
+    console.error('Error fetching resume list:', error);
+    return [];
+  }
+}
+
+export async function getResume(id: string): Promise<Resume | null> {
+  const pb = getPocketBaseInstance();
+  if (!loadAuthFromCookie(pb)) {
+    return null;
+  }
+
+  try {
+    const resume = await pb.collection('resumes').getOne(id) as Resume;
+    return resume;
+  } catch (error) {
+    console.error('Error fetching resume:', error);
+    return null;
+  }
 }
 
 // ------- Profiles ------- //
 
-
 export async function getProfile() {
-  if (!loadAuthFromCookie()) {
+  const pb = getPocketBaseInstance();
+  
+  if (!loadAuthFromCookie(pb)) {
     redirect('/');
   }
 
   const currentUserId = pb.authStore.model?.id;
 
-  const getCachedProfile = unstable_cache(
-    async () => {
-      const record = await pb.collection('users').getOne(currentUserId);
-      return record as UserProfile;
-    },
-    [`user-profile-${currentUserId}`],
-    { revalidate: 86400 } // Cache for 1 day (24 hours * 60 minutes * 60 seconds)
-  );
+  if (!currentUserId) {
+    throw new Error('User ID not found');
+  }
 
-  return getCachedProfile();
+  try {
+    const record = await pb.collection('users').getOne(currentUserId);
+    return record as UserProfile;
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    throw error;
+  }
 }
 
 export async function updateProfile(profileData: Partial<UserProfile>): Promise<{ success: boolean; message: string }> {
-  if (!loadAuthFromCookie()) {
+  const pb = getPocketBaseInstance();
+  if (!loadAuthFromCookie(pb)) {
     return { success: false, message: 'Not authenticated' };
   }
 
@@ -211,7 +259,7 @@ export async function updateProfile(profileData: Partial<UserProfile>): Promise<
       }
     });
 
-    const record = await pb.collection('users').update(currentUserId, data);
+    await pb.collection('users').update(currentUserId, data);
     revalidateAll();
 
     return { success: true, message: 'Profile updated successfully' };
@@ -232,6 +280,7 @@ export async function createProfile(
   password: string,
   confirmPassword: string
 ): Promise<{ success: boolean; message: string }> {
+  const pb = getPocketBaseInstance();
   try {
     const newUserData = {
       username: user_name,
@@ -272,7 +321,6 @@ export async function createProfile(
       sameSite: 'strict',
       httpOnly: true,
     });
-
 
     redirect('/dashboard');
 

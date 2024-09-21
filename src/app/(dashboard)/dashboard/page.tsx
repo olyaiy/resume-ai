@@ -1,22 +1,12 @@
 import Dashboard from "./dashboard";
-import PocketBase from 'pocketbase';
-import { Resume, UserProfile } from '@/lib/types';
-import { getProfile } from "@/app/actions";
-
-const pb = new PocketBase('http://127.0.0.1:8090');
+import { getProfile, getResumeList } from "@/app/actions";
 
 export default async function Page() {
+    // Get profile and resume list
+    const [data, resumeList] = await Promise.all([
+        getProfile(),
+        getResumeList()
+    ]);
 
-    // Get profile
-    const data: UserProfile = await getProfile();
-    
-    // Get resumes, filter by profile id
-    const resumeList = (
-        await pb.collection('resumes').getList(1, 8, {
-            filter: `user = "${data.id}"`
-        })
-    ).items as Resume[];
-    
-
-    return <Dashboard resumeList={resumeList}/>
+    return <Dashboard resumeList={resumeList} />
 }
