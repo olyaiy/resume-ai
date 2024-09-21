@@ -170,7 +170,6 @@ export async function getProfile() {
     redirect('/');
 
   }
-  
 
   const currentUserId = pb.authStore.model?.id;
   const record = await pb.collection('users').getOne(currentUserId);

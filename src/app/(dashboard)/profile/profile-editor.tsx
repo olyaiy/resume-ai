@@ -11,6 +11,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { PlusCircle, Trash2 } from "lucide-react";
 import ProfileSkills from '@/components/profile/profile-skills';
+import Work from '@/components/editor/work';
+import ProfileWork from '@/components/profile/profile-work';
 
 
 export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile }) {
@@ -100,6 +102,13 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
           <h2 className="text-lg font-semibold mt-4 mb-2">Skills</h2>
 
           <ProfileSkills
+            profile={profile}
+            setProfile={setProfile}
+          />
+
+
+          {/* Work  */}
+          <ProfileWork
             profile={profile}
             setProfile={setProfile}
           />
