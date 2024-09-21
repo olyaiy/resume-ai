@@ -15,14 +15,40 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { createProfile } from "@/app/actions"
 
-// ... existing description ...
-
 export default function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [emailError, setEmailError] = useState("")
+  const [passwordError, setPasswordError] = useState("")
   const router = useRouter()
+
+  function validateEmail(email: string) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email) ? "" : "Please enter a valid email address"
+  }
+
+  function validatePasswords(password: string, confirmPassword: string) {
+    if (password.length < 8) {
+      return "Password must be at least 8 characters long"
+    }
+    if (password !== confirmPassword) {
+      return "Passwords do not match"
+    }
+    return ""
+  }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    const emailValidationError = validateEmail(email)
+    const passwordValidationError = validatePasswords(password, confirmPassword)
+    
+    setEmailError(emailValidationError)
+    setPasswordError(passwordValidationError)
+
+    if (emailValidationError || passwordValidationError) return
+
     setIsLoading(true)
 
     const formData = new FormData(event.currentTarget)
@@ -30,17 +56,16 @@ export default function SignUpForm() {
       formData.get("first-name") as string,
       formData.get("last-name") as string,
       formData.get("username") as string,
-      formData.get("email") as string,
-      formData.get("password") as string,
-      formData.get("confirm-password") as string
+      email,
+      password,
+      confirmPassword
     )
 
     setIsLoading(false)
 
     if (result.success) {
-      router.push("/dashboard") // Redirect to dashboard or confirmation page
+      router.push("/dashboard")
     } else {
-      // Handle error (you might want to show an error message to the user)
       console.error(result.message)
     }
   }
@@ -83,19 +108,51 @@ export default function SignUpForm() {
               type="email"
               placeholder="m@example.com"
               required
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value)
+                setEmailError("")
+              }}
+              onBlur={(e) => setEmailError(validateEmail(e.target.value))}
             />
+            {emailError && <p className="text-sm text-red-500">{emailError}</p>}
           </div>
 
           {/* Password Input */}
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" name="password" type="password" placeholder="Enter your password" required />
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              required
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value)
+                setPasswordError("")
+              }}
+              onBlur={() => setPasswordError(validatePasswords(password, confirmPassword))}
+            />
+            {passwordError && <p className="text-sm text-red-500">{passwordError}</p>}
           </div>
 
           {/* Confirm Password Input */}
           <div className="grid gap-2">
             <Label htmlFor="confirm-password">Confirm Password</Label>
-            <Input id="confirm-password" name="confirm-password" type="password" placeholder="Confirm your password" required />
+            <Input
+              id="confirm-password"
+              name="confirm-password"
+              type="password"
+              placeholder="Confirm your password"
+              required
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value)
+                setPasswordError("")
+              }}
+              onBlur={() => setPasswordError(validatePasswords(password, confirmPassword))}
+            />
           </div>
 
           {/* Sign Up Buttons */}

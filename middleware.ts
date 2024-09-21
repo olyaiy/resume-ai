@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import PocketBase from 'pocketbase';
 import { isTokenExpired } from 'pocketbase';
 
 
