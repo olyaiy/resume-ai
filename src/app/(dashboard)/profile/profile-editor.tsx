@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { PlusCircle, Trash2 } from "lucide-react";
+import ProfileSkills from '@/components/profile/profile-skills';
 
 
 export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile }) {
@@ -31,9 +32,13 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
 
     return (
         <div className="flex flex-col gap-4 h-full w-1/2">
+
           {/* Personal Information */}
           <h2 className="text-lg font-semibold mb-2">Personal Information</h2>
+          
           <div className="grid grid-cols-[120px_1fr] gap-4 items-center">
+
+            {/* First Name */}
             <Label htmlFor="first_name" className="text-right">First Name</Label>
             <Input
               id="first_name"
@@ -41,7 +46,8 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
               value={profile.first_name}
               onChange={handleInputChange}
             />
-      
+
+            {/* Last Name */}
             <Label htmlFor="last_name" className="text-right">Last Name</Label>
             <Input
               id="last_name"
@@ -49,6 +55,17 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
               value={profile.last_name}
               onChange={handleInputChange}
             />
+
+            {/* Email */}
+            <Label htmlFor="email" className="text-right">Email Address</Label>
+            <Input
+              id="email"
+              name="email"
+              value={profile.email} 
+              onChange={handleInputChange}
+            />
+
+
           </div>
       
           {/* Links */}
@@ -81,6 +98,11 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
       
           {/* Skills */}
           <h2 className="text-lg font-semibold mt-4 mb-2">Skills</h2>
+
+          <ProfileSkills
+            profile={profile}
+            setProfile={setProfile}
+          />
         
           {/* Add skills section here */}
         </div>

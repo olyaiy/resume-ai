@@ -167,7 +167,8 @@ export async function deleteResume(resumeId: string) {
 export async function getProfile() {
 
   if (!loadAuthFromCookie()) {
-    return { success: false, message: 'Not authenticated' };
+    redirect('/');
+
   }
   
 

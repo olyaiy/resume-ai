@@ -17,7 +17,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 
 
-export default function EditorLayout({resumeData}: {resumeData: Resume}) {
+export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
     const { toast } = useToast()
     const [resume, setResume] = useState(resumeData);
 
