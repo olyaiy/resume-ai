@@ -250,7 +250,32 @@ export async function createProfile(
     console.log('Attempting to create user with data:', { ...newUserData, password: '[REDACTED]', passwordConfirm: '[REDACTED]' });
     const createdUser = await pb.collection('users').create(newUserData);
     console.log('User created successfully with ID:', createdUser.id);
-    return { success: true, message: 'Profile created successfully' };
+
+    // Automatically log in the user
+    const { token, record: model } = await pb.collection('users').authWithPassword(email, password);
+
+    // Prepare cookie data
+    const cookieData = JSON.stringify({
+      token,
+      model: {
+        id: model.id,
+        email: model.email,
+        username: model.username,
+      }
+    });
+
+    // Set the cookie
+    cookies().set('pb_auth', cookieData, {
+      secure: true,
+      path: '/',
+      sameSite: 'strict',
+      httpOnly: true,
+    });
+
+    console.log('User logged in automatically');
+    redirect('/dashboard');
+
+    return { success: true, message: 'Profile created and logged in successfully' };
   } catch (error) {
     console.error('Error creating profile:', error);
     const errorMessage = error instanceof Error ? error.message : 'Failed to create profile';
