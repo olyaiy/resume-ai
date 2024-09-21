@@ -20,7 +20,6 @@ export const description =
 
 export function LoginForm() {
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

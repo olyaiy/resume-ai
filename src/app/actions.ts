@@ -220,3 +220,28 @@ export async function updateProfile(profileData: Partial<UserProfile>): Promise<
     };
   }
 }
+
+export async function createProfile(first_name: string, last_name: string, email: string, password: string, confirmPassword: string): Promise<{ success: boolean; message: string }> {
+{
+  const newUserData = {
+    "username": "test_username",
+    "email": email,
+    "emailVisibility": true,
+    "password": password,
+    "passwordConfirm": confirmPassword,
+    "first_name": first_name,
+    "field": [
+        "RELATION_RECORD_ID"
+    ],
+    "last_name": last_name,
+    "skills": "JSON",
+    "work_history": "JSON",
+    "education_history": "JSON",
+    "projects": "JSON",
+    "Linkedin": "",
+    "Github": "",
+    "Portfolio": ""
+    };
+  }
+  return {success: true, message: 'Profile created successfully'};
+}

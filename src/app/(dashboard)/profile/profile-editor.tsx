@@ -71,8 +71,9 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
           {/* Editor (Left Side) */}
           <div className="flex flex-col gap-4 w-1/2">
             <h2 className="text-lg font-semibold mb-2">Personal Information</h2>
+            <h3>Paste your information here</h3>
 
-            <Textarea className='w-full h-auto min-h-[500px]' />
+            <Textarea className='w-full h-auto min-h-[500px]' placeholder='Copy and paste your linkedin profile, previous resumes, or anything else about yourself here!'/>
           </div>
 
           {/* Editor (Right Side) */}
