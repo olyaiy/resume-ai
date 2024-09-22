@@ -14,7 +14,7 @@ import ProfileWork from '@/components/profile/profile-work';
 import ProfileProjects from '@/components/profile/profile-projects';
 import ProfileEducation from '@/components/profile/profile-education';
 import { ClearProfileButton } from '@/components/profile/reset-profile';
-import { generateEducationHistory } from '@/lib/ai-actions';
+import { generateEducationHistory, generateWorkExperience } from '@/lib/ai-actions';
 
 export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile }) {
     
@@ -32,29 +32,36 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
     };
 
     const handleAIFill = async () => {
-        try {
-            const result = await generateEducationHistory(`make this into a json format:${aiPrompt}`);
-            if (result && result.education_history) {
-                setProfile(prevProfile => ({
-                    ...prevProfile,
-                    education_history: result.education_history
-                }));
-                toast({
-                    title: "Success",
-                    description: "Education history updated with AI-generated content",
-                    variant: "default",
-                });
-            } else {
-                throw new Error("Invalid response from AI");
-            }
-        } catch (error) {
-            console.error("Error generating education history:", error);
-            toast({
-                title: "Error",
-                description: "Failed to generate education history",
-                variant: "destructive",
-            });
+      try {
+        const educationResult = await generateEducationHistory(`make this into a json format:${aiPrompt}`);
+        const workExperienceResult = await generateWorkExperience(`make this into a json format:${aiPrompt}`);
+        
+        if (educationResult?.education_history && workExperienceResult?.work_experience) {
+          setProfile(prevProfile => ({
+            ...prevProfile,
+            education_history: educationResult.education_history,
+            work_history: workExperienceResult.work_experience
+          }));
+          console.log("Updated profile:", {
+            education_history: educationResult.education_history,
+            work_history: workExperienceResult.work_experience
+          });
+          toast({
+            title: "Success",
+            description: "Education history and work experience updated with AI-generated content",
+            variant: "default",
+          });
+        } else {
+          throw new Error("Invalid response from AI");
         }
+      } catch (error) {
+        console.error("Error generating profile content:", error);
+        toast({
+          title: "Error",
+          description: "Failed to generate profile content",
+          variant: "destructive",
+        });
+      }
     };
 
     return (
