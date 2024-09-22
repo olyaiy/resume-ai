@@ -1,6 +1,7 @@
 'use server'
 
 import OpenAI from "openai";
+import { Education } from "./types";
 
 
 const openai = new OpenAI({
@@ -55,13 +56,7 @@ const response = await openai.chat.completions.create({
                   "degree": {
                     "type": "string"
                   },
-                  "field_of_study": {
-                    "type": "string"
-                  },
-                  "start_date": {
-                    "type": "string"
-                  },
-                  "end_date": {
+                  "date": {
                     "type": "string"
                   },
                   "description": {
@@ -71,9 +66,7 @@ const response = await openai.chat.completions.create({
                 "required": [
                   "institution",
                   "degree",
-                  "field_of_study",
-                  "start_date",
-                  "end_date",
+                  "date",
                   "description"
                 ],
                 "additionalProperties": false
@@ -89,7 +82,13 @@ const response = await openai.chat.completions.create({
     },
   });
 
+  const educationHistory = JSON.parse(response.choices[0].message.content || '{}')
+
   console.log('WE GOT THIS REPONSE FROM THE AI ----------------------------------------')
   console.log(response.choices[0].message.content);
+  console.log('AS EDUCATION HISTORY ----------------------------------------')
+  console.log(educationHistory);
+
+  return educationHistory
 
 }

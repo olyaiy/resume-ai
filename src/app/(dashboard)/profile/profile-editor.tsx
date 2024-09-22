@@ -14,13 +14,13 @@ import ProfileWork from '@/components/profile/profile-work';
 import ProfileProjects from '@/components/profile/profile-projects';
 import ProfileEducation from '@/components/profile/profile-education';
 import { ClearProfileButton } from '@/components/profile/reset-profile';
-
+import { generateEducationHistory } from '@/lib/ai-actions';
 
 export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile }) {
     
     const [profile, setProfile] = useState<UserProfile>(initialProfile);
+    const [aiPrompt, setAiPrompt] = useState('');
     const { toast } = useToast();
-
 
     // Handle input change
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +31,31 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
         }));
     };
 
-   
+    const handleAIFill = async () => {
+        try {
+            const result = await generateEducationHistory(`make this into a json format:${aiPrompt}`);
+            if (result && result.education_history) {
+                setProfile(prevProfile => ({
+                    ...prevProfile,
+                    education_history: result.education_history
+                }));
+                toast({
+                    title: "Success",
+                    description: "Education history updated with AI-generated content",
+                    variant: "default",
+                });
+            } else {
+                throw new Error("Invalid response from AI");
+            }
+        } catch (error) {
+            console.error("Error generating education history:", error);
+            toast({
+                title: "Error",
+                description: "Failed to generate education history",
+                variant: "destructive",
+            });
+        }
+    };
 
     return (
       <div className="flex flex-col relative">
@@ -83,8 +107,19 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
           <div className="flex flex-col gap-4 w-1/2">
             <h2 className="text-lg font-semibold mb-2">Personal Information</h2>
             <h3>Paste your information here</h3>
+            <Button 
+              className='w-full'
+              onClick={handleAIFill}
+            >
+              Fill Profile With AI
+            </Button>
 
-            <Textarea className='w-full h-auto min-h-[500px]' placeholder='Copy and paste your linkedin profile, previous resumes, or anything else about yourself here!'/>
+            <Textarea 
+              className='w-full h-auto min-h-[500px]' 
+              placeholder='Copy and paste your linkedin profile, previous resumes, or anything else about yourself here!'
+              value={aiPrompt}
+              onChange={(e) => setAiPrompt(e.target.value)}
+            />
           </div>
 
           {/* Editor (Right Side) */}
