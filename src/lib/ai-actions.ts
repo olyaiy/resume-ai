@@ -8,7 +8,7 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
   
-
+// Generate Education History
 export async function generateEducationHistory(prompt: string) {
   
 const response = await openai.chat.completions.create({
@@ -86,17 +86,17 @@ const response = await openai.chat.completions.create({
 
   const educationHistory = JSON.parse(response.choices[0].message.content || '{}')
 
-  console.log('WE GOT THIS REPONSE FROM THE AI ----------------------------------------')
-  console.log(response.choices[0].message.content);
-  console.log('AS EDUCATION HISTORY ----------------------------------------')
-  console.log(educationHistory);
+//   console.log('WE GOT THIS REPONSE FROM THE AI ----------------------------------------')
+//   console.log(response.choices[0].message.content);
+//   console.log('AS EDUCATION HISTORY ----------------------------------------')
+//   console.log(educationHistory);
 
   return educationHistory
 
 }
 
 
-
+// Generate Work Experience
 export async function generateWorkExperience(prompt: string) {
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -161,10 +161,86 @@ export async function generateWorkExperience(prompt: string) {
   
     const workExperience = JSON.parse(response.choices[0].message.content || '{}');
   
-    console.log('WE GOT THIS RESPONSE FROM THE AI ----------------------------------------');
-    console.log(response.choices[0].message.content);
-    console.log('AS WORK EXPERIENCE ----------------------------------------');
-    console.log(workExperience);
+    // console.log('WE GOT THIS RESPONSE FROM THE AI ----------------------------------------');
+    // console.log(response.choices[0].message.content);
+    // console.log('AS WORK EXPERIENCE ----------------------------------------');
+    // console.log(workExperience);
   
     return workExperience;
   }
+
+
+export async function generateProjects(prompt: string) {
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      {
+        "role": "system",
+        "content": [
+          {
+            "type": "text",
+            "text": "You are a helpful assistant who takes in user project information and turns it into a json format. Do that with this text."
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": prompt
+          }
+        ]
+      }
+    ],
+    temperature: 1,
+    max_tokens: 5000,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+    response_format: {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "Projects",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "projects": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "accomplishments": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "technologies": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "url": { "type": "string" }
+                },
+                "required": ["name", "description", "accomplishments", "technologies","url"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": ["projects"],
+          "additionalProperties": false
+        }
+      }
+    },
+  });
+
+  const projects = JSON.parse(response.choices[0].message.content || '{}');
+
+  console.log('WE GOT THIS RESPONSE FROM THE AI ----------------------------------------');
+  console.log(response.choices[0].message.content);
+  console.log('AS PROJECTS ----------------------------------------');
+  console.log(projects);
+
+  return projects;
+}

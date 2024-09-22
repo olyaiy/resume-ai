@@ -14,7 +14,7 @@ import ProfileWork from '@/components/profile/profile-work';
 import ProfileProjects from '@/components/profile/profile-projects';
 import ProfileEducation from '@/components/profile/profile-education';
 import { ClearProfileButton } from '@/components/profile/reset-profile';
-import { generateEducationHistory, generateWorkExperience } from '@/lib/ai-actions';
+import { generateEducationHistory, generateProjects, generateWorkExperience } from '@/lib/ai-actions';
 
 export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile }) {
     
@@ -35,14 +35,15 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
       try {
         const educationResult = await generateEducationHistory(`make this into a json format:${aiPrompt}`);
         const workExperienceResult = await generateWorkExperience(`make this into a json format:${aiPrompt}`);
+        const projectsResult = await generateProjects(`make this into a json format:${aiPrompt}`);
         
         if (educationResult?.education_history && workExperienceResult?.work_experience) {
           setProfile(prevProfile => ({
             ...prevProfile,
-            education_history: educationResult.education_history,
-            work_history: workExperienceResult.work_experience,
+            // education_history: educationResult.education_history,
+            // work_history: workExperienceResult.work_experience,
             // skills: educationResult.skills,
-            // projects: educationResult.projects,
+            projects: projectsResult.projects,
             // Linkedin: educationResult.Linkedin,
             // Github: educationResult.Github,
             // Portfolio: educationResult.Portfolio,
