@@ -65,10 +65,10 @@ export interface Resume {
     last_name: string;
     avatar: string;
     user: string[];
-    skills: Skill[];
-    work_history: WorkExperience[];
-    education_history: Education[];
-    projects: Project[];
+    skills: string;
+    work_history: string[];
+    education_history: string[];
+    projects: string[];
     Linkedin?: string;
     Github?: string;
     Portfolio?: string;
