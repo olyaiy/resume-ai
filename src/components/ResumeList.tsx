@@ -19,8 +19,8 @@ export const ResumeList = ({ resumeList }: ResumeListProps) => {
         <div className="w-full max-w-2xl">
             {resumeList.map((resume: Resume) => (
                 <div key={resume.id} className="mb-2">
-                    <Card className="relative w-full p-4 hover:bg-gray-50 hover:text-black transition-colors">
-                        <Link href={`/editor/${resume.id}`} className="flex items-center justify-between w-full">
+                    <Card className="relative w-full hover:bg-gray-50 hover:text-black transition-colors">
+                        <Link href={`/editor/${resume.id}`} className=" p-4 flex items-center justify-between w-full h-full">
                             {/* Resume Name */}
                             <div className="text-lg font-medium truncate flex-grow">
                                 {resume.resume_name}

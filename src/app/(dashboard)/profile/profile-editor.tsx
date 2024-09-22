@@ -44,7 +44,7 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
           <div className="flex gap-2">
 
              {/* Button to clear profile */}
-             <ClearProfileButton profile={profile} setProfile={setProfile} />
+            <ClearProfileButton profile={profile} setProfile={setProfile} />
             
             {/* Button to save profile */}
             <Button
