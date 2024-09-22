@@ -16,6 +16,14 @@ import ProfileEducation from '@/components/profile/profile-education';
 import { ClearProfileButton } from '@/components/profile/reset-profile';
 import { generateEducationHistory, generatePersonalInfo, generateProjects, generateSkills, generateWorkExperience } from '@/lib/ai-actions';
 import { Loader2 } from "lucide-react"; // Add this import
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { InfoIcon } from "lucide-react"
 
 export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile }) {
     
@@ -122,15 +130,28 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
 
         </div>
 
-          <div className="mt-4 px-8 py-4 ">
-            <p>
-              Paste In your Linkedin Profile, Resume, or anything else about yourself Here. Our 
-              AI will separate the information into different sections for your resumes.
-              Then, whenever you create a new resume, our AI will generate 
-              bullet points, quantified achievements, descriptions, and skills, from each section.
+          <div className="flex flex-col mt-4 px-8 py-4 ">
+              <p className="text-md font-semibold">
+                Paste In your Linkedin Profile, Resume, or anything else about yourself Here. Our 
+                AI will separate the information into different sections for your resumes.
+                Then, whenever you create a new resume, our AI will generate 
+                bullet points, quantified achievements, descriptions, and skills, from each section.
+              </p>
 
+            <Alert className="my-4">
+              <InfoIcon className="h-4 w-4" />
+              <AlertTitle>Note</AlertTitle>
+              <AlertDescription>
+              <div className="flex flex-col gap-4">
+              
 
-            </p>
+                It's okay if the data here is unstructured! We'll do the work to extract it for you during resume generation.
+                This is just to get your information saved so we can use it to generate your resumes later on.
+                </div>
+             
+              </AlertDescription>
+            </Alert>
+
           </div>
 
         <div className="flex flex-row p-8 gap-4">
@@ -167,117 +188,126 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
           {/* Editor (Right Side) */}
           <div className="flex flex-col gap-4 w-1/2 ">
 
-            {/* Personal Information */}
-            <h2 className="text-lg font-semibold mb-2">Personal Information</h2>
-            
-            <div className="space-y-4">
+            <Accordion type="multiple" defaultValue={["personal", "skills", "work", "projects", "education"]} className="w-full">
+              <AccordionItem value="personal">
+                <AccordionTrigger>Personal Information</AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-4">
+                    {/* First Name */}
+                    <div className="flex items-center">
+                      <Label htmlFor="first_name" className="w-32">First Name</Label>
+                      <Input
+                        id="first_name"
+                        name="first_name"
+                        value={profile.first_name}
+                        onChange={handleInputChange}
+                        className="flex-grow"
+                      />
+                    </div>
 
-              {/* First Name */}
-              <div className="flex items-center">
-                <Label htmlFor="first_name" className="w-32">First Name</Label>
-                <Input
-                  id="first_name"
-                  name="first_name"
-                  value={profile.first_name}
-                  onChange={handleInputChange}
-                  className="flex-grow"
-                />
-              </div>
+                    {/* Last Name */}
+                    <div className="flex items-center">
+                      <Label htmlFor="last_name" className="w-32">Last Name</Label>
+                      <Input
+                        id="last_name"
+                        name="last_name"
+                        value={profile.last_name}
+                        onChange={handleInputChange}
+                        className="flex-grow"
+                      />
+                    </div>
 
-              {/* Last Name */}
-              <div className="flex items-center">
-                <Label htmlFor="last_name" className="w-32">Last Name</Label>
-                <Input
-                  id="last_name"
-                  name="last_name"
-                  value={profile.last_name}
-                  onChange={handleInputChange}
-                  className="flex-grow"
-                />
-              </div>
+                    {/* Email */}
+                    <div className="flex items-center">
+                      <Label htmlFor="email" className="w-32">Email Address</Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        value={profile.email} 
+                        onChange={handleInputChange}
+                        className="flex-grow"
+                      />
+                    </div>
 
-              {/* Email */}
-              <div className="flex items-center">
-                <Label htmlFor="email" className="w-32">Email Address</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  value={profile.email} 
-                  onChange={handleInputChange}
-                  className="flex-grow"
-                />
-              </div>
+                    {/* Github */}
+                    <div className="flex items-center">
+                      <Label htmlFor="github" className="w-32">Github Link</Label>
+                      <Input
+                        id="github"
+                        name="github"
+                        value={profile.Github} 
+                        onChange={handleInputChange}
+                        className="flex-grow"
+                      />
+                    </div>
 
-              {/* Github */}
-              <div className="flex items-center">
-                <Label htmlFor="github" className="w-32">Github Link</Label>
-                <Input
-                  id="github"
-                  name="github"
-                  value={profile.Github} 
-                  onChange={handleInputChange}
-                  className="flex-grow"
-                />
-              </div>
+                    {/* Linkedin */}
+                    <div className="flex items-center">
+                      <Label htmlFor="Linkedin" className="w-32">Linkedin Link</Label>
+                      <Input
+                        id="Linkedin"
+                        name="Linkedin"
+                        value={profile.Linkedin} 
+                        onChange={handleInputChange}
+                        className="flex-grow"
+                      />
+                    </div>
 
-              {/* Linkedin */}
-              <div className="flex items-center">
-                <Label htmlFor="Linkedin" className="w-32">Linkedin Link</Label>
-                <Input
-                  id="Linkedin"
-                  name="Linkedin"
-                  value={profile.Linkedin} 
-                  onChange={handleInputChange}
-                  className="flex-grow"
-                />
-              </div>
+                    {/* Portfolio */}
+                    <div className="flex items-center">
+                      <Label htmlFor="Portfolio" className="w-32">Portfolio Link</Label>
+                      <Input
+                        id="Portfolio"
+                        name="Portfolio"
+                        value={profile.Portfolio} 
+                        onChange={handleInputChange}
+                        className="flex-grow"
+                      />
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
 
-              {/* Portfolio */}
-              <div className="flex items-center">
-                <Label htmlFor="Portfolio" className="w-32">Portfolio Link</Label>
-                <Input
-                  id="Portfolio"
-                  name="Portfolio"
-                  value={profile.Portfolio} 
-                  onChange={handleInputChange}
-                  className="flex-grow"
-                />
-              </div>
+              <AccordionItem value="skills">
+                <AccordionTrigger>Skills</AccordionTrigger>
+                <AccordionContent>
+                  <ProfileSkills
+                    profile={profile}
+                    setProfile={setProfile}
+                  />
+                </AccordionContent>
+              </AccordionItem>
 
-            </div>
-        
-            {/* Links */}
+              <AccordionItem value="work">
+                <AccordionTrigger>Work Experience</AccordionTrigger>
+                <AccordionContent>
+                  <ProfileWork
+                    profile={profile}
+                    setProfile={setProfile}
+                  />
+                </AccordionContent>
+              </AccordionItem>
 
-            
-        
-            {/* Skills */}
-            <h2 className="text-lg font-semibold mt-4 mb-2">Skills</h2>
+              <AccordionItem value="projects">
+                <AccordionTrigger>Projects</AccordionTrigger>
+                <AccordionContent>
+                  <ProfileProjects
+                    profile={profile}
+                    setProfile={setProfile}
+                  />
+                </AccordionContent>
+              </AccordionItem>
 
-            <ProfileSkills
-              profile={profile}
-              setProfile={setProfile}
-            />
-
-
-            {/* Work  */}
-            <ProfileWork
-              profile={profile}
-              setProfile={setProfile}
-            />
-
-            {/* Projects  */}
-            <ProfileProjects
-              profile={profile}
-              setProfile={setProfile}
-            />
-
-            {/* Education History  */}
-            <ProfileEducation
-              profile={profile}
-              setProfile={setProfile}
-            />
-          
-            {/* Add skills section here */}
+              <AccordionItem value="education">
+                <AccordionTrigger>Education History</AccordionTrigger>
+                <AccordionContent>
+                  <ProfileEducation
+                    profile={profile}
+                    setProfile={setProfile}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
         
           </div>

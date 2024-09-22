@@ -104,7 +104,7 @@ Broad, Complete, Comprehensive, Consistent, Diversified, Extensive, Intensive, S
 const EDUCATION_PROMPT = `You take in user education history and turn it into a json format. 
 If the user has attended multiple schools, or holds multiple degrees, include each school and degree as 
 an object in the array.
-Do that with this text, and aim to create this format:
+Here is an example of what the json should look like:
 
 [
   {
@@ -172,7 +172,8 @@ URL if available.`;
 
 
 const GENERAL_PROMPT =  `If the user has not provided any 
-information about a specific field, return an empty string. Now do as instructed with the text.`
+information about a specific field, return an empty string. Now do as instructed with the text.
+Ensure that all items are sorted by date, from most recent first to least recent last. `
 
 // Generate Education History
 
