@@ -122,6 +122,17 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
 
         </div>
 
+          <div className="mt-4 px-8 py-4 ">
+            <p>
+              Paste In your Linkedin Profile, Resume, or anything else about yourself Here. Our 
+              AI will separate the information into different sections for your resumes.
+              Then, whenever you create a new resume, our AI will generate 
+              bullet points, quantified achievements, descriptions, and skills, from each section.
+
+
+            </p>
+          </div>
+
         <div className="flex flex-row p-8 gap-4">
 
           
