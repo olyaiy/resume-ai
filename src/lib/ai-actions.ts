@@ -135,15 +135,16 @@ const WORK_EXPERIENCE_PROMPT = `You are a helpful assistant who
 takes in user work experience history and turns it into a 
 json format. 
 
-for work experience, you are to return an array of WorkExperience objects that look like this: 
+for work experience, you are to return an array of strings, each string being a work experience.
 
-export interface WorkExperience {
-    company: string;
-    position: string;
-    date: string;
-    description: string;
-    accomplishments: string[];
-  }
+REMEMEBR, EACH STRING SHOULD BE A WORK EXPERIENCE. ALL THE DETAILS ABOUT THE WORK EXPERIENCE SHOULD BE IN THE STRING.
+
+FOR EXAMPLE:
+
+'software enginer at google....'
+' product manager at facebook....'
+
+ETC. Do not take information about one job, and make it more then one string.
 
 
 ENSURE YOUR RESPONSE IS ONLY ABOUT THE WORK EXPERIENCE, AND NOTHING ELSE. NOT PROJECTS, NOT SKILLS, NOT EDUCATION, NOT PERSONAL INFO. JUST
@@ -245,7 +246,12 @@ export async function generateEducationHistory(prompt: string) {
   return educationHistory
 }
 
-// Generate Work Experience
+
+
+
+// --------------- PROFILE --------------- //
+
+// Generate Work Experience FOR PROFILE
 export async function generateWorkExperience(prompt: string) {
   const response = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -272,26 +278,12 @@ export async function generateWorkExperience(prompt: string) {
         "schema": {
           "type": "object",
           "properties": {
-            "work_experience": {
+            "work_history": {
               "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "company": { "type": "string" },
-                  "position": { "type": "string" },
-                  "date": { "type": "string" },
-                  "description": { "type": "string" },
-                  "accomplishments": {
-                    "type": "array",
-                    "items": { "type": "string" }
-                  }
-                },
-                "required": ["company", "position", "date", "description", "accomplishments"],
-                "additionalProperties": false
-              }
+              "items": { "type": "string" }
             }
           },
-          "required": ["work_experience"],
+          "required": ["work_history"],
           "additionalProperties": false
         }
       }
@@ -300,10 +292,15 @@ export async function generateWorkExperience(prompt: string) {
 
   const workExperience = JSON.parse(response.choices[0].message.content || '{}');
 
-  return workExperience;
+
+  console.log('AS WORK EXPERIENCE ----------------------------------------');
+  console.log(workExperience);
+
+  return workExperience.work_history; // This should be an array of strings
+
 }
 
-// Generate Projects
+// Generate Projects FOR PROFILE
 export async function generateProjects(prompt: string) {
   const response = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -369,7 +366,7 @@ export async function generateProjects(prompt: string) {
   return projects;
 }
 
-// Generate Skills
+// Generate Skills FOR PROFILE
 export async function generateSkills(prompt: string) {
   const response = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -440,7 +437,7 @@ export async function generateSkills(prompt: string) {
   return skills;
 }
 
-// Generate Personal Information
+// Generate Personal Information FOR PROFILE
 export async function generatePersonalInfo(prompt: string) {
   const response = await openai.chat.completions.create({
     model: "gpt-4o-mini",

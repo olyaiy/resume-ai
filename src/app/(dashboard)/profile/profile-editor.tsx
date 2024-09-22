@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { UserProfile, Skill, WorkExperience, Project, Education } from '@/lib/types';
+import { UserProfile } from '@/lib/types';
 import { updateProfile } from '@/app/actions';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,49 +42,29 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
     };
 
     const handleAIFill = async () => {
-      setIsLoading(true); // Set loading to true when starting
+      setIsLoading(true);
       try {
-        const personalInfoResult = await generatePersonalInfo(`make this into a json format:${aiPrompt}`);
-        const educationResult = await generateEducationHistory(`make this into a json format:${aiPrompt}`);
-        const workExperienceResult = await generateWorkExperience(`make this into a json format:${aiPrompt}`);
-        const projectsResult = await generateProjects(`make this into a json format:${aiPrompt}`);
-        const skillsResult = await generateSkills(`make this into a json format:${aiPrompt}`);
+        const workExperienceResult = await generateWorkExperience(aiPrompt);
         
-        if (educationResult?.education_history && workExperienceResult?.work_experience) {
+        console.log('Work Experience Result:', workExperienceResult);
+
+        if (Array.isArray(workExperienceResult)) {
+          // Update the profile state with the new work_history
           setProfile(prevProfile => ({
             ...prevProfile,
-            education_history: educationResult.education_history,
-            work_history: workExperienceResult.work_experience,
-            skills: skillsResult.skills,
-            projects: projectsResult.projects,
-            first_name: personalInfoResult.first_name,
-            last_name: personalInfoResult.last_name,
-            Github: personalInfoResult.Github || prevProfile.Github,
-            Linkedin: personalInfoResult.Linkedin || prevProfile.Linkedin,
-            Portfolio: personalInfoResult.Portfolio || prevProfile.Portfolio,
-            
+            work_history: workExperienceResult
           }));
-          console.log("Updated profile:", {
-            education_history: educationResult.education_history,
-            work_history: workExperienceResult.work_experience
-          });
-          toast({
-            title: "Success",
-            description: "Education history and work experience updated with AI-generated content",
-            variant: "default",
-          });
+
+          console.log('Updated work history:', workExperienceResult);
         } else {
-          throw new Error("Invalid response from AI");
+          console.log('No valid work experience data found in the result');
+          console.log('Result:', workExperienceResult);
         }
+
       } catch (error) {
-        console.error("Error generating profile content:", error);
-        toast({
-          title: "Error",
-          description: "Failed to generate profile content",
-          variant: "destructive",
-        });
+        console.error("Error generating work experience:", error);
       } finally {
-        setIsLoading(false); // Set loading to false when done
+        setIsLoading(false);
       }
     };
 
@@ -193,6 +173,7 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
                 <AccordionTrigger>Personal Information</AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-4">
+
                     {/* First Name */}
                     <div className="flex items-center">
                       <Label htmlFor="first_name" className="w-32">First Name</Label>
