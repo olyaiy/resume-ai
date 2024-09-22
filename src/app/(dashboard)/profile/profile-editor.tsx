@@ -14,13 +14,15 @@ import ProfileWork from '@/components/profile/profile-work';
 import ProfileProjects from '@/components/profile/profile-projects';
 import ProfileEducation from '@/components/profile/profile-education';
 import { ClearProfileButton } from '@/components/profile/reset-profile';
-import { generateEducationHistory, generateProjects, generateWorkExperience } from '@/lib/ai-actions';
+import { generateEducationHistory, generatePersonalInfo, generateProjects, generateSkills, generateWorkExperience } from '@/lib/ai-actions';
+import { Loader2 } from "lucide-react"; // Add this import
 
 export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile }) {
     
     const [profile, setProfile] = useState<UserProfile>(initialProfile);
     const [aiPrompt, setAiPrompt] = useState('');
     const { toast } = useToast();
+    const [isLoading, setIsLoading] = useState(false); // Add this state
 
     // Handle input change
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,23 +34,26 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
     };
 
     const handleAIFill = async () => {
+      setIsLoading(true); // Set loading to true when starting
       try {
+        const personalInfoResult = await generatePersonalInfo(`make this into a json format:${aiPrompt}`);
         const educationResult = await generateEducationHistory(`make this into a json format:${aiPrompt}`);
         const workExperienceResult = await generateWorkExperience(`make this into a json format:${aiPrompt}`);
         const projectsResult = await generateProjects(`make this into a json format:${aiPrompt}`);
+        const skillsResult = await generateSkills(`make this into a json format:${aiPrompt}`);
         
         if (educationResult?.education_history && workExperienceResult?.work_experience) {
           setProfile(prevProfile => ({
             ...prevProfile,
-            // education_history: educationResult.education_history,
-            // work_history: workExperienceResult.work_experience,
-            // skills: educationResult.skills,
+            education_history: educationResult.education_history,
+            work_history: workExperienceResult.work_experience,
+            skills: skillsResult.skills,
             projects: projectsResult.projects,
-            // Linkedin: educationResult.Linkedin,
-            // Github: educationResult.Github,
-            // Portfolio: educationResult.Portfolio,
-            // first_name: educationResult.first_name,
-            // last_name: educationResult.last_name,
+            first_name: personalInfoResult.first_name,
+            last_name: personalInfoResult.last_name,
+            Github: personalInfoResult.Github || prevProfile.Github,
+            Linkedin: personalInfoResult.Linkedin || prevProfile.Linkedin,
+            Portfolio: personalInfoResult.Portfolio || prevProfile.Portfolio,
             
           }));
           console.log("Updated profile:", {
@@ -70,6 +75,8 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
           description: "Failed to generate profile content",
           variant: "destructive",
         });
+      } finally {
+        setIsLoading(false); // Set loading to false when done
       }
     };
 
@@ -126,8 +133,16 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
             <Button 
               className='w-full'
               onClick={handleAIFill}
+              disabled={isLoading} // Disable button when loading
             >
-              Fill Profile With AI
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                'Fill Profile With AI'
+              )}
             </Button>
 
             <Textarea 

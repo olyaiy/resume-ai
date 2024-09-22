@@ -169,7 +169,7 @@ export async function generateWorkExperience(prompt: string) {
     return workExperience;
   }
 
-
+// Generate Projects
 export async function generateProjects(prompt: string) {
   const response = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -244,3 +244,143 @@ export async function generateProjects(prompt: string) {
 
   return projects;
 }
+
+
+
+// Generate Skills
+export async function generateSkills(prompt: string) {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are a helpful assistant who takes in user skill information and turns it into a json format. Do that with this text."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": prompt
+            }
+          ]
+        }
+      ],
+      temperature: 1,
+      max_tokens: 5000,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+      response_format: {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "Skills",
+          "strict": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "skills": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "Languages": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "Frameworks/ Libraries": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "Developer Tools": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "Other": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  },
+                  "required": ["Languages", "Frameworks/ Libraries", "Developer Tools", "Other"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["skills"],
+            "additionalProperties": false
+          }
+        }
+      },
+    });
+  
+    const skills = JSON.parse(response.choices[0].message.content || '{}');
+  
+    console.log('WE GOT THIS RESPONSE FROM THE AI ----------------------------------------');
+    console.log(response.choices[0].message.content);
+    console.log('AS SKILLS ----------------------------------------');
+    console.log(skills);
+  
+    return skills;
+  }
+
+  // Generate Personal Information
+export async function generatePersonalInfo(prompt: string) {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are a helpful assistant who extracts personal information from user input and formats it as JSON. Extract the first name, last name, GitHub URL, LinkedIn URL, and personal portfolio URL if available."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": prompt
+            }
+          ]
+        }
+      ],
+      temperature: 1,
+      max_tokens: 5000,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+      response_format: {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "PersonalInfo",
+          "strict": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "first_name": { "type": "string" },
+              "last_name": { "type": "string" },
+              "Github": { "type": "string" },
+              "Linkedin": { "type": "string" },
+              "Portfolio": { "type": "string" }
+            },
+            "required": ["first_name", "last_name", "Github", "Linkedin", "Portfolio"],
+            "additionalProperties": false
+          }
+        }
+      },
+    });
+  
+    const personalInfo = JSON.parse(response.choices[0].message.content || '{}');
+  
+    console.log('Personal Info generated:', personalInfo);
+  
+    return personalInfo;
+  }
