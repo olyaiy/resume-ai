@@ -42,13 +42,13 @@ export function ClearResumeButton({ resume,setResume }: ClearResumeButtonProps) 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive">Clear Resume Content</Button>
+        <Button variant="destructive">Reset Resume</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Clear Resume Content</DialogTitle>
           <DialogDescription>
-            This will essentially remove all content from your resume, making it a blank slate. Continue?
+          This action will remove all current content from your resume, including work history, education, skills, and projects. You'll be left with a blank template. This cannot be undone. Are you sure you want to proceed?
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
