@@ -40,7 +40,15 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
           setProfile(prevProfile => ({
             ...prevProfile,
             education_history: educationResult.education_history,
-            work_history: workExperienceResult.work_experience
+            work_history: workExperienceResult.work_experience,
+            // skills: educationResult.skills,
+            // projects: educationResult.projects,
+            // Linkedin: educationResult.Linkedin,
+            // Github: educationResult.Github,
+            // Portfolio: educationResult.Portfolio,
+            // first_name: educationResult.first_name,
+            // last_name: educationResult.last_name,
+            
           }));
           console.log("Updated profile:", {
             education_history: educationResult.education_history,

@@ -32,7 +32,8 @@ const response = await openai.chat.completions.create({
             }
           ]
         }
-      ],    temperature: 1,
+      ],    
+    temperature: 1,
     max_tokens: 5000,
     top_p: 1,
     frequency_penalty: 0,
@@ -80,6 +81,7 @@ const response = await openai.chat.completions.create({
         }
       }
     },
+    
   });
 
   const educationHistory = JSON.parse(response.choices[0].message.content || '{}')
