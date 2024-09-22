@@ -159,63 +159,79 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
             {/* Personal Information */}
             <h2 className="text-lg font-semibold mb-2">Personal Information</h2>
             
-            <div className="grid grid-cols-[120px_1fr] gap-4 items-center">
+            <div className="space-y-4">
 
               {/* First Name */}
-              <Label htmlFor="first_name" className="text-right">First Name</Label>
-              <Input
-                id="first_name"
-                name="first_name"
-                value={profile.first_name}
-                onChange={handleInputChange}
-              />
+              <div className="flex items-center">
+                <Label htmlFor="first_name" className="w-32">First Name</Label>
+                <Input
+                  id="first_name"
+                  name="first_name"
+                  value={profile.first_name}
+                  onChange={handleInputChange}
+                  className="flex-grow"
+                />
+              </div>
 
               {/* Last Name */}
-              <Label htmlFor="last_name" className="text-right">Last Name</Label>
-              <Input
-                id="last_name"
-                name="last_name"
-                value={profile.last_name}
-                onChange={handleInputChange}
-              />
+              <div className="flex items-center">
+                <Label htmlFor="last_name" className="w-32">Last Name</Label>
+                <Input
+                  id="last_name"
+                  name="last_name"
+                  value={profile.last_name}
+                  onChange={handleInputChange}
+                  className="flex-grow"
+                />
+              </div>
 
               {/* Email */}
-              <Label htmlFor="email" className="text-right">Email Address</Label>
-              <Input
-                id="email"
-                name="email"
-                value={profile.email} 
-                onChange={handleInputChange}
-              />
+              <div className="flex items-center">
+                <Label htmlFor="email" className="w-32">Email Address</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  value={profile.email} 
+                  onChange={handleInputChange}
+                  className="flex-grow"
+                />
+              </div>
 
-
-                {/* Github */}
-                <Label htmlFor="github" className="text-right">Github Link</Label>
-              <Input
-                id="github"
-                name="github"
-                value={profile.Github} 
-                onChange={handleInputChange}
-              />
+              {/* Github */}
+              <div className="flex items-center">
+                <Label htmlFor="github" className="w-32">Github Link</Label>
+                <Input
+                  id="github"
+                  name="github"
+                  value={profile.Github} 
+                  onChange={handleInputChange}
+                  className="flex-grow"
+                />
+              </div>
 
               {/* Linkedin */}
-              <Label htmlFor="Linkedin" className="text-right">Linkedin Link</Label>
-              <Input
-                id="Linkedin"
-                name="Linkedin"
-                value={profile.Linkedin} 
-                onChange={handleInputChange}
-              />
+              <div className="flex items-center">
+                <Label htmlFor="Linkedin" className="w-32">Linkedin Link</Label>
+                <Input
+                  id="Linkedin"
+                  name="Linkedin"
+                  value={profile.Linkedin} 
+                  onChange={handleInputChange}
+                  className="flex-grow"
+                />
+              </div>
 
               {/* Portfolio */}
-              <Label htmlFor="Portfolio" className="text-right">Portfolio Link</Label>
-              <Input
-                id="Portfolio"
-                name="Portfolio"
-                value={profile.Portfolio} 
-                onChange={handleInputChange}
-              />
-
+              <div className="flex items-center">
+                <Label htmlFor="Portfolio" className="w-32">Portfolio Link</Label>
+                <Input
+                  id="Portfolio"
+                  name="Portfolio"
+                  value={profile.Portfolio} 
+                  onChange={handleInputChange}
+                  className="flex-grow"
+                />
+              </div>
 
             </div>
         

@@ -87,7 +87,7 @@ const ProfileEducation = ({profile, setProfile}: {profile:UserProfile, setProfil
                                 </div>
                             </div>
                         ))}
-                        <Button onClick={addEducation}>
+                        <Button onClick={addEducation} className='w-full'>
                             <PlusCircleIcon className="w-4 h-4 mr-2"/>
                             Add Education
                         </Button>
