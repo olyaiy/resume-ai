@@ -44,25 +44,32 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
     const handleAIFill = async () => {
       setIsLoading(true);
       try {
-        const workExperienceResult = await generateWorkExperience(aiPrompt);
-        
+        const [workExperienceResult, projectsResult] = await Promise.all([
+          generateWorkExperience(aiPrompt),
+          generateProjects(aiPrompt)
+        ]);
+
         console.log('Work Experience Result:', workExperienceResult);
+        console.log('Projects Result:', projectsResult);
 
-        if (Array.isArray(workExperienceResult)) {
-          // Update the profile state with the new work_history
-          setProfile(prevProfile => ({
-            ...prevProfile,
-            work_history: workExperienceResult
-          }));
+        setProfile(prevProfile => ({
+          ...prevProfile,
+          work_history: Array.isArray(workExperienceResult) ? workExperienceResult : prevProfile.work_history,
+          projects: Array.isArray(projectsResult) ? projectsResult : prevProfile.projects
+        }));
 
-          console.log('Updated work history:', workExperienceResult);
-        } else {
-          console.log('No valid work experience data found in the result');
-          console.log('Result:', workExperienceResult);
-        }
+        console.log('Updated profile:', {
+          work_history: Array.isArray(workExperienceResult) ? workExperienceResult : 'No change',
+          projects: Array.isArray(projectsResult) ? projectsResult : 'No change'
+        });
 
       } catch (error) {
-        console.error("Error generating work experience:", error);
+        console.error("Error generating profile data:", error);
+        toast({
+          title: "Error",
+          description: "Failed to generate profile data. Please try again.",
+          variant: "destructive",
+        });
       } finally {
         setIsLoading(false);
       }

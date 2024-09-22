@@ -21,13 +21,6 @@ Be specific about technical details
 Describe the actual work done, not just technologies used
 Include impact or results when possible
 Multiple sentences per bullet are acceptable (max 2)
-Example: 
-
-    "accomplishments": [
-      "Achieved a 95% performance score on Google Lighthouse",
-      "Implemented a dark mode feature, increasing user engagement by 20%",
-      "Reduced load time by 40% through image optimization and lazy loading"
-    ],"
 
 
 
@@ -137,7 +130,7 @@ json format.
 
 for work experience, you are to return an array of strings, each string being a work experience.
 
-REMEMEBR, EACH STRING SHOULD BE A WORK EXPERIENCE. ALL THE DETAILS ABOUT THE WORK EXPERIENCE SHOULD BE IN THE STRING.
+REMEMBER, EACH STRING SHOULD BE A WORK EXPERIENCE. ALL THE DETAILS ABOUT THE WORK EXPERIENCE SHOULD BE IN THE STRING.
 
 FOR EXAMPLE:
 
@@ -159,6 +152,17 @@ json format.
 
 ENSURE YOUR RESPONSE IS ONLY ABOUT THE PROJECTS, AND NOTHING ELSE. NOT WORK EXPERIENCE, NOT SKILLS, NOT EDUCATION, NOT PERSONAL INFO. JUST
 ITEMS THAT ARE CLEARLY PROJECTS.
+
+REMEMBER, EACH STRING SHOULD BE A PROJECT. ALL THE DETAILS ABOUT THE PROJECT SHOULD BE IN THE STRING.
+
+FOR EXAMPLE:
+
+'made an ai resume builder....'
+'portfolio website....'
+
+ETC. Do not take information about one job, and make it more then one string.
+Include as much detail as possible.
+
 `;
 
 
@@ -258,7 +262,7 @@ export async function generateWorkExperience(prompt: string) {
     messages: [
       {
         "role": "system",
-        "content": [{ "type": "text", "text": WORK_EXPERIENCE_PROMPT + BULLET_POINT_TIPS + GENERAL_PROMPT  }]
+        "content": [{ "type": "text", "text": WORK_EXPERIENCE_PROMPT + BULLET_POINT_TIPS +  GENERAL_PROMPT  }]
       },
       {
         "role": "user",
@@ -302,68 +306,51 @@ export async function generateWorkExperience(prompt: string) {
 
 // Generate Projects FOR PROFILE
 export async function generateProjects(prompt: string) {
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      {
-        "role": "system",
-        "content": [{ "type": "text", "text": PROJECTS_PROMPT }]
-      },
-      {
-        "role": "user",
-        "content": [{ "type": "text", "text": prompt }]
-      }
-    ],
-    temperature: 1,
-    max_tokens: 5000,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0,
-    response_format: {
-      "type": "json_schema",
-      "json_schema": {
-        "name": "Projects",
-        "strict": true,
-        "schema": {
-          "type": "object",
-          "properties": {
-            "projects": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": { "type": "string" },
-                  "description": { "type": "string" },
-                  "accomplishments": {
-                    "type": "array",
-                    "items": { "type": "string" }
-                  },
-                  "technologies": {
-                    "type": "array",
-                    "items": { "type": "string" }
-                  },
-                  "url": { "type": "string" }
-                },
-                "required": ["name", "description", "accomplishments", "technologies","url"],
-                "additionalProperties": false
-              }
-            }
-          },
-          "required": ["projects"],
-          "additionalProperties": false
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          "role": "system",
+          "content": [{ "type": "text", "text": PROJECTS_PROMPT + GENERAL_PROMPT }]
+        },
+        {
+          "role": "user",
+          "content": [{ "type": "text", "text": prompt }]
         }
-      }
-    },
-  });
-
-  const projects = JSON.parse(response.choices[0].message.content || '{}');
-
-  console.log('WE GOT THIS RESPONSE FROM THE AI ----------------------------------------');
-  console.log(response.choices[0].message.content);
-  console.log('AS PROJECTS ----------------------------------------');
-  console.log(projects);
-
-  return projects;
+      ],
+      temperature: 1,
+      max_tokens: 5000,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+      response_format: {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "Projects",
+          "strict": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "projects": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            },
+            "required": ["projects"],
+            "additionalProperties": false
+          }
+        }
+      },
+    });
+  
+    const projects = JSON.parse(response.choices[0].message.content || '{}');
+  
+    console.log('WE GOT THIS RESPONSE FROM THE AI ----------------------------------------');
+    console.log(response.choices[0].message.content);
+    console.log('AS PROJECTS ----------------------------------------');
+    console.log(projects);
+  
+  return projects.projects; // This will return an array of strings
 }
 
 // Generate Skills FOR PROFILE
