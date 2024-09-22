@@ -50,9 +50,11 @@ export interface Resume {
   }
 
   export interface UserProfile {
+
     id: string;
     collectionId: string;
     collectionName: string;
+
     username: string;
     verified: boolean;
     emailVisibility: boolean;
