@@ -146,7 +146,7 @@ ITEMS THAT ARE CLEARLY WORK EXPERIENCE.
   `;
 
 const PROJECTS_PROMPT = `You are a helpful assistant who 
-takes in user project information and turns it into a 
+takes in user project information from their resumeand turns it into a 
 json format. 
 
 
@@ -156,18 +156,40 @@ ITEMS THAT ARE CLEARLY PROJECTS.
 REMEMBER, EACH STRING SHOULD BE A PROJECT. ALL THE DETAILS ABOUT THE PROJECT SHOULD BE IN THE STRING.
 
 FOR EXAMPLE:
-
+{
 'made an ai resume builder....'
 'portfolio website....'
-
-ETC. Do not take information about one job, and make it more then one string.
+}
+ETC. Do not take information about one project, and make it more then one string.
 Include as much detail as possible.
 
+Your ouput will be going in a an array like this:
+
+[
+  "Personal Portfolio Website\nTechnologies: React, Next.js, Tailwind CSS\nDescription: Designed and developed a responsive personal portfolio website to showcase projects and skills.\nAccomplishments:\n• Achieved a 95% performance score on Google Lighthouse\n• Implemented a dark mode feature, increasing user engagement by 20%\n• Reduced load time by 40% through image optimization and lazy loading\nURL: https://alexjohnson-portfolio.com",
+  "Task Management App\nTechnologies: Node.js, Express, MongoDB, React, Socket.io\nDescription: Created a full-stack task management application with user authentication and real-time updates.\nAccomplishments:\n• Implemented JWT authentication, ensuring secure user access\n• Utilized Socket.io to enable real-time task updates across multiple users\n• Designed and implemented a RESTful API with over 20 endpoints\nURL: https://github.com/alexjohnson/task-manager"
+]
+
+SO ENSURE IT FOLLOWS THAT FORMAT.
 `;
 
 
 const SKILLS_PROMPT = `You are a helpful assistant who takes in user 
-skill information and turns it into a json format. Do that with this text.`;
+resume and returns a list of skills. Do not mention yourself or anything that is not a skill. 
+Your output is directly going into a resume, so it should look like this:
+
+Languages: Python, JavaScript, Typescript, C, C++, Java, HTML, CSS, SQL, BASH
+
+Frameworks/Libraries: React, ReactNative, NextJS, Express.js, Node.js, Mongoose, GraphQL, Tailwind, Vite
+
+Developer Tools: Git, Docker, AWS (S3, EC2, ECS, Lambda), Linux, MSSQL, PostgreSQL, NGINX, REST APIs
+
+Other Skills: Web development, Data processing, Data handling, Data analysis, Database management, Content management systems, Workflow creation
+
+thats just an example. The following is the user information. Format is as 
+
+Category: skill1, skill2, skill3, etc.
+`;
 
 
 const PERSONAL_INFO_PROMPT = `You are a helpful assistant who extracts 
@@ -372,49 +394,10 @@ export async function generateSkills(prompt: string) {
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    response_format: {
-      "type": "json_schema",
-      "json_schema": {
-        "name": "Skills",
-        "strict": true,
-        "schema": {
-          "type": "object",
-          "properties": {
-            "skills": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "Languages": {
-                    "type": "array",
-                    "items": { "type": "string" }
-                  },
-                  "Frameworks/ Libraries": {
-                    "type": "array",
-                    "items": { "type": "string" }
-                  },
-                  "Developer Tools": {
-                    "type": "array",
-                    "items": { "type": "string" }
-                  },
-                  "Other": {
-                    "type": "array",
-                    "items": { "type": "string" }
-                  }
-                },
-                "required": ["Languages", "Frameworks/ Libraries", "Developer Tools", "Other"],
-                "additionalProperties": false
-              }
-            }
-          },
-          "required": ["skills"],
-          "additionalProperties": false
-        }
-      }
-    },
+    
   });
 
-  const skills = JSON.parse(response.choices[0].message.content || '{}');
+  const skills = response.choices[0].message.content || '';
 
   console.log('WE GOT THIS RESPONSE FROM THE AI ----------------------------------------');
   console.log(response.choices[0].message.content);

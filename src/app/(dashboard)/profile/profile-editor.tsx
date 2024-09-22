@@ -44,23 +44,27 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
     const handleAIFill = async () => {
       setIsLoading(true);
       try {
-        const [workExperienceResult, projectsResult] = await Promise.all([
+        const [workExperienceResult, projectsResult, skillsResult] = await Promise.all([
           generateWorkExperience(aiPrompt),
-          generateProjects(aiPrompt)
+          generateProjects(aiPrompt),
+          generateSkills(aiPrompt)
         ]);
 
         console.log('Work Experience Result:', workExperienceResult);
         console.log('Projects Result:', projectsResult);
+        console.log('Skills Result:', skillsResult);
 
         setProfile(prevProfile => ({
           ...prevProfile,
           work_history: Array.isArray(workExperienceResult) ? workExperienceResult : prevProfile.work_history,
-          projects: Array.isArray(projectsResult) ? projectsResult : prevProfile.projects
+          projects: Array.isArray(projectsResult) ? projectsResult : prevProfile.projects,
+          skills: typeof skillsResult === 'string' ? skillsResult : prevProfile.skills
         }));
 
         console.log('Updated profile:', {
           work_history: Array.isArray(workExperienceResult) ? workExperienceResult : 'No change',
-          projects: Array.isArray(projectsResult) ? projectsResult : 'No change'
+          projects: Array.isArray(projectsResult) ? projectsResult : 'No change',
+          skills: typeof skillsResult === 'string' ? skillsResult : 'No change'
         });
 
       } catch (error) {
