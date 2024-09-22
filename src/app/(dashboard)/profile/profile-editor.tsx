@@ -13,6 +13,7 @@ import Work from '@/components/editor/work';
 import ProfileWork from '@/components/profile/profile-work';
 import ProfileProjects from '@/components/profile/profile-projects';
 import ProfileEducation from '@/components/profile/profile-education';
+import { ClearProfileButton } from '@/components/profile/reset-profile';
 
 
 export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile }) {
@@ -39,26 +40,38 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
         {/* sticky bar */}
         <div className="w-full flex flex-row justify-between sticky top-0 z-10 bg-card border-2 border-border px-4 py-2 items-center rounded-md">
           <h1>User Profile</h1>
-          <Button
-            onClick={async () => {
-              const result = await updateProfile(profile);
-              if (result.success) {
-                toast({
-                  title: "Success",
-                  description: result.message,
-                  variant: "default",
-                });
-              } else {
-                toast({
-                  title: "Error",
-                  description: result.message,
-                  variant: "destructive",
-                });
-              }
-            }}
-          >
-            Save Profile Info
-          </Button>
+
+          <div className="flex gap-2">
+
+             {/* Button to clear profile */}
+             <ClearProfileButton profile={profile} setProfile={setProfile} />
+            
+            {/* Button to save profile */}
+            <Button
+              onClick={async () => {
+                const result = await updateProfile(profile);
+                if (result.success) {
+                  toast({
+                    title: "Success",
+                    description: result.message,
+                    variant: "default",
+                  });
+                } else {
+                  toast({
+                    title: "Error",
+                    description: result.message,
+                    variant: "destructive",
+                  });
+                }
+              }}
+            >
+              Save Profile Info
+            </Button>
+
+           
+
+          </div>
+
 
         </div>
 
