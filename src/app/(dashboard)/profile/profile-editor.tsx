@@ -44,27 +44,47 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
     const handleAIFill = async () => {
       setIsLoading(true);
       try {
-        const [workExperienceResult, projectsResult, skillsResult] = await Promise.all([
+        const [
+          workExperienceResult,
+          projectsResult,
+          skillsResult,
+          personalInfoResult,
+          educationHistoryResult
+        ] = await Promise.all([
           generateWorkExperience(aiPrompt),
           generateProjects(aiPrompt),
-          generateSkills(aiPrompt)
+          generateSkills(aiPrompt),
+          generatePersonalInfo(aiPrompt),
+          generateEducationHistory(aiPrompt)
         ]);
 
         console.log('Work Experience Result:', workExperienceResult);
         console.log('Projects Result:', projectsResult);
         console.log('Skills Result:', skillsResult);
+        console.log('Personal Info Result:', personalInfoResult);
+        console.log('Education History Result:', educationHistoryResult);
 
         setProfile(prevProfile => ({
           ...prevProfile,
           work_history: Array.isArray(workExperienceResult) ? workExperienceResult : prevProfile.work_history,
           projects: Array.isArray(projectsResult) ? projectsResult : prevProfile.projects,
-          skills: typeof skillsResult === 'string' ? skillsResult : prevProfile.skills
+          skills: typeof skillsResult === 'string' ? skillsResult : prevProfile.skills,
+          first_name: personalInfoResult.first_name || prevProfile.first_name,
+          last_name: personalInfoResult.last_name || prevProfile.last_name,
+          Github: personalInfoResult.Github || prevProfile.Github,
+          Linkedin: personalInfoResult.Linkedin || prevProfile.Linkedin,
+          Portfolio: personalInfoResult.Portfolio || prevProfile.Portfolio,
+          education_history: Array.isArray(educationHistoryResult.education_history) 
+            ? educationHistoryResult.education_history 
+            : prevProfile.education_history
         }));
 
         console.log('Updated profile:', {
           work_history: Array.isArray(workExperienceResult) ? workExperienceResult : 'No change',
           projects: Array.isArray(projectsResult) ? projectsResult : 'No change',
-          skills: typeof skillsResult === 'string' ? skillsResult : 'No change'
+          skills: typeof skillsResult === 'string' ? skillsResult : 'No change',
+          personal_info: personalInfoResult ? 'Updated' : 'No change',
+          education_history: Array.isArray(educationHistoryResult.education_history) ? 'Updated' : 'No change'
         });
 
       } catch (error) {
