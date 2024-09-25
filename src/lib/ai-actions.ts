@@ -1,7 +1,7 @@
 'use server'
 
 import OpenAI from "openai";
-import { Education, SkillsArray } from "./types";
+import { Education, SkillsArray, WorkExperience } from "./types";
 import { getProfile } from "@/app/actions";
 
 const openai = new OpenAI({
@@ -437,7 +437,7 @@ export async function generatePersonalInfo(prompt: string) {
 
 // --------------- RESUME EDITOR --------------- //
 
-
+// Profile Skills -> Resume Skills
 export async function convertProfileSkillsToResumeSkills() {
   const profile = await getProfile();
 
@@ -500,3 +500,68 @@ export async function convertProfileSkillsToResumeSkills() {
   
 
 }
+
+//  Profile Work Experience -> Resume Work Experience
+export async function convertProfileWorkExperienceToResumeWorkExperience() {
+  const profile = await getProfile();
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      {
+        "role": "system",
+        "content": [
+          {
+            "type": "text",
+            "text": "Convert this work experience to a structured JSON format. Each work experience should have company, position, date, description, and accomplishments fields. The accomplishments should be an array of strings." + JSON.stringify(profile.work_history)
+          }
+        ]
+      }
+    ],
+    temperature: 1,
+    max_tokens: 16383,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+    response_format: {
+      type: "json_schema",
+      json_schema: {
+        name: "work_experience_response",
+        schema: {
+          type: "object",
+          properties: {
+            work_history: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  company: { type: "string" },
+                  position: { type: "string" },
+                  date: { type: "string" },
+                  description: { type: "string" },
+                  accomplishments: {
+                    type: "array",
+                    items: { type: "string" }
+                  }
+                },
+                required: ["company", "position", "date", "description", "accomplishments"],
+                additionalProperties: false
+              }
+            }
+          },
+          required: ["work_history"],
+          additionalProperties: false
+        },
+        strict: true
+      }
+    }
+  });
+
+  const parsedResponse = JSON.parse(response.choices[0].message.content || '{}');
+
+
+  
+  return parsedResponse.work_history || [];;
+}
+
+// ... rest of the file ...

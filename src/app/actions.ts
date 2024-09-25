@@ -5,7 +5,7 @@ import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
 import { Resume, UserProfile } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
-import { convertProfileSkillsToResumeSkills } from '@/lib/ai-actions';
+import { convertProfileSkillsToResumeSkills, convertProfileWorkExperienceToResumeWorkExperience } from '@/lib/ai-actions';
 
 // Create a new PocketBase instance for each request
 function getPocketBaseInstance() {
@@ -100,20 +100,17 @@ export async function saveResume(resumeData: Resume): Promise<{ success: boolean
 export async function createResume(resumeName: string, useProfile: boolean) {
   const pb = getPocketBaseInstance();
 
-
   const profile: UserProfile = await getProfile();
-
   const currentUserId = profile.id;
 
   let data: Record<string, any> = {
     "name": profile.first_name + " " + profile.last_name || "",
     "resume_name": resumeName,
     "user": profile.id,
-
     "linkedin": profile.Linkedin || "",
     "github": profile.Github || "",
     "portfolio_site": profile.Portfolio || "",
-    "skills":[],
+    "skills": [],
     "education_history": [],
     "work_history": [],
     "projects": [],
@@ -121,17 +118,23 @@ export async function createResume(resumeName: string, useProfile: boolean) {
 
   const record = await pb.collection('resumes').create(data);
 
-
   try {
     if (useProfile) {
-      const convertedSkills = await convertProfileSkillsToResumeSkills();
-      console.log('CONVERTED SKILLS ----------------------------------------');
-      console.log(convertedSkills);
+      const [convertedSkills, convertedWorkExperience] = await Promise.all([
+        convertProfileSkillsToResumeSkills(),
+        convertProfileWorkExperienceToResumeWorkExperience()
+      ]);
+
+      // console.log('CONVERTED SKILLS ----------------------------------------');
+      // console.log(convertedSkills);
+      console.log('CONVERTED WORK EXPERIENCE -------------------------------');
+      console.log(convertedWorkExperience);
+
       await pb.collection('resumes').update(record.id, {
-        "skills": convertedSkills
+        "skills": convertedSkills,
+        "work_history": convertedWorkExperience
       });
     }
-
 
     revalidateAll();
     return { 
@@ -146,10 +149,6 @@ export async function createResume(resumeName: string, useProfile: boolean) {
       message: error instanceof Error ? error.message : 'Failed to create resume' 
     };
   }
-
-  
-
-
 }
 
 export async function deleteResume(resumeId: string) {
