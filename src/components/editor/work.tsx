@@ -59,6 +59,7 @@ export default function Work({resume, setResume}: {resume: Resume, setResume: (r
                     <div className="flex justify-between items-center">
                         <h3 className="text-lg font-medium">Work Experience {index + 1}</h3>
                         <Button 
+
                             variant="destructive" 
                             size="icon"
                             onClick={() => removeWorkExperience(index)}
@@ -136,7 +137,7 @@ export default function Work({resume, setResume}: {resume: Resume, setResume: (r
                     </div>
                 </div>
             ))}
-            <Button onClick={addWorkExperience}>
+            <Button onClick={addWorkExperience} className="w-full mt-2">
                 <PlusCircle className="w-4 h-4 mr-2"/>
                 Add Work Experience
             </Button>

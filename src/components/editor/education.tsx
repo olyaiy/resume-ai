@@ -89,7 +89,7 @@ export default function EducationHistory({resume, setResume}: {resume: Resume, s
                                 </div>
                             </div>
                         ))}
-                        <Button onClick={addEducation}>
+                        <Button onClick={addEducation} className="w-full mt-2">
                             <PlusCircle className="w-4 h-4 mr-2"/>
                             Add Education
                         </Button>

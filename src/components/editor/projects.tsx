@@ -145,7 +145,7 @@ export default function Projects({resume, setResume}: {resume: Resume, setResume
                                 </div>
                             </div>
                         ))}
-                        <Button onClick={handleAddProject}>
+                        <Button onClick={handleAddProject} className="w-full mt-2">
                             <PlusCircle className="w-4 h-4 mr-2"/>
                             Add Project
                         </Button>
