@@ -5,7 +5,7 @@ import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
 import { Resume, UserProfile } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
-import { convertProfileSkillsToResumeSkills, convertProfileWorkExperienceToResumeWorkExperience } from '@/lib/ai-actions';
+import { convertProfileSkillsToResumeSkills, convertProfileWorkExperienceToResumeWorkExperience, convertProfileProjectsToResumeProjects } from '@/lib/ai-actions';
 
 // Create a new PocketBase instance for each request
 function getPocketBaseInstance() {
@@ -121,21 +121,22 @@ export async function createResume(resumeName: string, useProfile: boolean) {
 
   try {
     if (useProfile) {
-      const [convertedSkills, convertedWorkExperience] = await Promise.all([
+      const [convertedSkills, convertedWorkExperience, convertedProjects] = await Promise.all([
         convertProfileSkillsToResumeSkills(),
-        convertProfileWorkExperienceToResumeWorkExperience()
+        convertProfileWorkExperienceToResumeWorkExperience(),
+        convertProfileProjectsToResumeProjects()
       ]);
 
-      // console.log('CONVERTED SKILLS ----------------------------------------');
-      // console.log(convertedSkills);
       console.log('CONVERTED WORK EXPERIENCE -------------------------------');
       console.log(convertedWorkExperience);
+      console.log('CONVERTED PROJECTS --------------------------------------');
+      console.log(convertedProjects);
 
       await pb.collection('resumes').update(record.id, {
         "skills": convertedSkills,
         "work_history": convertedWorkExperience,
-        "education_history": profile.education_history
-        
+        "education_history": profile.education_history,
+        "projects": convertedProjects
       });
     }
 

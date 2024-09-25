@@ -564,4 +564,68 @@ export async function convertProfileWorkExperienceToResumeWorkExperience() {
   return parsedResponse.work_history || [];;
 }
 
-// ... rest of the file ...
+
+
+// Profile Projects -> Resume Projects
+export async function convertProfileProjectsToResumeProjects() {
+  const profile = await getProfile();
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      {
+        "role": "system",
+        "content": [
+          {
+            "type": "text",
+            "text": "Convert these projects to a structured JSON format. Each project should have name, description, accomplishments, technologies, and an optional url field. The accomplishments and technologies should be arrays of strings." + JSON.stringify(profile.projects)
+          }
+        ]
+      }
+    ],
+    temperature: 1,
+    max_tokens: 16383,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+    response_format: {
+      type: "json_schema",
+      json_schema: {
+        name: "projects_response",
+        schema: {
+          type: "object",
+          properties: {
+            projects: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  name: { type: "string" },
+                  description: { type: "string" },
+                  accomplishments: {
+                    type: "array",
+                    items: { type: "string" }
+                  },
+                  technologies: {
+                    type: "array",
+                    items: { type: "string" }
+                  },
+                  url: { type: "string" }
+                },
+                required: ["name", "description", "accomplishments", "technologies", "url"],
+                additionalProperties: false
+              }
+            }
+          },
+          required: ["projects"],
+          additionalProperties: false
+        },
+        strict: true
+      }
+    }
+  });
+
+  const parsedResponse = JSON.parse(response.choices[0].message.content || '{}');
+  
+  return parsedResponse.projects || [];
+}
