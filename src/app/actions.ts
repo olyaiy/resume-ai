@@ -130,7 +130,6 @@ export async function createResume(resumeName: string, useProfile: boolean) {
       await pb.collection('resumes').update(record.id, {
         "skills": convertedSkills
       });
-
     }
 
 

@@ -16,32 +16,37 @@ interface NewResumeDialogProps {
 export function NewResumeDialog({ triggerButton }: NewResumeDialogProps) {
     const [error, setError] = useState<string | null>(null);
     const [fillWithProfile, setFillWithProfile] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const closeRef = useRef<HTMLButtonElement>(null);
     const router = useRouter();
 
     const handleCreateResume = async (e: React.FormEvent<HTMLFormElement>) => {
-        // Prevent default form submission behavior
         e.preventDefault();
+        setIsLoading(true);
+        setError(null);
 
-        // Get form data
         const formData = new FormData(e.currentTarget);
         const resumeName = formData.get('resumeName') as string;
 
-        // Validate resume name
         if (!resumeName.trim()) {
             setError("Resume name is required");
+            setIsLoading(false);
             return;
         }
 
-        // Create resume
-        const result = await createResume(resumeName.trim(), fillWithProfile);
-        console.log(resumeName.trim(), fillWithProfile)
-        if (result.success) {
-            closeRef.current?.click(); // Close the dialog
-            router.push(`/editor/${result.id}`);
-        } else {
-            setError(result.message || "Failed to create resume");
-        } 
+        try {
+            const result = await createResume(resumeName.trim(), fillWithProfile);
+            if (result.success) {
+                closeRef.current?.click();
+                router.push(`/editor/${result.id}`);
+            } else {
+                setError(result.message || "Failed to create resume");
+            }
+        } catch (error) {
+            setError("An unexpected error occurred");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -79,7 +84,18 @@ export function NewResumeDialog({ triggerButton }: NewResumeDialogProps) {
                             <Label htmlFor="fill-profile">Fill with profile information</Label>
                         </div>
                     </div>
-                    <Button type="submit">Continue</Button>
+                    <Button type="submit" disabled={isLoading} className="w-full h-10">
+                        {isLoading ? (
+                            <span className="flex items-center justify-center space-x-2">
+                                <span className="sr-only">Loading...</span>
+                                <div className="h-2 w-2 bg-current rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                                <div className="h-2 w-2 bg-current rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                                <div className="h-2 w-2 bg-current rounded-full animate-bounce"></div>
+                            </span>
+                        ) : (
+                            'Continue'
+                        )}
+                    </Button>
                 </form>
                 <DialogClose ref={closeRef} className="hidden" />
             </DialogContent>
