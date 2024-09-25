@@ -1,7 +1,8 @@
 'use server'
 
 import OpenAI from "openai";
-import { Education } from "./types";
+import { Education, SkillsArray } from "./types";
+import { getProfile } from "@/app/actions";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -93,7 +94,7 @@ Broad, Complete, Comprehensive, Consistent, Diversified, Extensive, Intensive, S
 `
 
 
-
+// PROMPTS FOR PROFILE EDITOR
 const EDUCATION_PROMPT = `You take in user education history and turn it into a json format. 
 If the user has attended multiple schools, or holds multiple degrees, include each school and degree as 
 an object in the array.
@@ -122,8 +123,6 @@ export interface Education {
 and you are to return an array of Education objects education_history: Education[];
 
 `
-
-
 const WORK_EXPERIENCE_PROMPT = `You are a helpful assistant who 
 takes in user work experience history and turns it into a 
 json format. 
@@ -144,7 +143,6 @@ ENSURE YOUR RESPONSE IS ONLY ABOUT THE WORK EXPERIENCE, AND NOTHING ELSE. NOT PR
 ITEMS THAT ARE CLEARLY WORK EXPERIENCE.
 
   `;
-
 const PROJECTS_PROMPT = `You are a helpful assistant who 
 takes in user project information from their resumeand turns it into a 
 json format. 
@@ -172,8 +170,6 @@ Your ouput will be going in a an array like this:
 
 SO ENSURE IT FOLLOWS THAT FORMAT.
 `;
-
-
 const SKILLS_PROMPT = `You are a helpful assistant who takes in user 
 resume and returns a list of skills. Do not mention yourself or anything that is not a skill. 
 Your output is directly going into a resume, so it should look like this:
@@ -190,14 +186,10 @@ thats just an example. The following is the user information. Format is as
 
 Category: skill1, skill2, skill3, etc.
 `;
-
-
 const PERSONAL_INFO_PROMPT = `You are a helpful assistant who extracts 
 personal information from user input and formats it as JSON. Extract the 
 first name, last name, GitHub URL, LinkedIn URL, and personal portfolio 
 URL if available.`;
-
-
 const GENERAL_PROMPT =  `If the user has not provided any 
 information about a specific field, return an empty string. Now do as instructed with the text.
 Ensure that all items are sorted by date, from most recent first to least recent last. `
@@ -272,9 +264,6 @@ export async function generateEducationHistory(prompt: string) {
   return educationHistory
 }
 
-
-
-
 // --------------- PROFILE --------------- //
 
 // Generate Work Experience FOR PROFILE
@@ -319,8 +308,7 @@ export async function generateWorkExperience(prompt: string) {
   const workExperience = JSON.parse(response.choices[0].message.content || '{}');
 
 
-  console.log('AS WORK EXPERIENCE ----------------------------------------');
-  console.log(workExperience);
+
 
   return workExperience.work_history; // This should be an array of strings
 
@@ -367,11 +355,7 @@ export async function generateProjects(prompt: string) {
   
     const projects = JSON.parse(response.choices[0].message.content || '{}');
   
-    console.log('WE GOT THIS RESPONSE FROM THE AI ----------------------------------------');
-    console.log(response.choices[0].message.content);
-    console.log('AS PROJECTS ----------------------------------------');
-    console.log(projects);
-  
+
   return projects.projects; // This will return an array of strings
 }
 
@@ -399,11 +383,7 @@ export async function generateSkills(prompt: string) {
 
   const skills = response.choices[0].message.content || '';
 
-  console.log('WE GOT THIS RESPONSE FROM THE AI ----------------------------------------');
-  console.log(response.choices[0].message.content);
-  console.log('AS SKILLS ----------------------------------------');
-  console.log(skills);
-
+ 
   return skills;
 }
 
@@ -449,7 +429,74 @@ export async function generatePersonalInfo(prompt: string) {
 
   const personalInfo = JSON.parse(response.choices[0].message.content || '{}');
 
-  console.log('Personal Info generated:', personalInfo);
+
 
   return personalInfo;
+}
+
+
+// --------------- RESUME EDITOR --------------- //
+
+
+export async function convertProfileSkillsToResumeSkills() {
+  const profile = await getProfile();
+
+  // console.log('PROFILE SKILLS ----------------------------------------');
+  // console.log(profile.skills);
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      {
+        "role": "system",
+        "content": [
+          {
+            "type": "text",
+            "text": "Convert this to json." + profile.skills
+          }
+        ]
+      }
+    ],
+    temperature: 1,
+    max_tokens: 16383,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+    response_format: {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "skills",
+        "strict": false,
+        "schema": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        }
+      }
+    },
+  });
+
+
+
+  // console.log('WE GOT THIS RESPONSE FROM THE AI ----------------------------------------');
+  // console.log(response.choices[0].message.content)
+
+  const resumeSkills = JSON.parse(response.choices[0].message.content || '{}');
+
+  // console.log('AS RESUME SKILLS ----------------------------------------');
+  // console.log(resumeSkills);
+
+  // Convert the resumeSkills object to the desired SkillsArray format
+  const skillsArray: SkillsArray = Object.entries(resumeSkills).map(([key, value]) => ({
+    [key.replace('_', ' ')]: (value as string[]).join(', ')
+  }));
+
+
+  // console.log('AS SKILLS ARRAY ----------------------------------------');
+  // console.log(skillsArray);
+
+  
+  return skillsArray;
+  
+
 }

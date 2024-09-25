@@ -4,11 +4,10 @@ export interface Skill {
     [key: string]: string;
   }
   
-export type SkillCategories = 'Languages' | 'Frameworks/ Libraries' | 'Developer Tools' | 'Other';
   
 export type SkillsArray = {
-    [K in SkillCategories]: string;
-  }[];
+  [key: string]: string;
+}[];
   
   
 export interface Education {

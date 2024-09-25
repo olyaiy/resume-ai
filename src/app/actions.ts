@@ -5,6 +5,7 @@ import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
 import { Resume, UserProfile } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
+import { convertProfileSkillsToResumeSkills } from '@/lib/ai-actions';
 
 // Create a new PocketBase instance for each request
 function getPocketBaseInstance() {
@@ -70,6 +71,7 @@ export async function logout() {
 
 // ------- Resumes ------- //
 
+// Save Resume
 export async function saveResume(resumeData: Resume): Promise<{ success: boolean, message: string }> {
   const pb = getPocketBaseInstance();
   if (!loadAuthFromCookie(pb)) {
@@ -94,6 +96,7 @@ export async function saveResume(resumeData: Resume): Promise<{ success: boolean
   }
 }
 
+// Create Resume
 export async function createResume(resumeName: string, useProfile: boolean) {
   const pb = getPocketBaseInstance();
 
@@ -106,35 +109,30 @@ export async function createResume(resumeName: string, useProfile: boolean) {
     "name": profile.first_name + " " + profile.last_name || "",
     "resume_name": resumeName,
     "user": profile.id,
+
+    "linkedin": profile.Linkedin || "",
+    "github": profile.Github || "",
+    "portfolio_site": profile.Portfolio || "",
+    "skills":[],
+    "education_history": [],
+    "work_history": [],
+    "projects": [],
   };
+
+  const record = await pb.collection('resumes').create(data);
+
 
   try {
     if (useProfile) {
-      const userProfile = pb.authStore.model;
-      data = {
-        ...data,
-        "skills": profile.skills || [],
-        "education_history": profile.education_history || [],
-        "work_history": profile.work_history || [],
-        "projects": profile.projects || [],
-        "linkedin": profile.Linkedin || "",
-        "github": profile.Github || "",
-        "portfolio_site": profile.Portfolio || "",
-      };
-    } else {
-      data = {
-        ...data,
-        "skills": [],
-        "education_history": [],
-        "work_history": [],
-        "projects": [],
-        "linkedin": "",
-        "github": "",
-        "portfolio_site": "",
-      };
+      const convertedSkills = await convertProfileSkillsToResumeSkills();
+      console.log('CONVERTED SKILLS ----------------------------------------');
+      console.log(convertedSkills);
+      await pb.collection('resumes').update(record.id, {
+        "skills": convertedSkills
+      });
+
     }
 
-    const record = await pb.collection('resumes').create(data);
 
     revalidateAll();
     return { 
@@ -149,6 +147,10 @@ export async function createResume(resumeName: string, useProfile: boolean) {
       message: error instanceof Error ? error.message : 'Failed to create resume' 
     };
   }
+
+  
+
+
 }
 
 export async function deleteResume(resumeId: string) {

@@ -9,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import ProfileSkills from '@/components/profile/profile-skills';
-import Work from '@/components/editor/work';
 import ProfileWork from '@/components/profile/profile-work';
 import ProfileProjects from '@/components/profile/profile-projects';
 import ProfileEducation from '@/components/profile/profile-education';
@@ -24,6 +23,8 @@ import {
 } from "@/components/ui/accordion"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { InfoIcon } from "lucide-react"
+
+
 
 export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile }) {
     
@@ -41,6 +42,7 @@ export function ProfileEditor({ initialProfile }: { initialProfile: UserProfile 
         }));
     };
 
+    // Generate profile with AI Based on Input
     const handleAIFill = async () => {
       setIsLoading(true);
       try {
