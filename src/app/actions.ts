@@ -109,11 +109,12 @@ export async function createResume(resumeName: string, useProfile: boolean) {
     "user": profile.id,
     "linkedin": profile.Linkedin || "",
     "github": profile.Github || "",
-    "portfolio_site": profile.Portfolio || "",
+    "portfolio": profile.Portfolio || "",
     "skills": [],
     "education_history": [],
     "work_history": [],
     "projects": [],
+    "email": profile.email || "",
   };
 
   const record = await pb.collection('resumes').create(data);
@@ -132,7 +133,9 @@ export async function createResume(resumeName: string, useProfile: boolean) {
 
       await pb.collection('resumes').update(record.id, {
         "skills": convertedSkills,
-        "work_history": convertedWorkExperience
+        "work_history": convertedWorkExperience,
+        "education_history": profile.education_history
+        
       });
     }
 

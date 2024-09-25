@@ -46,6 +46,10 @@ export interface Resume {
     skills: Skill[];
     updated: string;
     work_history: WorkExperience[];
+    github: string;
+    linkedin: string;
+    portfolio: string;
+    email: string;
   }
 
   export interface UserProfile {
