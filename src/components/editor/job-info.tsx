@@ -13,6 +13,8 @@ import {
 import { AutosizeTextarea } from "@/components/ui/auto-resize-textarea";
 import { X, Plus } from "lucide-react";
 import { extractJobKeywords } from "@/lib/ai-actions"; // Import the new function
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { KeywordManagement } from "./keyword-management";
 
 interface JobInfoProps {
   resume: Resume;
@@ -20,8 +22,8 @@ interface JobInfoProps {
 }
 
 export function JobInfo({ resume, setResume }: JobInfoProps) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [newKeyword, setNewKeyword] = useState("");
+  const [isJobInfoDialogOpen, setIsJobInfoDialogOpen] = useState(false);
+  const [isKeywordsDialogOpen, setIsKeywordsDialogOpen] = useState(false);
 
   const handleJobInfoChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setResume(prevResume => {
@@ -36,66 +38,22 @@ export function JobInfo({ resume, setResume }: JobInfoProps) {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      setIsDialogOpen(false);
+      setIsJobInfoDialogOpen(false);
     }
-  };
-
-  const handleAddKeyword = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (newKeyword.trim()) {
-      setResume(prevResume => {
-        if (!prevResume) return prevResume;
-        return {
-          ...prevResume,
-          job_keywords: [...(prevResume.job_keywords || []), newKeyword.trim()]
-        };
-      });
-      setNewKeyword("");
-    }
-  };
-
-  const handleRemoveKeyword = (keywordToRemove: string) => {
-    setResume(prevResume => {
-      if (!prevResume) return prevResume;
-      return {
-        ...prevResume,
-        job_keywords: prevResume.job_keywords.filter(keyword => keyword !== keywordToRemove)
-      };
-    });
-  };
-
-  const handleClearAllKeywords = () => {
-    setResume(prevResume => {
-      if (!prevResume) return prevResume;
-      return {
-        ...prevResume,
-        job_keywords: []
-      };
-    });
   };
 
   const isJobInfoEmpty = !resume.job_info || resume.job_info.trim() === '';
 
-  const handleFillFromJobInfo = async () => {
-    if (isJobInfoEmpty) return;
-    try {
-      const extractedKeywords = await extractJobKeywords(resume.job_info);
-      setResume(prevResume => {
-        if (!prevResume) return prevResume;
-        return {
-          ...prevResume,
-          job_keywords: extractedKeywords
-        };
-      });
-    } catch (error) {
-      console.error("Error extracting job keywords:", error);
-      // Handle the error appropriately (e.g., show an error message to the user)
+  const handleKeywordDialogClick = (event: React.MouseEvent) => {
+    if (event.target === event.currentTarget) {
+      setIsKeywordsDialogOpen(true);
     }
   };
 
   return (
     <div>
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      {/* Job Info Dialog */}
+      <Dialog open={isJobInfoDialogOpen} onOpenChange={setIsJobInfoDialogOpen}>
         <DialogTrigger asChild>
           <div className="cursor-text">
             <Label htmlFor="jobDescription" className="text-lg font-semibold">
@@ -128,65 +86,62 @@ export function JobInfo({ resume, setResume }: JobInfoProps) {
         </DialogContent>
       </Dialog>
       
+      {/* Job Keywords Section */}
       <div className="mt-4">
         <Label htmlFor="jobKeywords" className="text-lg font-semibold">
           Job Keywords
         </Label>
-        <div className="mt-2 flex flex-col">
-          <div className="flex flex-wrap gap-2 min-h-[120px] max-h-[120px] overflow-y-auto p-2 border rounded-md">
-            {resume.job_keywords && resume.job_keywords.length > 0 ? (
-              resume.job_keywords.map((keyword, index) => (
-                <div
-                  key={index}
-                  className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md flex items-center group relative max-h-12"
-                >
-                  {keyword}
-                  <button
-                    onClick={() => handleRemoveKeyword(keyword)}
-                    className="ml-2 text-red-500 hover:text-red-700 transition-colors duration-200 ease-in-out"
-                  >
-                    <X size={14} strokeWidth={2.5} />
-                  </button>
+        <Dialog open={isKeywordsDialogOpen} onOpenChange={setIsKeywordsDialogOpen}>
+          <DialogTrigger asChild>
+            <div className="mt-2 border rounded-md p-2 cursor-pointer">
+              <div className="h-20 overflow-y-auto mb-2" onClick={handleKeywordDialogClick}>
+                <div className="flex flex-wrap gap-2">
+                  {resume.job_keywords && resume.job_keywords.length > 0 ? (
+                    resume.job_keywords.map((keyword, index) => (
+                      <div
+                        key={index}
+                        className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md flex items-center group relative max-h-12"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {keyword}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-muted-foreground">Click to add keywords...</div>
+                  )}
                 </div>
-              ))
-            ) : (
-              <div className="text-muted-foreground">Add your keywords here...</div>
-            )}
-          </div>
-          <form onSubmit={handleAddKeyword} className="flex items-center mt-2 gap-2">
-            <Input
-              type="text"
-              placeholder="Add keyword..."
-              value={newKeyword}
-              onChange={(e) => setNewKeyword(e.target.value)}
-              className="flex-grow h-9 text-sm"
+              </div>
+              <KeywordManagement
+                resume={resume}
+                setResume={setResume}
+                isJobInfoEmpty={isJobInfoEmpty}
+              />
+            </div>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[800px]">
+            <DialogHeader>
+              <DialogTitle>Edit Job Keywords</DialogTitle>
+            </DialogHeader>
+            <ScrollArea className="h-[300px] w-full rounded-md border p-4">
+              <div className="flex flex-wrap gap-2">
+                {resume.job_keywords && resume.job_keywords.map((keyword, index) => (
+                  <div
+                    key={index}
+                    className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md flex items-center group relative max-h-12"
+                  >
+                    {keyword}
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+            <KeywordManagement
+              resume={resume}
+              setResume={setResume}
+              isJobInfoEmpty={isJobInfoEmpty}
+              inDialog={true}
             />
-            <Button
-              type="submit"
-              size="icon"
-              className="bg-green-500 hover:bg-green-600 text-white w-9 h-9"
-            >
-              <Plus className="h-4 w-16" />
-            </Button>
-            <Button
-              type="button"
-              variant="destructive"
-              size="sm"
-              onClick={handleClearAllKeywords}
-            >
-              Clear All
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              size="sm"
-              onClick={handleFillFromJobInfo}
-              disabled={isJobInfoEmpty}
-            >
-              Fill from Job Info
-            </Button>
-          </form>
-        </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="flex justify-end mt-4">
