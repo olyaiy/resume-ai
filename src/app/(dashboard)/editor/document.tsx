@@ -2,8 +2,9 @@
 
 import React, { Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
-import { Resume, SkillCategories, SkillsArray } from '@/lib/types';
+import {Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
+import { Resume, SkillsArray } from '@/lib/types';
+
 
 // Dynamically import PDFViewer with ssr option set to false
 const PDFViewer = dynamic(() => import('@react-pdf/renderer').then(mod => mod.PDFViewer), {
@@ -116,17 +117,17 @@ const styles = StyleSheet.create({
  
 
 const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
-  <PDFViewer width="100%" className='h-full'>
+  // <PDFViewer width="100%" className='h-full' >
 
-
-    <Document pageMode={'fullScreen'} pageLayout={"oneColumn"}>
+  <PDFViewer width="100%" height="100%">
+    <Document >
 
 
       <Page size="A4" style={styles.page}>
 
         {/* Name */}
         <Text style={styles.header}>{resumeData.name}</Text>
-        <Text style={styles.subHeader}>name@gmail.com | portfolio.com | github.com/name</Text>
+        <Text style={styles.subHeader}> {resumeData.email} | {resumeData.portfolio} | {resumeData.github}</Text>
         
 
         {/* Skills */}
@@ -135,7 +136,7 @@ const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
         </View>
 
         {(resumeData.skills as SkillsArray).map((skillCategory, index) => {
-            const category = Object.keys(skillCategory)[0] as SkillCategories;
+            const category = Object.keys(skillCategory)[0] ;
             const skillsList = skillCategory[category];
 
             return (
@@ -249,9 +250,14 @@ const ResumeDocument = ({resumeData}: {resumeData: Resume}) => (
       </Page>
 
     </Document>
+    </PDFViewer>
    
-  </PDFViewer>
+  // </PDFViewer>
   
 );
 
+
+
+
 export default ResumeDocument;
+

@@ -69,9 +69,17 @@ export interface Resume {
     avatar: string;
     user: string[];
     skills: string;
+    formatted_skills: Skill[];
+    
     work_history: string[];
+    formatted_work_history: WorkExperience[];
+
     education_history: string[];
     projects: string[];
+    formatted_projects: Project[];
+
+
+
     Linkedin?: string;
     Github?: string;
     Portfolio?: string;

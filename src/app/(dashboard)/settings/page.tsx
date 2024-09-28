@@ -2,9 +2,9 @@ import { convertProfileSkillsToResumeSkills, convertProfileWorkExperienceToResum
 
 export default async function Page() {
 
-    const result = await convertProfileWorkExperienceToResumeWorkExperience()
-    console.log('FINAL RESULT ----------------------------------------');
-    console.log(result);
+    // const result = await convertProfileWorkExperienceToResumeWorkExperience()
+    // console.log('FINAL RESULT ----------------------------------------');
+    // console.log(result);
 
 return (
         <div></div>

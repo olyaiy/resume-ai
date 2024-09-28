@@ -2,8 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Resume } from "@/lib/types";
-import { Suspense, useState } from "react";
-import ResumeDocument from "./document";
+import { useState } from "react";
 import { saveResume } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import BasicInfo from "@/components/editor/basic-info";
@@ -12,10 +11,13 @@ import EducationHistory from "@/components/editor/education";
 import Work from "@/components/editor/work";
 import Projects from "@/components/editor/projects";
 import { ClearResumeButton } from "@/components/editor/clear-resume";
-
-
-
-
+import ResumeDocument from "./document";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable"
+import { GripVertical } from "lucide-react"
 
 export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
     const { toast } = useToast()
@@ -32,7 +34,6 @@ export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
             </div>
         );
     }
-
 
     const handleSaveResume = async () => {
 
@@ -65,54 +66,43 @@ export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
         } 
     };
 
-
     return (
-        <div className="flex flex-row gap-4 h-full ">
-            {/* left side: resume editor */}
-            <div className="w-full h-full space-y-6 p-4 overflow-scroll">
+        <ResizablePanelGroup
+            direction="horizontal"
+            className="h-full rounded-lg border"
+        >
+            <ResizablePanel defaultSize={50} minSize={30}>
+                <div className="h-full space-y-6 p-4 overflow-scroll">
+                    <div className="flex flex-row gap-2">
+                        <h1 className="text-2xl font-bold">Edit Resume</h1>
+                        <Button 
+                        onClick={() => handleSaveResume()}
+                        className="ml-auto">
+                            Save
+                        </Button>
+                        <ClearResumeButton resume={resume} setResume={setResume} />
+                    </div>
 
-
-                
-                <div className="flex flex-row gap-2">
-                    <h1 className="text-2xl font-bold">Edit Resume</h1>
-                    <Button 
-                    onClick={() => handleSaveResume()}
-                    className="ml-auto">
-                        Save
-                    </Button>
-
-
-                    <ClearResumeButton resume={resume} setResume={setResume} />
-
+                    <BasicInfo resume={resume} setResume={setResume}/>
+                    <Skills resume={resume} setResume={setResume}/>
+                    <Work resume={resume} setResume={setResume}/>
+                    <Projects resume={resume} setResume={setResume}/>
+                    <EducationHistory resume={resume} setResume={setResume}/>
                 </div>
+            </ResizablePanel>
 
-                {/* Basic Information */}
-                <BasicInfo resume={resume} setResume={setResume}/>
-                
-                {/* Skills */}
-                <Skills resume={resume} setResume={setResume}/>
+            <ResizableHandle withHandle>
+                <div className="h-full w-2 bg-gray-200 cursor-col-resize flex items-center justify-center">
+                    <GripVertical className="h-4 w-4 text-gray-500" />
+                </div>
+            </ResizableHandle>
 
-
-                {/* Work Experience */}
-                <Work resume={resume} setResume={setResume}/>
-                
-
-                {/* Projects */}
-                <Projects resume={resume} setResume={setResume}/>
-
-                {/* Education History */}
-                <EducationHistory resume={resume} setResume={setResume}/>
-                
-                
-            </div>
-            {/* right side: resume display */}
-
-                <ResumeDocument
-                    resumeData={resume}
-                />
-
-        </div>
-
+            <ResizablePanel defaultSize={50} minSize={30}>
+                <div className="h-full">
+                    <ResumeDocument resumeData={resume} />
+                </div>
+            </ResizablePanel>
+        </ResizablePanelGroup>
     );
 }
 
