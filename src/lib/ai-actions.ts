@@ -630,6 +630,59 @@ export async function convertProfileProjectsToResumeProjects() {
 }
 
 
+// New function to extract job keywords
+export async function extractJobKeywords(jobInfo: string) {
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      {
+        "role": "system",
+        "content": [
+          {
+            "type": "text",
+            "text": "Extract key skills, technologies, and important keywords from the given job description. Return them as an array of strings, with each keyword or phrase as a separate item. Focus on technical skills, tools, frameworks, and job-specific terminology."
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": [{ "type": "text", "text": jobInfo }]
+      }
+    ],
+    temperature: 0.7,
+    max_tokens: 10000,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+    response_format: {
+      type: "json_schema",
+      json_schema: {
+        name: "job_keywords_response",
+        schema: {
+          type: "object",
+          properties: {
+            job_keywords: {
+              type: "array",
+              items: { type: "string" }
+            }
+          },
+          required: ["job_keywords"],
+          additionalProperties: false
+        },
+        strict: true
+      }
+    }
+  });
+
+  const parsedResponse = JSON.parse(response.choices[0].message.content || '{}');
+  
+  return parsedResponse.job_keywords || [];
+}
+
+
+
+
+
 export async function askAI(prompt: string) {
   const response = await openai.chat.completions.create({
     model: "gpt-4-turbo-preview",

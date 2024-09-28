@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { AutosizeTextarea } from "@/components/ui/auto-resize-textarea";
 import { X, Plus } from "lucide-react";
+import { extractJobKeywords } from "@/lib/ai-actions"; // Import the new function
 
 interface JobInfoProps {
   resume: Resume;
@@ -75,11 +76,21 @@ export function JobInfo({ resume, setResume }: JobInfoProps) {
 
   const isJobInfoEmpty = !resume.job_info || resume.job_info.trim() === '';
 
-  const handleFillFromJobInfo = () => {
+  const handleFillFromJobInfo = async () => {
     if (isJobInfoEmpty) return;
-    // Implement the logic to extract keywords from job_info
-    // and add them to job_keywords
-    console.log("Fill from Job Info functionality to be implemented");
+    try {
+      const extractedKeywords = await extractJobKeywords(resume.job_info);
+      setResume(prevResume => {
+        if (!prevResume) return prevResume;
+        return {
+          ...prevResume,
+          job_keywords: extractedKeywords
+        };
+      });
+    } catch (error) {
+      console.error("Error extracting job keywords:", error);
+      // Handle the error appropriately (e.g., show an error message to the user)
+    }
   };
 
   return (
