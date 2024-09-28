@@ -50,7 +50,7 @@ function ResumePreview({ resume }: { resume: Resume }) {
                 </CardHeader>
                 <CardContent className="p-4 pt-0 flex-grow overflow-auto">
                     <div className="space-y-2 text-[10px]">
-                        {/* <PreviewSection icon={<Code className="h-2 w-2" />} title="Skills"> */}
+                        <PreviewSection icon={<Code className="h-2 w-2" />} title="Skills">
                             <div className="flex flex-wrap gap-1">
                                 {resume.skills.slice(0, 3).map((skill: Skill, index: number) => (
                                     <Badge key={index} variant="secondary" className="text-[8px] px-1 py-0">
