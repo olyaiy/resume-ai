@@ -73,10 +73,13 @@ export function JobInfo({ resume, setResume }: JobInfoProps) {
     });
   };
 
-  const handleFillFromProfile = () => {
-    // This is a placeholder function. You'll need to implement the logic
-    // to fetch keywords from the user's profile and add them to job_keywords.
-    console.log("Fill from profile functionality to be implemented");
+  const isJobInfoEmpty = !resume.job_info || resume.job_info.trim() === '';
+
+  const handleFillFromJobInfo = () => {
+    if (isJobInfoEmpty) return;
+    // Implement the logic to extract keywords from job_info
+    // and add them to job_keywords
+    console.log("Fill from Job Info functionality to be implemented");
   };
 
   return (
@@ -164,7 +167,8 @@ export function JobInfo({ resume, setResume }: JobInfoProps) {
             <Button
               type="button"
               variant={"secondary"}
-              onClick={handleFillFromProfile}
+              onClick={handleFillFromJobInfo}
+              disabled={isJobInfoEmpty}
               className="h-8 text-sm"
             >
               Fill from Job Info
