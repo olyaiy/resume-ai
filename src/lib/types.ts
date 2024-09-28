@@ -50,6 +50,8 @@ export interface Resume {
     linkedin: string;
     portfolio: string;
     email: string;
+    job_info: string;
+    job_keywords: string[]
   }
 
   export interface UserProfile {
