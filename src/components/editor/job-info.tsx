@@ -23,7 +23,7 @@ interface JobInfoProps {
 
 export function JobInfo({ resume, setResume }: JobInfoProps) {
   const [isJobInfoDialogOpen, setIsJobInfoDialogOpen] = useState(false);
-  const [isKeywordsDialogOpen, setIsKeywordsDialogOpen] = useState(false);
+  const [maxKeywords, setMaxKeywords] = useState(10);
 
   const handleJobInfoChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setResume(prevResume => {
@@ -43,12 +43,6 @@ export function JobInfo({ resume, setResume }: JobInfoProps) {
   };
 
   const isJobInfoEmpty = !resume.job_info || resume.job_info.trim() === '';
-
-  const handleKeywordDialogClick = (event: React.MouseEvent) => {
-    if (event.target === event.currentTarget) {
-      setIsKeywordsDialogOpen(true);
-    }
-  };
 
   return (
     <div>
@@ -91,57 +85,13 @@ export function JobInfo({ resume, setResume }: JobInfoProps) {
         <Label htmlFor="jobKeywords" className="text-lg font-semibold">
           Job Keywords
         </Label>
-        <Dialog open={isKeywordsDialogOpen} onOpenChange={setIsKeywordsDialogOpen}>
-          <DialogTrigger asChild>
-            <div className="mt-2 border rounded-md p-2 cursor-pointer">
-              <div className="h-20 overflow-y-auto mb-2" onClick={handleKeywordDialogClick}>
-                <div className="flex flex-wrap gap-2">
-                  {resume.job_keywords && resume.job_keywords.length > 0 ? (
-                    resume.job_keywords.map((keyword, index) => (
-                      <div
-                        key={index}
-                        className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md flex items-center group relative max-h-12"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {keyword}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-muted-foreground">Click to add keywords...</div>
-                  )}
-                </div>
-              </div>
-              <KeywordManagement
-                resume={resume}
-                setResume={setResume}
-                isJobInfoEmpty={isJobInfoEmpty}
-              />
-            </div>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px]">
-            <DialogHeader>
-              <DialogTitle>Edit Job Keywords</DialogTitle>
-            </DialogHeader>
-            <ScrollArea className="h-[300px] w-full rounded-md border p-4">
-              <div className="flex flex-wrap gap-2">
-                {resume.job_keywords && resume.job_keywords.map((keyword, index) => (
-                  <div
-                    key={index}
-                    className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md flex items-center group relative max-h-12"
-                  >
-                    {keyword}
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-            <KeywordManagement
-              resume={resume}
-              setResume={setResume}
-              isJobInfoEmpty={isJobInfoEmpty}
-              inDialog={true}
-            />
-          </DialogContent>
-        </Dialog>
+        <KeywordManagement
+          resume={resume}
+          setResume={setResume}
+          isJobInfoEmpty={isJobInfoEmpty}
+          maxKeywords={maxKeywords}
+          setMaxKeywords={setMaxKeywords}
+        />
       </div>
 
       <div className="flex justify-end mt-4">
