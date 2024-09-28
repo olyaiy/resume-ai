@@ -142,34 +142,35 @@ export function JobInfo({ resume, setResume }: JobInfoProps) {
               <div className="text-muted-foreground">Add your keywords here...</div>
             )}
           </div>
-          <form onSubmit={handleAddKeyword} className="flex items-center mt-2">
+          <form onSubmit={handleAddKeyword} className="flex items-center mt-2 gap-2">
             <Input
               type="text"
               placeholder="Add keyword..."
               value={newKeyword}
               onChange={(e) => setNewKeyword(e.target.value)}
-              className="flex-grow h-8 text-sm mr-2"
+              className="flex-grow h-9 text-sm"
             />
             <Button
               type="submit"
-              className="p-1 bg-green-500 hover:bg-green-600 text-white w-8 aspect-square mr-2"
+              size="icon"
+              className="bg-green-500 hover:bg-green-600 text-white w-9 h-9"
             >
-              <Plus size={16} />
+              <Plus className="h-4 w-16" />
             </Button>
             <Button
               type="button"
               variant="destructive"
+              size="sm"
               onClick={handleClearAllKeywords}
-              className="h-8 text-sm mr-2"
             >
               Clear All
             </Button>
             <Button
               type="button"
-              variant={"secondary"}
+              variant="secondary"
+              size="sm"
               onClick={handleFillFromJobInfo}
               disabled={isJobInfoEmpty}
-              className="h-8 text-sm"
             >
               Fill from Job Info
             </Button>
