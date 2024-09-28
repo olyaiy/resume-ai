@@ -86,6 +86,7 @@ export async function saveResume(resumeData: Resume): Promise<{ success: boolean
       education_history: resumeData.education_history,
       work_history: resumeData.work_history,
       projects: resumeData.projects,
+      job_info: resumeData.job_info
     });
 
     revalidateAll();
