@@ -24,6 +24,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
 
 export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
     const { toast } = useToast()
@@ -78,7 +80,7 @@ export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
             className="h-full rounded-lg border"
         >
             <ResizablePanel defaultSize={50} minSize={30}>
-                <div className="h-full p-4 overflow-scroll">
+                <div className="h-full p-4 overflow-y-auto flex flex-col">
                     <div className="flex flex-row gap-2 mb-6">
                         <h1 className="text-2xl font-bold">Edit Resume</h1>
                         <Button 
@@ -89,7 +91,7 @@ export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
                         <ClearResumeButton resume={resume} setResume={setResume} />
                     </div>
 
-                    <Accordion type="multiple" className="w-full">
+                    <Accordion type="multiple" className="w-full mb-6">
                         <AccordionItem value="basic-info">
                             <AccordionTrigger>Basic Information</AccordionTrigger>
                             <AccordionContent>
@@ -121,6 +123,23 @@ export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
+
+                    <div className="mt-auto">
+                        <Label htmlFor="jobDescription" className="text-lg font-semibold">
+                            Job Info
+                        </Label>
+                        <Textarea
+                            id="jobDescription"
+                            placeholder="Paste job description or listing here..."
+                            className="mt-2 mb-2"
+                            rows={5}
+                        />
+                        <div className="flex justify-end">
+                            <Button>
+                                Customize Resume
+                            </Button>
+                        </div>
+                    </div>
                 </div>
             </ResizablePanel>
 
