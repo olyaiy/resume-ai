@@ -8,6 +8,7 @@ import { FileText } from "lucide-react";
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createResume } from "@/app/actions";
+import { AutosizeTextarea } from "@/components/ui/auto-resize-textarea";
 
 interface NewResumeDialogProps {
     triggerButton?: React.ReactNode;
@@ -19,6 +20,8 @@ export function NewResumeDialog({ triggerButton }: NewResumeDialogProps) {
     const [isLoading, setIsLoading] = useState(false);
     const closeRef = useRef<HTMLButtonElement>(null);
     const router = useRouter();
+    const [jobDescription, setJobDescription] = useState("");
+    const [customizeForJob, setCustomizeForJob] = useState(false);
 
     const handleCreateResume = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -49,6 +52,12 @@ export function NewResumeDialog({ triggerButton }: NewResumeDialogProps) {
         }
     };
 
+    const handleJobDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const value = e.target.value;
+        setJobDescription(value);
+        setCustomizeForJob(value.trim().length > 0);
+    };
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -60,9 +69,9 @@ export function NewResumeDialog({ triggerButton }: NewResumeDialogProps) {
                 )}
             </DialogTrigger>
 
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
-                    <DialogTitle>Name Your Resume</DialogTitle>
+                    <DialogTitle>Create New Resume</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleCreateResume}>
                     <div className="grid gap-4 py-4">
@@ -74,6 +83,26 @@ export function NewResumeDialog({ triggerButton }: NewResumeDialogProps) {
                                 placeholder="Enter resume name"
                             />
                             {error && <p className="text-sm text-red-500">{error}</p>}
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="jobDescription">Job Description (Optional)</Label>
+                            <AutosizeTextarea
+                                id="jobDescription"
+                                name="jobDescription"
+                                placeholder="Paste the job listing or description to tailor your resume"
+                                value={jobDescription}
+                                onChange={handleJobDescriptionChange}
+                                className="min-h-[100px]"
+                                maxHeight={400}
+                            />
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Switch
+                                id="customize-for-job"
+                                checked={customizeForJob}
+                                onCheckedChange={setCustomizeForJob}
+                            />
+                            <Label htmlFor="customize-for-job">Customize resume for this job</Label>
                         </div>
                         <div className="flex items-center space-x-2">
                             <Switch
