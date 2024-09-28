@@ -33,6 +33,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { AutosizeTextarea } from "@/components/ui/auto-resize-textarea";
 
 export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
     const { toast } = useToast()
@@ -159,15 +160,16 @@ export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
                                     </div>
                                 </div>
                             </DialogTrigger>
-                            <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+                            <DialogContent className="sm:max-w-[800px] overflow-y-auto">
                                 <DialogHeader>
                                     <DialogTitle>Edit Job Information</DialogTitle>
                                 </DialogHeader>
-                                <Textarea
+                                <AutosizeTextarea
                                     id="jobDescription"
                                     placeholder="Paste job description or listing here..."
                                     className="mt-2"
                                     rows={15}
+                                    maxHeight={500}
                                     value={resume.job_info || ''}
                                     onChange={handleJobInfoChange}
                                 />
