@@ -26,10 +26,18 @@ import {
 } from "@/components/ui/accordion"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
     const { toast } = useToast()
     const [resume, setResume] = useState(resumeData);
+    const [isJobInfoDialogOpen, setIsJobInfoDialogOpen] = useState(false);
 
     if (!resume) {
         return (
@@ -135,18 +143,37 @@ export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
                     </Accordion>
 
                     <div className="mt-auto">
-                        <Label htmlFor="jobDescription" className="text-lg font-semibold">
-                            Job Info
-                        </Label>
-                        <Textarea
-                            id="jobDescription"
-                            placeholder="Paste job description or listing here..."
-                            className="mt-2 mb-2"
-                            rows={5}
-                            value={resume.job_info || ''}
-                            onChange={handleJobInfoChange}
-                        />
-                        <div className="flex justify-end">
+                        <Dialog open={isJobInfoDialogOpen} onOpenChange={setIsJobInfoDialogOpen}>
+                            <DialogTrigger asChild>
+                                <div className="cursor-text">
+                                    <Label htmlFor="jobDescription" className="text-lg font-semibold">
+                                        Job Info
+                                    </Label>
+                                    <div 
+                                        className="mt-2 p-2 border rounded-md h-20 overflow-y-auto"
+                                        style={{ cursor: 'text' }}
+                                        role="textbox"
+                                        tabIndex={0}
+                                    >
+                                        {resume.job_info || 'Click to edit job description...'}
+                                    </div>
+                                </div>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+                                <DialogHeader>
+                                    <DialogTitle>Edit Job Information</DialogTitle>
+                                </DialogHeader>
+                                <Textarea
+                                    id="jobDescription"
+                                    placeholder="Paste job description or listing here..."
+                                    className="mt-2"
+                                    rows={15}
+                                    value={resume.job_info || ''}
+                                    onChange={handleJobInfoChange}
+                                />
+                            </DialogContent>
+                        </Dialog>
+                        <div className="flex justify-end mt-2">
                             <Button>
                                 Customize Resume
                             </Button>
