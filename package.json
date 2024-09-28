@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "cp ./node_modules/pdfjs-dist/build/pdf.worker.min.js ./public/"
+    "install": "npm install --no-fund"
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.61",
@@ -37,6 +37,7 @@
     "pdfjs-dist": "^4.6.82",
     "pdfobject": "^2.3.0",
     "pocketbase": "^0.21.5",
+    "punycode.js": "^2.3.1",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
@@ -47,6 +48,7 @@
     "shadcn-ui": "^0.2.3",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
+    "vaul": "^1.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

@@ -565,7 +565,6 @@ export async function convertProfileWorkExperienceToResumeWorkExperience() {
 }
 
 
-
 // Profile Projects -> Resume Projects
 export async function convertProfileProjectsToResumeProjects() {
   const profile = await getProfile();

@@ -18,6 +18,12 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
 import { GripVertical } from "lucide-react"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
     const { toast } = useToast()
@@ -72,8 +78,8 @@ export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
             className="h-full rounded-lg border"
         >
             <ResizablePanel defaultSize={50} minSize={30}>
-                <div className="h-full space-y-6 p-4 overflow-scroll">
-                    <div className="flex flex-row gap-2">
+                <div className="h-full p-4 overflow-scroll">
+                    <div className="flex flex-row gap-2 mb-6">
                         <h1 className="text-2xl font-bold">Edit Resume</h1>
                         <Button 
                         onClick={() => handleSaveResume()}
@@ -83,11 +89,38 @@ export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
                         <ClearResumeButton resume={resume} setResume={setResume} />
                     </div>
 
-                    <BasicInfo resume={resume} setResume={setResume}/>
-                    <Skills resume={resume} setResume={setResume}/>
-                    <Work resume={resume} setResume={setResume}/>
-                    <Projects resume={resume} setResume={setResume}/>
-                    <EducationHistory resume={resume} setResume={setResume}/>
+                    <Accordion type="multiple" className="w-full">
+                        <AccordionItem value="basic-info">
+                            <AccordionTrigger>Basic Information</AccordionTrigger>
+                            <AccordionContent>
+                                <BasicInfo resume={resume} setResume={setResume}/>
+                            </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="skills">
+                            <AccordionTrigger>Skills</AccordionTrigger>
+                            <AccordionContent>
+                                <Skills resume={resume} setResume={setResume}/>
+                            </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="work">
+                            <AccordionTrigger>Work Experience</AccordionTrigger>
+                            <AccordionContent>
+                                <Work resume={resume} setResume={setResume}/>
+                            </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="projects">
+                            <AccordionTrigger>Projects</AccordionTrigger>
+                            <AccordionContent>
+                                <Projects resume={resume} setResume={setResume}/>
+                            </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="education">
+                            <AccordionTrigger>Education</AccordionTrigger>
+                            <AccordionContent>
+                                <EducationHistory resume={resume} setResume={setResume}/>
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
                 </div>
             </ResizablePanel>
 
