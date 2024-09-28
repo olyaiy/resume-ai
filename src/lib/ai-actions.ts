@@ -645,7 +645,20 @@ export async function extractJobKeywords(jobInfo: string, maxKeywords: number = 
           "content": [
             {
               "type": "text",
-              "text": `Extract up to ${maxKeywords} key skills, technologies, and important keywords from the given job description. Return them as an array of strings, with each keyword or phrase as a separate item. Focus on technical skills, tools, frameworks, and job-specific terminology.`
+              "text": `Analyze the given job description for a computer science position and extract up to ${maxKeywords} ATS-critical keywords and phrases. Focus on:
+
+1. Technical skills (e.g., programming languages, frameworks, tools)
+2. Software development methodologies (e.g., Agile, Scrum)
+3. Cloud platforms and services (e.g., AWS, Azure, GCP)
+4. Database technologies
+5. DevOps practices and tools
+6. Specific computer science concepts or algorithms mentioned
+7. Industry-specific terminology or domain knowledge
+8. Soft skills particularly relevant to tech roles
+9. Certifications or qualifications
+10. Key responsibilities or job functions
+
+Return the results as an array of strings, with each keyword or phrase as a separate item. Prioritize terms that are likely to be used in Applicant Tracking Systems (ATS) for filtering candidates. If a keyword is mentioned multiple times or emphasized, consider including it even if it means slightly exceeding the ${maxKeywords} limit.`
             }
           ]
         },

@@ -89,59 +89,65 @@ export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
             className="h-full rounded-lg border"
         >
             <ResizablePanel defaultSize={50} minSize={30}>
-                <div className="h-full p-4 overflow-y-auto flex flex-col">
-                    <div className="flex flex-row gap-2 mb-6">
-                        <h1 className="text-2xl font-bold">Edit Resume</h1>
-                        <Button 
-                        onClick={() => handleSaveResume()}
-                        className="ml-auto">
-                            Save
-                        </Button>
-                        <ClearResumeButton resume={resume} setResume={setResume} />
+                <div className="h-full flex flex-col">
+                    <div className="sticky top-0 z-10 bg-background border-b border-border p-4 shadow-sm">
+                        <div className="flex flex-row items-center gap-2">
+                            <h1 className="text-2xl font-bold">Edit Resume</h1>
+                            <Button 
+                                onClick={() => handleSaveResume()}
+                                className="ml-auto"
+                            >
+                                Save
+                            </Button>
+                            <ClearResumeButton resume={resume} setResume={setResume} />
+                        </div>
                     </div>
-
-                    <Accordion type="multiple" className="w-full mb-6">
-                        <AccordionItem value="basic-info">
-                            <AccordionTrigger>Basic Information</AccordionTrigger>
-                            <AccordionContent>
-                                <BasicInfo resume={resume} setResume={setResume}/>
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="skills">
-                            <AccordionTrigger>Skills</AccordionTrigger>
-                            <AccordionContent>
-                                <Skills resume={resume} setResume={setResume}/>
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="work">
-                            <AccordionTrigger>Work Experience</AccordionTrigger>
-                            <AccordionContent>
-                                <Work resume={resume} setResume={setResume}/>
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="projects">
-                            <AccordionTrigger>Projects</AccordionTrigger>
-                            <AccordionContent>
-                                <Projects resume={resume} setResume={setResume}/>
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="education">
-                            <AccordionTrigger>Education</AccordionTrigger>
-                            <AccordionContent>
-                                <EducationHistory resume={resume} setResume={setResume}/>
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-
-                    <div className="mt-auto">
-                        <JobInfo resume={resume} setResume={setResume} />
+                    <div className="flex-grow p-4 overflow-y-auto">
+                        <Accordion type="multiple" className="w-full mb-6">
+                            <AccordionItem value="basic-info">
+                                <AccordionTrigger>Basic Information</AccordionTrigger>
+                                <AccordionContent>
+                                    <BasicInfo resume={resume} setResume={setResume}/>
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="skills">
+                                <AccordionTrigger>Skills</AccordionTrigger>
+                                <AccordionContent>
+                                    <Skills resume={resume} setResume={setResume}/>
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="work">
+                                <AccordionTrigger>Work Experience</AccordionTrigger>
+                                <AccordionContent>
+                                    <Work resume={resume} setResume={setResume}/>
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="projects">
+                                <AccordionTrigger>Projects</AccordionTrigger>
+                                <AccordionContent>
+                                    <Projects resume={resume} setResume={setResume}/>
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="education">
+                                <AccordionTrigger>Education</AccordionTrigger>
+                                <AccordionContent>
+                                    <EducationHistory resume={resume} setResume={setResume}/>
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="ai-tailoring">
+                                <AccordionTrigger>AI Resume Tailoring</AccordionTrigger>
+                                <AccordionContent>
+                                    <JobInfo resume={resume} setResume={setResume} />
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
                     </div>
                 </div>
             </ResizablePanel>
 
             <ResizableHandle withHandle>
-                <div className="h-full w-2 bg-gray-200 cursor-col-resize flex items-center justify-center">
-                    <GripVertical className="h-4 w-4 text-gray-500" />
+                <div className="h-full w-12 bg-gray-100 cursor-col-resize flex items-center justify-center hover:bg-gray-200 transition-colors border-x border-gray-300">
+                    <GripVertical className="h-10 w-10 text-gray-600" />
                 </div>
             </ResizableHandle>
 

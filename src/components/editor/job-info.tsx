@@ -54,7 +54,7 @@ export function JobInfo({ resume, setResume }: JobInfoProps) {
               Job Info
             </Label>
             <div 
-              className="mt-2 p-2 border rounded-md h-20 overflow-y-auto"
+              className="mt-2 p-2 border rounded-md h-28 overflow-y-auto"
               style={{ cursor: 'text' }}
               role="textbox"
               tabIndex={0}
@@ -70,8 +70,9 @@ export function JobInfo({ resume, setResume }: JobInfoProps) {
           <AutosizeTextarea
             id="jobDescription"
             placeholder="Paste job description or listing here..."
-            className="mt-2"
-            rows={15}
+
+            rows={20}
+            minHeight={200}
             maxHeight={500}
             value={resume.job_info || ''}
             onChange={handleJobInfoChange}
