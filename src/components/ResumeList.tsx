@@ -23,39 +23,45 @@ function ResumePreview({ resume }: { resume: Resume }) {
         <Card className="w-full h-full hover:bg-secondary/50 transition-colors overflow-hidden">
             <div className="aspect-[3/4] flex flex-col">
                 <CardHeader className="p-2 flex-shrink-0">
-                    <h3 className="text-xs font-semibold truncate">{resume.name}</h3>
-                    <p className="text-[10px] text-muted-foreground truncate">{resume.resume_name}</p>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                        {resume.email && (
-                            <div className="flex items-center text-[10px] text-muted-foreground">
-                                <Mail className="h-2 w-2 mr-1" />
-                                <span className="truncate">{truncate(resume.email, 15)}</span>
-                            </div>
-                        )}
-                        {resume.linkedin && (
-                            <div className="flex items-center text-[10px] text-muted-foreground">
-                                <LinkIcon className="h-2 w-2 mr-1" />
-                                <span>LinkedIn</span>
-                            </div>
-                        )}
-                        {resume.github && (
-                            <div className="flex items-center text-[10px] text-muted-foreground">
-                                <LinkIcon className="h-2 w-2 mr-1" />
-                                <span>GitHub</span>
-                            </div>
-                        )}
+                    <div className="w-full text-center">
+                        <h3 className="text-xs font-semibold truncate">{resume.name}</h3>
+                        <p className="text-[10px] text-muted-foreground truncate">{resume.resume_name}</p>
+                        <div className="flex flex-wrap justify-center gap-1 mt-1">
+                            {resume.email && (
+                                <div className="flex items-center text-[10px] text-muted-foreground">
+                                    <Mail className="h-2 w-2 mr-1" />
+                                    <span className="truncate">{truncate(resume.email, 15)}</span>
+                                </div>
+                            )}
+                            {resume.linkedin && (
+                                <div className="flex items-center text-[10px] text-muted-foreground">
+                                    <LinkIcon className="h-2 w-2 mr-1" />
+                                    <span>LinkedIn</span>
+                                </div>
+                            )}
+                            {resume.github && (
+                                <div className="flex items-center text-[10px] text-muted-foreground">
+                                    <LinkIcon className="h-2 w-2 mr-1" />
+                                    <span>GitHub</span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </CardHeader>
-                <CardContent className="p-2 pt-0 flex-grow overflow-auto">
+                <CardContent className="p-4 pt-0 flex-grow overflow-auto">
                     <div className="space-y-2 text-[10px]">
-                        <PreviewSection icon={<Code className="h-2 w-2" />} title="Skills">
+                        {/* <PreviewSection icon={<Code className="h-2 w-2" />} title="Skills"> */}
                             <div className="flex flex-wrap gap-1">
                                 {resume.skills.slice(0, 3).map((skill: Skill, index: number) => (
                                     <Badge key={index} variant="secondary" className="text-[8px] px-1 py-0">
                                         {truncate(Object.values(skill)[0], 8)}
                                     </Badge>
                                 ))}
-                                {resume.skills.length > 3 && <Badge variant="outline" className="text-[8px] px-1 py-0">+{resume.skills.length - 3}</Badge>}
+                                {resume.skills.length > 3 && (
+                                    <Badge variant="outline" className="text-[8px] px-1 py-0">
+                                        +{resume.skills.length - 3}
+                                    </Badge>
+                                )}
                             </div>
                         </PreviewSection>
                         
@@ -105,9 +111,9 @@ function PreviewSection({ icon, title, children }: { icon: React.ReactNode, titl
         <div>
             <div className="flex items-center space-x-1 mb-1">
                 {icon}
-                <h4 className="font-medium text-[10px]">{title}</h4>
+                <h4 className="font-medium text-[11px]">{title}</h4>
             </div>
-            <div>{children}</div>
+            <div className="text-[9px]">{children}</div>
         </div>
     );
 }
@@ -127,14 +133,14 @@ export function ResumeList({ resumeList }: ResumeListProps) {
                                 <Button
                                     variant="destructive"
                                     size="icon"
-                                    className="absolute top-1 right-1 h-4 w-4"
+                                    className="absolute top-2 right-2 h-6 w-6"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
                                         setResumeToDelete(resume.id);
                                     }}
                                 >
-                                    <Trash2 className="h-2 w-2" />
+                                    <Trash2 className="h-4 w-6" />
                                 </Button>
                             </div>
                         </Link>
