@@ -74,6 +74,16 @@ export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
         } 
     };
 
+    const handleJobInfoChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setResume(prevResume => {
+            if (!prevResume) return prevResume;
+            return {
+                ...prevResume,
+                job_info: event.target.value
+            };
+        });
+    };
+
     return (
         <ResizablePanelGroup
             direction="horizontal"
@@ -133,6 +143,8 @@ export default function EditorLayout({ resumeData }: { resumeData?: Resume }) {
                             placeholder="Paste job description or listing here..."
                             className="mt-2 mb-2"
                             rows={5}
+                            value={resume.job_info || ''}
+                            onChange={handleJobInfoChange}
                         />
                         <div className="flex justify-end">
                             <Button>

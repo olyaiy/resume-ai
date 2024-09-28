@@ -628,3 +628,21 @@ export async function convertProfileProjectsToResumeProjects() {
   
   return parsedResponse.projects || [];
 }
+
+
+export async function askAI(prompt: string) {
+  const response = await openai.chat.completions.create({
+    model: "gpt-4-turbo-preview",
+    messages: [
+      { role: "system", content: "you are a helpful assistant." },
+      { role: "user", content: prompt }
+    ],
+    temperature: 1,
+    max_tokens: 16383,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+  });
+
+  return response.choices[0].message.content || '';
+}
