@@ -63,6 +63,22 @@ export function JobInfo({ resume, setResume }: JobInfoProps) {
     });
   };
 
+  const handleClearAllKeywords = () => {
+    setResume(prevResume => {
+      if (!prevResume) return prevResume;
+      return {
+        ...prevResume,
+        job_keywords: []
+      };
+    });
+  };
+
+  const handleFillFromProfile = () => {
+    // This is a placeholder function. You'll need to implement the logic
+    // to fetch keywords from the user's profile and add them to job_keywords.
+    console.log("Fill from profile functionality to be implemented");
+  };
+
   return (
     <div>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -103,21 +119,25 @@ export function JobInfo({ resume, setResume }: JobInfoProps) {
           Job Keywords
         </Label>
         <div className="mt-2 flex flex-col">
-          <div className="flex flex-wrap gap-2 max-h-[120px] overflow-y-auto p-2 border rounded-md">
-            {resume.job_keywords?.map((keyword, index) => (
-              <div
-                key={index}
-                className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md flex items-center group relative"
-              >
-                {keyword}
-                <button
-                  onClick={() => handleRemoveKeyword(keyword)}
-                  className="ml-2 text-red-500 hover:text-red-700 transition-colors duration-200 ease-in-out"
+          <div className="flex flex-wrap gap-2 min-h-[120px] max-h-[120px] overflow-y-auto p-2 border rounded-md">
+            {resume.job_keywords && resume.job_keywords.length > 0 ? (
+              resume.job_keywords.map((keyword, index) => (
+                <div
+                  key={index}
+                  className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md flex items-center group relative max-h-12"
                 >
-                  <X size={14} strokeWidth={2.5} />
-                </button>
-              </div>
-            ))}
+                  {keyword}
+                  <button
+                    onClick={() => handleRemoveKeyword(keyword)}
+                    className="ml-2 text-red-500 hover:text-red-700 transition-colors duration-200 ease-in-out"
+                  >
+                    <X size={14} strokeWidth={2.5} />
+                  </button>
+                </div>
+              ))
+            ) : (
+              <div className="text-muted-foreground">Add your keywords here...</div>
+            )}
           </div>
           <form onSubmit={handleAddKeyword} className="flex items-center mt-2">
             <Input
@@ -129,9 +149,25 @@ export function JobInfo({ resume, setResume }: JobInfoProps) {
             />
             <Button
               type="submit"
-              className="p-1 bg-green-500 hover:bg-green-600 text-white w-8 aspect-square"
+              className="p-1 bg-green-500 hover:bg-green-600 text-white w-8 aspect-square mr-2"
             >
               <Plus size={16} />
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleClearAllKeywords}
+              className="h-8 text-sm mr-2"
+            >
+              Clear All
+            </Button>
+            <Button
+              type="button"
+              variant={"secondary"}
+              onClick={handleFillFromProfile}
+              className="h-8 text-sm"
+            >
+              Fill from Job Info
             </Button>
           </form>
         </div>
