@@ -131,6 +131,77 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
 
+
+## 🗄️ Database Setup
+
+### Option 1: Supabase Setup (Recommended)
+
+1. Create a new Supabase project at [supabase.com](https://supabase.com)
+
+2. Enable the `uuid-ossp` extension in your Supabase database:
+```sql
+create extension if not exists "uuid-ossp" with schema extensions;
+```
+
+3. Create the `update_updated_at_column` function:
+```sql
+create or replace function public.update_updated_at_column()
+returns trigger
+language plpgsql
+as $$
+begin
+    new.updated_at = timezone('utc'::text, now());
+    return new;
+end;
+$$;
+```
+
+4. Execute the table creation SQL script found in `database/schema.sql`
+
+### Option 2: Local PostgreSQL Setup
+
+1. Install PostgreSQL on your local machine
+
+2. Create a new database:
+```bash
+createdb resumelm
+```
+
+3. Enable the required extensions:
+```sql
+create extension if not exists "uuid-ossp" with schema extensions;
+```
+
+4. Execute the table creation SQL script found in `database/schema.sql`
+
+### Database Schema
+
+The application uses three main tables:
+
+1. **profiles**: Stores user profile information
+   - Basic user details (name, contact info)
+   - Professional information (work experience, education, skills)
+   - All JSON fields for flexible data storage
+
+2. **jobs**: Manages job listings
+   - Company and position details
+   - Job description and requirements
+   - Location and employment type constraints
+   - Keywords for job matching
+
+3. **resumes**: Handles resume creation and customization
+   - Base and job-specific resumes
+   - Customizable sections and ordering
+   - Document formatting settings
+   - Cover letter support
+
+Each table includes:
+- UUID primary keys
+- Created/Updated timestamps
+- Automatic timestamp updates via triggers
+- Foreign key constraints to maintain data integrity
+- Row-level security for data protection
+
 ## 🏗️ Project Status
 
 ### Production Ready Features
