@@ -6,9 +6,36 @@ An intelligent, open-source resume builder powered by AI that helps create and t
 
 ![Dashboard Screenshot](public/images/ss1.webp)
 
+## 📚 Table of Contents
+- [Live Demo](#-live-demo)
+- [Key Features](#-key-features)
+  - [Resume Management](#resume-management)
+  - [AI Integration](#ai-integration)
+  - [Technical Features](#technical-features)
+- [Design System](#-design-system)
+  - [Core Principles](#core-principles)
+  - [Visual Elements](#visual-elements)
+- [Tech Stack](#️-tech-stack)
+  - [Frontend](#frontend)
+  - [AI & Data Processing](#ai--data-processing)
+  - [Database](#database)
+- [Getting Started](#-getting-started)
+- [Database Setup](#️-database-setup)
+  - [Supabase Setup](#option-1-supabase-setup-recommended)
+  - [Local PostgreSQL Setup](#option-2-local-postgresql-setup)
+  - [Database Schema](#database-schema)
+- [Project Status](#️-project-status)
+  - [Production Ready Features](#production-ready-features)
+  - [Upcoming Features](#upcoming-features)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+
 ## ✨ Live Demo
 
 Check out the live demo at [resumelm.com](https://resumelm.com)
+
+
 
 ## 🌟 Key Features
 
