@@ -96,9 +96,31 @@ cp .env.example .env.local
 ```
 
 Required environment variables:
-- `OPENAI_API_KEY`: For AI features
-- `DATABASE_URL`: For data storage
-- `NEXT_PUBLIC_APP_URL`: Your application URL
+- `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anonymous key
+- `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase service role key
+- `NEXT_PUBLIC_SITE_URL`: Your application URL (e.g., http://localhost:3000 for local development)
+
+Required AI API Keys (one of these will work, or you can simmply enter your api key in the settings):
+- `ANTHROPIC_API_KEY`: For Claude AI integration
+- `OPENAI_API_KEY`: For OpenAI features
+- `OPENROUTER_API_KEY`: For OpenRouter AI routing
+- `DEEPSEEK_API_KEY`: For Deepseek AI integration
+- `GEMINI_API_KEY`: For Google's Gemini AI
+- `GROQ_API_KEY`: For Groq AI integration
+
+Required Redis Configuration:
+- `UPSTASH_REDIS_REST_URL`: Your Upstash Redis REST URL
+- `UPSTASH_REDIS_REST_TOKEN`: Your Upstash Redis REST token
+
+Optional Stripe Integration (for production, you wont need them but cool if you're intrested in learning more):
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`: Stripe publishable key
+- `STRIPE_SECRET_KEY`: Stripe secret key
+- `STRIPE_WEBHOOK_SECRET`: Stripe webhook secret
+- `NEXT_PUBLIC_SUBSCRIPTION_LINK`: Your subscription page URL
+- `PRICE_ID`: Stripe price ID
+- `PRODUCT_ID`: Stripe product ID
+- `NEXT_PUBLIC_STRIPE_PRO_PRICE_ID`: Stripe pro tier price ID
 
 4. Start the development server:
 ```bash
