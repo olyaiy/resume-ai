@@ -43,6 +43,7 @@ Check out the live demo at [resumelm.com](https://resumelm.com)
 - 📝 Two-tier resume system:
   - **Base Resumes**: Foundation templates for your professional profile
   - **Tailored Resumes**: AI-optimized versions for specific job applications
+- 📋 Automated cover letter generation and customization
 - 💼 Comprehensive section management for:
   - Work Experience
   - Education
@@ -55,11 +56,19 @@ Check out the live demo at [resumelm.com](https://resumelm.com)
 
 ### AI Integration
 - 🤖 AI-powered content suggestions for all resume sections
-- 💡 Smart content optimization and improvement recommendations
 - 🎯 Intelligent job description analysis
+- ✍️ Smart cover letter generation based on job descriptions
+- 💡 Smart content optimization and improvement recommendations
+- 🔄 Multiple AI model support:
+  - OpenAI (GPT-4, GPT-3.5)
+  - Anthropic Claude
+  - Google Gemini
+  - Groq
+  - DeepSeek
+  - OpenRouter (coming soon)
 - 💬 Interactive AI assistant for resume writing guidance
 - ✨ Real-time content enhancement suggestions
-
+- 🎛️ Flexible model selection and API key management
 ![AI Assistant](public/images/ss4.webp)
 
 ### Technical Features
@@ -68,6 +77,7 @@ Check out the live demo at [resumelm.com](https://resumelm.com)
 - 📄 PDF generation and preview
 - 🎨 Custom design system with consistent UI/UX
 - 🔄 Real-time updates and preview
+- ⚙️ Custom AI model configuration 
 
 ## 🎨 Design System
 
@@ -239,6 +249,8 @@ Each table includes:
 - ✅ User authentication and authorization
 - ✅ Profile management
 - ✅ Real-time preview and editing
+- ✅ Cover Letter Generation
+- ✅ Resume Score Generation
 
 ### Upcoming Features
 - 🔄 Enhanced AI tailoring algorithms
